@@ -1,13 +1,12 @@
 import React from "react";
 
 export function Card({
-                         itemId,
-                         title
-                     }: {
+    itemId,
+    title
+}: {
     itemId: string;
     title: string;
 }) {
-
     return (
         <button
             className="inline-block px-4 py-8 cursor-pointer select-none"

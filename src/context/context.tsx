@@ -1,46 +1,49 @@
 import React, { createContext, useContext, useState } from 'react';
 
+type Card = {
+    id: string;
+    title: string;
+};
 
 type Player = {
     id: number;
-    hand: any[];
-    ground: any[];
+    hand: Card[];
+    ground: Card[];
 };
 
 type GameContextType = {
     activePlayer: Player | null;
-    players: Player[];  // Add this line
+    players: Player[];
     setActivePlayer: React.Dispatch<React.SetStateAction<Player | null>>;
     addCardToHand: (playerId: number) => void;
     moveCardToGround: (playerId: number, cardIndex: number) => void;
 };
+
 const defaultContextValue: GameContextType = {
     activePlayer: null,
-    players: null,  // Add this line
-    setActivePlayer: () => {}, // Empty function for default value
+    players: [],
+    setActivePlayer: () => {},
     addCardToHand: () => {},
     moveCardToGround: () => {}
 };
-const GameContext = createContext<GameContextType>(defaultContextValue);
 
+const GameContext = createContext<GameContextType>(defaultContextValue);
 
 export function useGame() {
     return useContext(GameContext);
 }
 
 export function GameProvider({ children }) {
-
-    const [players, setPlayers] = useState([
+    const [players, setPlayers] = useState<Player[]>([
         { id: 1, hand: [], ground: [] },
         { id: 2, hand: [], ground: [] },
         { id: 3, hand: [], ground: [] },
         { id: 4, hand: [], ground: [] },
-        // ... other players
     ]);
-    const [activePlayer, setActivePlayer] = useState(players[0]);
+    const [activePlayer, setActivePlayer] = useState<Player | null>(players[0]);
 
-    const addCardToHand = (playerId) => {
-        const newCard = {};
+    const addCardToHand = (playerId: number) => {
+        const newCard = { id: 'newCard', title: 'New Card' };
         setPlayers(prevPlayers => {
             return prevPlayers.map(player => {
                 if (player.id === playerId) {
@@ -51,7 +54,7 @@ export function GameProvider({ children }) {
         });
     };
 
-    const moveCardToGround = (playerId, cardIndex) => {
+    const moveCardToGround = (playerId: number, cardIndex: number) => {
         setPlayers(prevPlayers => {
             return prevPlayers.map(player => {
                 if (player.id === playerId) {
@@ -65,10 +68,8 @@ export function GameProvider({ children }) {
         });
     };
 
-    // ... other game-related functions
-
     return (
-        <GameContext.Provider value={{ activePlayer,players, setActivePlayer, addCardToHand, moveCardToGround }}>
+        <GameContext.Provider value={{ activePlayer, players, setActivePlayer, addCardToHand, moveCardToGround }}>
             {children}
         </GameContext.Provider>
     );

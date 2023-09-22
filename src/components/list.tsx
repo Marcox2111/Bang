@@ -1,11 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 import {Card} from "./card";
-import { useGame } from './context';
+import { useGame } from '../context/context';
 
 type ListProps = {
     type: "Hand" | "Ground";
 };
-
 
 export function List({ type }: ListProps) {
     const { activePlayer, addCardToHand, moveCardToGround } = useGame();
@@ -15,9 +14,9 @@ export function List({ type }: ListProps) {
         <div className="flex overflow-x-scroll hide-scroll-bar">
             {cards.map((card, index) => (
                 <Card
-                    title={`Card ${index + 1}`}
-                    itemId={`Card ${index + 1}`} // NOTE: itemId is required for track items
-                    key={index}
+                    title={card.title}
+                    itemId={card.id}
+                    key={card.id}
                 />
             ))}
             {type === "Hand" && (
