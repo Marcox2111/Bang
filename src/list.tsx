@@ -1,34 +1,30 @@
-import React, {useState, useContext} from "react";
+import React, {useState} from "react";
 import {Card} from "./card";
-import GlobalIdContext from "./context";
+import { useGame } from './context';
 
-const elemPrefix = "Card_";
-const getId = (index: number) => `${elemPrefix}${index}`;
-
-export function List() {
-    const { globalIdCounter, incrementGlobalId } = useContext(GlobalIdContext);
-    const [items, setItems] = useState([]);
+type ListProps = {
+    type: "Hand" | "Ground";
+};
 
 
-    const addCard = () => {
-        incrementGlobalId();
-        const newId = getId(globalIdCounter);
-        setItems([...items, {id: newId}]);
-    };
+export function List({ type }: ListProps) {
+    const { activePlayer, addCardToHand, moveCardToGround } = useGame();
+    const cards = type === "Hand" ? activePlayer.hand : activePlayer.ground;
 
     return (
         <div className="flex overflow-x-scroll hide-scroll-bar">
-            {items.map(({id}) => (
+            {cards.map((card, index) => (
                 <Card
-                    title={id}
-                    itemId={id} // NOTE: itemId is required for track items
-                    key={id}
+                    title={`Card ${index + 1}`}
+                    itemId={`Card ${index + 1}`} // NOTE: itemId is required for track items
+                    key={index}
                 />
             ))}
-            <button onClick={addCard} className="inline-block px-4 py-8 cursor-pointer select-none">
-                <div className="card-button">
-                </div>
-            </button>
+            {type === "Hand" && (
+                <button onClick={() => addCardToHand(activePlayer.id)} className="inline-block px-4 py-8 cursor-pointer select-none">
+                    <div className="card-button"></div>
+                </button>
+            )}
         </div>
     );
 }
