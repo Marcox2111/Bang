@@ -1,0 +1,9 @@
+build/*
+node_modules/*
+dist/*
+src/workspace/*
+src/memory/*
+src/archive/*
+src/.gpte_consent
+src/prompt
+src/file_list.txt
