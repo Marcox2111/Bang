@@ -7,9 +7,9 @@ export function Hero() {
 
     return (
         <div className="h-screen flex flex-col justify-center items-center bg-gray-400">
-            {activePlayer.hand.map((card, index) => (
-                <Card key={card.id} itemId={card.id} title={card.title} />
-            ))}
+            <Card key={activePlayer.character.id} itemId={activePlayer.character.id} title={activePlayer.character.title} />
+            <Card key={activePlayer.role.id} itemId={activePlayer.role.id} title={activePlayer.role.title} />
+
         </div>
     );
 }

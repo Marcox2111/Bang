@@ -1,26 +1,25 @@
-import React from "react";
-import { useGame } from '../context/context';
+import React from 'react';
+import {useGame} from "../context/context";
 
 export function Sidebar() {
-    const { setActivePlayer, players } = useGame();
-
-    const handlePlayerClick = (playerId) => {
-        const selectedPlayer = players.find(player => player.id === playerId);
-        setActivePlayer(selectedPlayer);
-    };
+    //Chiamo la funzione useGame che mi restituisce il context e da questo mi prendo le informazioni di tutti player,
+    //per come ho definito players, è un array di player cha hanno come informazioni: ruolo, character, le carte in mano e sul ground. Perf
+    const {players,setActivePlayer} = useGame()
 
     return (
         <div className="h-screen flex flex-col justify-between p-8 bg-gray-400">
-            <ul className="space-y-2">
+            <div className="flex space-y-2 flex-col">
                 {players.map(player => (
-                    <li key={player.id}>
-                        <a href="#" onClick={() => handlePlayerClick(player.id)}
-                           className="flex font-medium text-gray-600 hover:text-green-400 p-2 rounded-lg bg-gray-100 hover:bg-green-100">
-                            Player {player.id}
-                        </a>
-                    </li>
+                    <button key={player.id} onClick={() => setActivePlayer(players[player.id-1])}
+                            className="font-medium text-gray-600 hover:text-green-400 p-2 rounded-lg bg-gray-100 hover:bg-green-100">
+                        Player {player.id}
+                    </button>
                 ))}
-            </ul>
+                <button key={"newplayer"}
+                        className="font-medium border-4 border-white text-gray-600 hover:text-green-400 p-2 rounded-lg hover:bg-green-100">
+                    New Player
+                </button>
+            </div>
 
             <a href="#"
                className="flex font-medium text-gray-600 hover:text-green-400 p-2 rounded-lg hover:bg-green-100">
