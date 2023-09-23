@@ -1,4 +1,6 @@
 import React, {createContext, useContext, useState} from 'react';
+import {start} from "repl";
+import {act} from "react-dom/test-utils";
 
 type Card = {
     id: string;
@@ -18,10 +20,10 @@ const GameContext = createContext({
     players: [] as Player[],
     setActivePlayer: (() => {
     }) as React.Dispatch<React.SetStateAction<Player | null>>,
-    moveCardToGround: ((_: number, __: number) => {
-    }) as (playerId: number, cardIndex: number) => void,
-    addCardToPlayerHand: ((newCard: Card) => {
-    }) as (newCard: Card) => void
+    moveCardList: ((startList:string, endList:string, startIndex:number, endIndex:number) => { }),
+    removeCardActivePlayer: ((_: string) => {    }) as (cardIndex: string) => void,
+    addCardToPlayerHand: ((type: string, newCard: Card) => {
+    }) as (type: string, newCard: Card) => void
 });
 
 
@@ -36,24 +38,24 @@ export function GameProvider({children}) {
         {
             id: 1,
             character: {
-                id: '',
-                title: ''
+                id: 'asd',
+                title: 'asss'
             },
             role: {
-                id: '',
-                title: ''
+                id: 'qwe',
+                title: 'qwww'
             },
             hand: [], ground: []
         },
         {
             id: 2,
             character: {
-                id: '',
-                title: ''
+                id: 'zxc',
+                title: 'zxxx'
             },
             role: {
-                id: '',
-                title: ''
+                id: 'vvv',
+                title: 'vfr'
             },
             hand: [], ground: []
         },
@@ -61,30 +63,65 @@ export function GameProvider({children}) {
     ]);
     const [activePlayer, setActivePlayer] = useState<Player>(players[0]);
 
+    const removeCardActivePlayer = (cardIndex:string) => {
+        const newHand = activePlayer.hand.filter(c => c.id !== cardIndex);
+        setActivePlayer({
+            ...activePlayer,
+            hand: newHand,
+        });
 
-    const moveCardToGround = (playerId: number, cardIndex: number) => {
+    }
+
+    const moveCardList = (startList, endList, startIndex, endIndex) => {
+        const card = activePlayer[startList][startIndex];
+        if (!card) return;
+
+        // Remove the card from the hand
+        const newStartList = activePlayer[startList].filter(c => c.id !== startIndex);
+
+        // Add the card to the ground
+        const newEndList = [...activePlayer[endList], card];
+
+        // Update the activePlayer's hand and ground
+        setActivePlayer({
+            ...activePlayer,
+            [startList]: newStartList,
+            [endList]: newEndList,
+        });
     };
 
-    const addCardToPlayerHand = (newCard: Card) => {
+    const addCardToPlayerHand = (type: string, newCard: Card) => {
         setActivePlayer(prevPlayer => {
             if (!prevPlayer) return null;
-            return {...prevPlayer, hand: [...prevPlayer.hand, newCard]};
+
+            // Check the type and update the appropriate array
+            if (type === "Hand") {
+                return { ...prevPlayer, hand: [...prevPlayer.hand, newCard] };
+            } else if (type === "Ground") {
+                return { ...prevPlayer, ground: [...prevPlayer.ground, newCard] };
+            }
+            return prevPlayer; // return the previous state if type doesn't match any condition
         });
 
         // Update the specific player in the players array
         setPlayers(prevPlayers => {
             return prevPlayers.map(player => {
                 if (player.id === activePlayer.id) {
-                    return { ...player, hand: [...player.hand, newCard] };
+                    if (type === "Hand") {
+                        return { ...player, hand: [...player.hand, newCard] };
+                    } else if (type === "Ground") {
+                        return { ...player, ground: [...player.ground, newCard] };
+                    }
                 }
                 return player;
             });
         });
     };
 
+
     return (
         <GameContext.Provider
-            value={{activePlayer, players, setActivePlayer, moveCardToGround, addCardToPlayerHand}}>
+            value={{activePlayer, players, setActivePlayer, moveCardList,removeCardActivePlayer, addCardToPlayerHand}}>
             {children}
         </GameContext.Provider>
     );

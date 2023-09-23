@@ -1,36 +1,56 @@
 import React from "react";
 import {Card} from "./card";
 import {useGame} from "../context/context";
+import {useDroppable} from '@dnd-kit/core';
+import {SortableContext, horizontalListSortingStrategy} from "@dnd-kit/sortable";
+
 
 type ListProps = {
-    type: "Hand" | "Ground";
+    id: string
+    type: string;
     cards: { id: string, title: string }[];
 };
 
-export function List({type, cards}: ListProps) {
-    const {addCardToPlayerHand} = useGame();
 
-    const addCard = () => {
-        const newCard = {id: 'newId', title: 'New Card'}; // Adjust as needed
-        addCardToPlayerHand(newCard);
+export function List({id, type, cards}: ListProps) {
+    const {addCardToPlayerHand} = useGame();
+    const {setNodeRef} = useDroppable({
+        id: id,
+        data: {
+            type: "List"
+        }
+    });
+
+    const addCard = (type : string) => {
+        console.log(type)
+        const newId = Math.random().toString(36).substring(2, 10);
+        const newCard = {id: newId, title: newId}; // Adjust as needed
+        addCardToPlayerHand(type,newCard);
     };
 
+
     return (
-        <div className="flex flex-row overflow-visible hide-scroll-bar">
-            <div className="flex flex-row overflow-x-scroll hide-scroll-bar">
+        <SortableContext
+            id={type}
+            items={cards}
+        >
+            <div
+                ref={setNodeRef}
+                className="flex flex-grow overflow-x-scroll overflow-y-visible hide-scroll-bar">
                 {cards.map((card, index) => (
                     <Card
-                        title={card.title}
-                        itemId={card.id}
+                        cardName={card.title}
+                        cardID={card.id}
                         key={card.id}
                     />
                 ))}
-                {type === "Hand" && (
-                    <button onClick={() => addCard()} className="inline-block px-4 py-8 cursor-pointer select-none">
+                {/*{type === "Hand" && (*/}
+                    <button onClick={() => addCard(type)} className="inline-block px-4 py-8 cursor-pointer select-none">
                         <div className="card-button"></div>
                     </button>
-                )}
+                {/*)}*/}
+
             </div>
-        </div>
+        </SortableContext>
     );
 }

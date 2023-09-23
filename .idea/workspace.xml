@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Dunno">
-      <change afterPath="$PROJECT_DIR$/.idea/basic-with-select-item.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="PlayerContainer">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hero.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/playerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerContainer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/context/context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/context.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globalStyles.css" afterDir="false" />
@@ -27,6 +26,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -77,7 +77,7 @@
       <updated>1695401748253</updated>
       <workItem from="1695401750041" duration="1354000" />
       <workItem from="1695452839816" duration="393000" />
-      <workItem from="1695454018275" duration="15962000" />
+      <workItem from="1695454018275" duration="45214000" />
     </task>
     <task id="LOCAL-00001" summary="Dunno">
       <option name="closed" value="true" />
@@ -87,7 +87,23 @@
       <option name="project" value="LOCAL" />
       <updated>1695401915259</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="PlayerContainer">
+      <option name="closed" value="true" />
+      <created>1695474525250</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1695474525250</updated>
+    </task>
+    <task id="LOCAL-00003" summary="PlayerContainer">
+      <option name="closed" value="true" />
+      <created>1695474534968</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1695474534968</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -95,6 +111,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Dunno" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dunno" />
+    <MESSAGE value="PlayerContainer" />
+    <option name="LAST_COMMIT_MESSAGE" value="PlayerContainer" />
   </component>
 </project>

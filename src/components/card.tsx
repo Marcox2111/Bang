@@ -1,32 +1,62 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
+import { useDraggable } from '@dnd-kit/core';
+import { useSortable } from "@dnd-kit/sortable";
+import {CSS} from "@dnd-kit/utilities";
 
-export function Card({itemId, title}: { itemId: string; title: string;}) {
+type ListProps = {
+    cardID: string
+    cardName: string
+};
+export function Card({cardID, cardName}: ListProps) {
 
-    const [longHover, setLongHover] = useState(false);
-    const hoverTimeout = useRef(null);
+    const {
+        setNodeRef,
+        attributes,
+        listeners,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
+        id: cardID,
+        data: {
+            type: "Card",
+        },
+    });
 
-    const handleMouseEnter = () => {
-        hoverTimeout.current = setTimeout(() => {
-            setLongHover(true);
-        }, 1000); // 1000ms = 1 second
+    const style = {
+        transition,
+        transform: CSS.Transform.toString(transform),
     };
 
-    const handleMouseLeave = () => {
-        clearTimeout(hoverTimeout.current);
-        setLongHover(false);
-    };
+    // const [longHover, setLongHover] = useState(false);
+    // const hoverTimeout = useRef(null);
+    //
+    // // const handleMouseEnter = () => {
+    // //     hoverTimeout.current = setTimeout(() => {
+    // //         setLongHover(true);
+    // //     }, 2500); // 1000ms = 1 second
+    // // };
+    // //
+    // // const handleMouseLeave = () => {
+    // //     clearTimeout(hoverTimeout.current);
+    // //     setLongHover(false);
+    // // };
+    // //
+    // // const handleDragStart = (e, cardId) => {
+    // //     e.dataTransfer.setData("text/plain", cardId);
+    // // }
 
     return (
         <button
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className={`inline-block px-4 py-8 cursor-pointer select-none ${longHover ? 'long-hover' : ''}`}>
+            ref={setNodeRef} style={style} {...attributes} {...listeners}
+            className="inline-block px-4 py-8 cursor-pointer select-none">
             <div
-                className="w-64 h-64 max-w-xs rounded-lg shadow-md bg-white hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
+                 className="w-64 h-64 max-w-xs rounded-lg shadow-md bg-white hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
                 <div className="p-4">
-                    <div className="font-bold">{title}</div>
+                    <div className="font-bold">{cardName}</div>
                 </div>
             </div>
         </button>
+
     );
 }
