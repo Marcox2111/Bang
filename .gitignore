@@ -7,3 +7,4 @@ src/archive/*
 src/.gpte_consent
 src/prompt
 src/file_list.txt
+package-lock.json

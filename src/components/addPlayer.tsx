@@ -5,7 +5,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 export function AddPlayer({onClose}) {
     const {addNewPlayer} = useGame();
-    const [currentImage, setCurrentImage] = useState(null);
+    const [currentImage, setCurrentImage] = useState("../cards/bang_cards/character/blackjack.png");
     const [playerName, setPlayerName] = useState(''); // For the input textbox
     const [selectedCharacter, setSelectedCharacter] = useState(''); // For the selected item from ReactSearchAutocomplete
 
@@ -39,7 +39,7 @@ export function AddPlayer({onClose}) {
     const handleOnHover = (result) => {
         console.log(result.name)
         try {
-            const image = require(`../cards/bang_cards/character/${result.name}.png`);
+            const image = require(`../cards/bang_cards/character/blackjack.png`);
             setCurrentImage(image);
         } catch (error) {
             const image = require(`../cards/bang_cards/character/blackjack.png`);

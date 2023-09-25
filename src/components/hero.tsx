@@ -3,7 +3,7 @@ import {Card} from "./card";
 import { useGame } from '../context/context';
 
 export function Hero() {
-    const { activePlayer } = useGame();
+    const { activePlayerID } = useGame();
 
     return (
         <div className="h-screen flex flex-col justify-center items-center bg-gray-400">

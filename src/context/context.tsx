@@ -14,19 +14,19 @@ type Player = {
 };
 
 type GameContextType = {
-    activePlayer: Player | null;
+    activePlayerID: string | null;
     addCardToPlayerHand: (type: string, newCard: CardType) => void;
     addNewPlayer: (name: string, character: string) => void;
     moveCardList: (startList: string, endList: string, startIndex: number, endIndex: number) => void;
     players: Player[];
     removeCardActivePlayer: (cardIndex: string) => void;
-    setActivePlayer: React.Dispatch<React.SetStateAction<Player | null>>;
+    setActivePlayerID: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const defaultContext: GameContextType = {
-    activePlayer: null,
+    activePlayerID: null,
     players: [],
-    setActivePlayer: () => {},  // This is a placeholder and will be overridden by the actual function
+    setActivePlayerID: () => {},  // This is a placeholder and will be overridden by the actual function
     moveCardList: () => {},    // Placeholder
     removeCardActivePlayer: () => {},  // Placeholder
     addCardToPlayerHand: () => {},  // Placeholder
@@ -44,7 +44,7 @@ export function GameProvider({children}) {
     // useState è un hook di react che mi restituisce il player e una funzione setPlayers che mi permette di modificare questi player
     //<Player[]> è un cast per dire che players è un array di Player, lo inizializzo creando solo un player per ora che non ha nessuna carta o niente
     const [players, setPlayers] = useState<Player[]>([]);
-    const [activePlayer, setActivePlayer] = useState<Player>(players[0]);
+    const [activePlayerID, setActivePlayerID] = useState<string | null>(null);
 
 
     const addNewPlayer = (name:string,character:string) => {
@@ -67,39 +67,53 @@ export function GameProvider({children}) {
     };
 
     const removeCardActivePlayer = (cardIndex:string) => {
-        const newHand = activePlayer.Hand.filter(c => c.id !== cardIndex);
-        setActivePlayer({
-            ...activePlayer,
-            Hand: newHand,
-        });
+        // const newHand = activePlayer.Hand.filter(c => c.id !== cardIndex);
+        // setActivePlayer({
+        //     ...activePlayer,
+        //     Hand: newHand,
+        // });
 
     }
 
     const moveCardList = (startList, endList, startIndex, endIndex) => {
-        const card = activePlayer[startList][startIndex];
+        const playerIndex = players.findIndex(player => player.id === activePlayerID);
+        const card = players[playerIndex][startList][startIndex];
         if (!card) return;
 
         if (startList === endList) {
             // If moving within the same list
-            const updatedList = [...activePlayer[startList]];
-            updatedList.splice(startIndex, 1); // Remove the card from its original position
-            updatedList.splice(endIndex, 0, card); // Insert the card at the endIndex position
-
-            setActivePlayer({
-                ...activePlayer,
-                [startList]: updatedList,
+            setPlayers(prevPlayers => {
+                const updatedPlayers = [...prevPlayers];
+                const updatedPlayer = {...updatedPlayers[playerIndex]};
+                const updatedList = [...updatedPlayer[startList]];
+        
+                // Move the card within the list
+                updatedList.splice(endIndex, 0, ...updatedList.splice(startIndex, 1));
+        
+                // Update the player's list and the players array
+                updatedPlayer[startList] = updatedList;
+                updatedPlayers[playerIndex] = updatedPlayer;
+        
+                return updatedPlayers;
             });
         } else {
-            // If moving between different lists
-            const newStartList = activePlayer[startList].filter(c => c.id !== card.id);
-
-            const newEndList = [...activePlayer[endList]];
-            newEndList.splice(endIndex, 0, card); // Insert the card at the endIndex position
-
-            setActivePlayer({
-                ...activePlayer,
-                [startList]: newStartList,
-                [endList]: newEndList,
+            // If moving between lists
+            setPlayers(prevPlayers => {
+                const updatedPlayers = [...prevPlayers];
+                const updatedPlayer = {...updatedPlayers[playerIndex]};
+                const updatedStartList = [...updatedPlayer[startList]];
+                const updatedEndList = [...updatedPlayer[endList]];
+        
+                // Move the card from the start list to the end list
+                updatedEndList.splice(endIndex, 0, card);
+                updatedStartList.splice(startIndex, 1);
+        
+                // Update the player's lists and the players array
+                updatedPlayer[startList] = updatedStartList;
+                updatedPlayer[endList] = updatedEndList;
+                updatedPlayers[playerIndex] = updatedPlayer;
+        
+                return updatedPlayers;
             });
         }
 
@@ -107,27 +121,26 @@ export function GameProvider({children}) {
 
 
     const addCardToPlayerHand = (type: "Hand" | "Ground", newCard: CardType) => {
-        setActivePlayer(prevPlayer => {
-            if (!prevPlayer) return null;
-
-            const updatedPlayer = {...prevPlayer};
-            console.log(type); // Debug log
+        
+        setPlayers(prevPlayers => {
+            const playerIndex = prevPlayers.findIndex(player => player.id === activePlayerID);
+            
+            if (playerIndex === -1) return prevPlayers; // If the player is not found, return the original array
+        
+            const updatedPlayer = {...prevPlayers[playerIndex]};
             updatedPlayer[type] = [...updatedPlayer[type], newCard];
-            return updatedPlayer;
+        
+            const updatedPlayers = [...prevPlayers];
+            updatedPlayers[playerIndex] = updatedPlayer;
+        
+            return updatedPlayers;
         });
-
-        setPlayers(prevPlayers => prevPlayers.map(player => {
-            if (player.id !== activePlayer.id) return player;
-
-            const updatedPlayer = {...player};
-            updatedPlayer[type] = [...updatedPlayer[type], newCard];
-            return updatedPlayer;
-        }));
+        
     };
 
 
     return (
-        <GameContext.Provider value={{activePlayer, players,addNewPlayer, setActivePlayer, moveCardList, removeCardActivePlayer, addCardToPlayerHand}}>
+        <GameContext.Provider value={{setActivePlayerID, activePlayerID, players, addNewPlayer, moveCardList, removeCardActivePlayer, addCardToPlayerHand}}>
             {children}
         </GameContext.Provider>
     );

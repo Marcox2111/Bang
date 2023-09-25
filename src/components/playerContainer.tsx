@@ -7,7 +7,7 @@ import {DndContext, DragOverlay} from '@dnd-kit/core';
 
 
 export function PlayerContainer() {
-    const {activePlayer,moveCardList} = useGame()
+    const {activePlayerID, players, moveCardList} = useGame()
     const [activeId, setActiveId] = useState(null)
 
     const handleDragEnd = (event) => {
@@ -19,41 +19,34 @@ export function PlayerContainer() {
     };
 
     const handleDragOver = (event) => {
-        if (!event.over) return;
+        if (!event.over || event.active.id === event.over.id) return;
+    
         const activeId = event.active.id;
-
-        if (activeId === event.over.id) return;
-
+        const activePlayer = players.find(p => p.id === activePlayerID);
+        if (!activePlayer) return;
+    
+        const ActiveList = event.active.data.current?.sortable?.containerId;
+        const OverList = event.over.data.current?.sortable?.containerId || event.over.id.split('_').slice(2).join('_');
+    
         const isActiveCard = event.active.data.current?.type === "Card";
         const isOverCard = event.over.data.current?.type === "Card";
-        const isOverList = event.over.data.current?.type === "List";
-
-
-        const ActiveContainer = event?.active?.data?.current?.sortable?.containerId;
-        const OverContainer = event?.over?.data?.current?.sortable?.containerId;
-        const ActiveList = ActiveContainer ? ActiveContainer : null;
-        const OverList = OverContainer ? OverContainer : null;
-
-        if (isActiveCard && isOverCard) {
-            if (!activePlayer[ActiveList] || !activePlayer[OverList]) return;
-
-            const activeIndex = activePlayer[ActiveList].findIndex(card => card.id === activeId);
-            const overIndex = activePlayer[OverList].findIndex(card => card.id === event.over.id);
-
-            return moveCardList(ActiveList, OverList, activeIndex, overIndex);
-        } else if (isActiveCard && isOverList) {
-            const parts = event.over.id.split('_');
-            const OverList = parts.slice(2).join('_')
-            const activeIndex = activePlayer[ActiveList].findIndex(card => card.id === activeId);
-            const endIndex = activePlayer[OverList].length;  // Append at the end of the OverList
-
+    
+        if (!ActiveList || !OverList) return;
+    
+        const activeIndex = activePlayer[ActiveList]?.findIndex(card => card.id === activeId);
+        if (activeIndex === -1) return;
+    
+        const endIndex = isOverCard ? activePlayer[OverList]?.findIndex(card => card.id === event.over.id) : activePlayer[OverList]?.length;
+    
+        if (endIndex !== undefined) {
             return moveCardList(ActiveList, OverList, activeIndex, endIndex);
         }
     };
+    
 
 
     return (
-        activePlayer ? (
+        activePlayerID ? (
             <div className="grid grid-cols-4 justify-between items-center">
                 <div className="col-span-3 flex flex-col">
                     <DndContext
@@ -61,8 +54,8 @@ export function PlayerContainer() {
                         onDragOver={handleDragOver}
                         onDragEnd={handleDragEnd}
                     >
-                        <List id={`Player_${activePlayer.id}_Hand`} type="Hand" cards={activePlayer.Hand}/>
-                        <List id={`Player_${activePlayer.id}_Ground`} type="Ground" cards={activePlayer.Ground}/>
+                        <List id={`Player_${activePlayerID}_Hand`} type="Hand" cards={players.find(p => p.id === activePlayerID)?.Hand}/>
+                        <List id={`Player_${activePlayerID}_Ground`} type="Ground" cards={players.find(p => p.id === activePlayerID)?.Ground}/>
 
                         <DragOverlay dropAnimation={{
                             duration: 500,
