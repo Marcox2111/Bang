@@ -4,79 +4,81 @@ import {List} from './list';
 import {Card} from "./card";
 import {useGame} from "../context/context";
 import {DndContext, DragOverlay} from '@dnd-kit/core';
-import {arrayMove} from "@dnd-kit/sortable";
+
 
 export function PlayerContainer() {
-    const {activePlayer, removeCardActivePlayer, addCardToPlayerHand,moveCardList} = useGame()
+    const {activePlayer,moveCardList} = useGame()
     const [activeId, setActiveId] = useState(null)
+
     const handleDragEnd = (event) => {
-        if (!event.over) return;
-        const activeId = event.active.id;
-        const overId = event.over.id;
-
-        if (activeId === overId) return;
-
-        const isActiveAList = event.active.data.current?.type === "List";
-        console.log(event.active.data.current.type);
-
-        if (!isActiveAList) return;
-
-        // setColumns((columns) => {
-        //     const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
-        //
-        //     const overColumnIndex = columns.findIndex((col) => col.id === overId);
-        //
-        //     return arrayMove(columns, activeColumnIndex, overColumnIndex);
-
-    };
+        return;
+    }
 
     const handleDragStart = (event) => {
         setActiveId(event.active.id);
     };
+
     const handleDragOver = (event) => {
         if (!event.over) return;
         const activeId = event.active.id;
-        const overId = event.over.id;
 
-
-        if (activeId == overId) return;
+        if (activeId === event.over.id) return;
 
         const isActiveCard = event.active.data.current?.type === "Card";
         const isOverCard = event.over.data.current?.type === "Card";
+        const isOverList = event.over.data.current?.type === "List";
+
+
+        const ActiveContainer = event?.active?.data?.current?.sortable?.containerId;
+        const OverContainer = event?.over?.data?.current?.sortable?.containerId;
+        const ActiveList = ActiveContainer ? ActiveContainer : null;
+        const OverList = OverContainer ? OverContainer : null;
 
         if (isActiveCard && isOverCard) {
-            const ActiveList = event.active.data.current.sortable.containerId
-            const OverList = event.over.data.current.sortable.containerId
+            if (!activePlayer[ActiveList] || !activePlayer[OverList]) return;
 
-            const activeIndex = (activePlayer[ActiveList] as Card[]).findIndex(card => card.id === activeId);
-            const overIndex = (activePlayer[OverList] as Card[]).findIndex(card => card.id === overId);
+            const activeIndex = activePlayer[ActiveList].findIndex(card => card.id === activeId);
+            const overIndex = activePlayer[OverList].findIndex(card => card.id === event.over.id);
 
+            return moveCardList(ActiveList, OverList, activeIndex, overIndex);
+        } else if (isActiveCard && isOverList) {
+            const parts = event.over.id.split('_');
+            const OverList = parts.slice(2).join('_')
+            const activeIndex = activePlayer[ActiveList].findIndex(card => card.id === activeId);
+            const endIndex = activePlayer[OverList].length;  // Append at the end of the OverList
 
-            if (ActiveList === OverList) {
-                return arrayMove(activePlayer[ActiveList], activeIndex, overIndex - 1);
-            }
-
-            return moveCardList(ActiveList,OverList,activeIndex,overIndex);
+            return moveCardList(ActiveList, OverList, activeIndex, endIndex);
         }
     };
 
+
     return (
-        <div className="grid grid-cols-4 justify-between items-center">
-            <div className="col-span-3 flex flex-col">
-                <DndContext
-                    onDragStart={handleDragStart}
-                    onDragOver={handleDragOver}
-                    onDragEnd={handleDragEnd}
-                >
-                    <List id={`Player_${activePlayer.id}_Hand`} type="Hand" cards={activePlayer.hand}/>
-                    <List id={`Player_${activePlayer.id}_Ground`} type="Ground" cards={activePlayer.ground}/>
-                    <DragOverlay>{activeId ? <Card cardID={activeId} cardName={activeId}/> : null}</DragOverlay>
-                </DndContext>
+        activePlayer ? (
+            <div className="grid grid-cols-4 justify-between items-center">
+                <div className="col-span-3 flex flex-col">
+                    <DndContext
+                        onDragStart={handleDragStart}
+                        onDragOver={handleDragOver}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <List id={`Player_${activePlayer.id}_Hand`} type="Hand" cards={activePlayer.Hand}/>
+                        <List id={`Player_${activePlayer.id}_Ground`} type="Ground" cards={activePlayer.Ground}/>
+
+                        <DragOverlay dropAnimation={{
+                            duration: 500,
+                            easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+                        }}>
+                            {activeId ? <Card cardID={activeId} cardName={activeId}/> : null}
+                        </DragOverlay>
+                    </DndContext>
+                </div>
+                <div className="col-span-1">
+                    <Hero/>
+                </div>
             </div>
-            <div className="col-span-1">
-                <Hero/>
+        ) : (
+            <div >
             </div>
-        </div>
-    )
-        ;
+        )
+    );
 }

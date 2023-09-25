@@ -1,5 +1,4 @@
-import React, {useState, useRef} from 'react';
-import { useDraggable } from '@dnd-kit/core';
+import React from 'react';
 import { useSortable } from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 
@@ -26,25 +25,8 @@ export function Card({cardID, cardName}: ListProps) {
     const style = {
         transition,
         transform: CSS.Transform.toString(transform),
+        opacity: isDragging ? 0 : 1,  // Add this line
     };
-
-    // const [longHover, setLongHover] = useState(false);
-    // const hoverTimeout = useRef(null);
-    //
-    // // const handleMouseEnter = () => {
-    // //     hoverTimeout.current = setTimeout(() => {
-    // //         setLongHover(true);
-    // //     }, 2500); // 1000ms = 1 second
-    // // };
-    // //
-    // // const handleMouseLeave = () => {
-    // //     clearTimeout(hoverTimeout.current);
-    // //     setLongHover(false);
-    // // };
-    // //
-    // // const handleDragStart = (e, cardId) => {
-    // //     e.dataTransfer.setData("text/plain", cardId);
-    // // }
 
     return (
         <button

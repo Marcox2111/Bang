@@ -22,11 +22,11 @@ export function List({id, type, cards}: ListProps) {
     });
 
     const addCard = (type : string) => {
-        console.log(type)
         const newId = Math.random().toString(36).substring(2, 10);
         const newCard = {id: newId, title: newId}; // Adjust as needed
         addCardToPlayerHand(type,newCard);
     };
+
 
 
     return (
