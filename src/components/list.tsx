@@ -1,8 +1,8 @@
 import React from "react";
-import {Card} from "./card";
+import {DraggableCard} from "./DraggableCard";
 import {useGame} from "../context/context";
 import {useDroppable} from '@dnd-kit/core';
-import {SortableContext, horizontalListSortingStrategy} from "@dnd-kit/sortable";
+import {SortableContext} from "@dnd-kit/sortable";
 
 
 type ListProps = {
@@ -38,7 +38,7 @@ export function List({id, type, cards}: ListProps) {
                 ref={setNodeRef}
                 className="flex flex-grow overflow-x-scroll overflow-y-visible hide-scroll-bar">
                 {cards.map((card, index) => (
-                    <Card
+                    <DraggableCard
                         cardName={card.title}
                         cardID={card.id}
                         key={card.id}

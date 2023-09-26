@@ -4,18 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Drag and Drop">
-      <change afterPath="$PROJECT_DIR$/src/components/addPlayer.tsx" afterDir="false" />
+    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Modal Window">
+      <change afterPath="$PROJECT_DIR$/src/components/DraggableCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/addPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/addPlayer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hero.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/list.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/playerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/context/context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globalStyles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +79,8 @@
       <workItem from="1695454018275" duration="54578000" />
       <workItem from="1695546476537" duration="8591000" />
       <workItem from="1695557205213" duration="10616000" />
+      <workItem from="1695615242984" duration="7725000" />
+      <workItem from="1695666615298" duration="283000" />
     </task>
     <task id="LOCAL-00001" summary="Dunno">
       <option name="closed" value="true" />
@@ -114,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695506229646</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Modal Window">
+      <option name="closed" value="true" />
+      <created>1695615367977</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1695615367977</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,6 +132,7 @@
     <MESSAGE value="Dunno" />
     <MESSAGE value="PlayerContainer" />
     <MESSAGE value="Drag and Drop" />
-    <option name="LAST_COMMIT_MESSAGE" value="Drag and Drop" />
+    <MESSAGE value="Modal Window" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modal Window" />
   </component>
 </project>

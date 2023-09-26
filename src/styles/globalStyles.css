@@ -18,3 +18,4 @@
 .long-hover {
     @apply scale-150 transition duration-300 ease-in-out hover:z-50
 }
+

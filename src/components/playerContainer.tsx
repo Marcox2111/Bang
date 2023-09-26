@@ -4,6 +4,7 @@ import {List} from './list';
 import {Card} from "./card";
 import {useGame} from "../context/context";
 import {DndContext, DragOverlay} from '@dnd-kit/core';
+import {DraggableCard} from "./DraggableCard";
 
 
 export function PlayerContainer() {
@@ -61,7 +62,7 @@ export function PlayerContainer() {
                             duration: 500,
                             easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
                         }}>
-                            {activeId ? <Card cardID={activeId} cardName={activeId}/> : null}
+                            {activeId ? <DraggableCard cardID={activeId} cardName={activeId}/> : null}
                         </DragOverlay>
                     </DndContext>
                 </div>

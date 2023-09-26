@@ -2,34 +2,39 @@ import React, {useState} from "react";
 import {useGame} from "../context/context";
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
+type Item = {
+    id: string;
+    name: string;
+}
 
 export function AddPlayer({onClose}) {
     const {addNewPlayer} = useGame();
-    const [currentImage, setCurrentImage] = useState("../cards/bang_cards/character/blackjack.png");
+    const initialImage = require("../cards/bang_cards/character/bartcassidy.png");
+    const [currentImage, setCurrentImage] = useState(initialImage);
     const [playerName, setPlayerName] = useState(''); // For the input textbox
-    const [selectedCharacter, setSelectedCharacter] = useState(''); // For the selected item from ReactSearchAutocomplete
+    const [selectedCharacter, setSelectedCharacter] = useState<Item | null>(null);
 
 
 
     const items = [
-        'bartcassidy',
-        'blackjack',
-        'calamityjanet',
-        'elgringo',
-        'jessejones',
-        'jourdonnais',
-        'kitcarlson',
-        'luckyduke',
-        'paulregret',
-        'pedroramirez',
-        'rosedoolan',
-        'sidketchum',
-        'slabthekiller',
-        'suzylafayette',
-        'vulturesam',
-        'willythekid'
-    ].map((name, index) => ({
-        id: index,
+        'Bart Cassidy',
+        'Black Jack',
+        'Calamity Janet',
+        'El Gringo',
+        'Jesse Jones',
+        'Jourdonnais',
+        'Kit Carlson',
+        'Lucky Duke',
+        'Paul Regret',
+        'Pedro Ramirez',
+        'Rose Doolan',
+        'Sid Ketchum',
+        'Slab The Killer',
+        'Suzy Lafayette',
+        'Vulture Sam',
+        'Willy The Kid'
+    ].map(name => ({
+        id: name.toLowerCase().replace(/\s+/g, ''),  // Convert to lowercase and remove spaces
         name: name
     }));
 
@@ -37,30 +42,27 @@ export function AddPlayer({onClose}) {
     }
 
     const handleOnHover = (result) => {
-        console.log(result.name)
         try {
-            const image = require(`../cards/bang_cards/character/blackjack.png`);
+            const image = require(`../cards/bang_cards/character/${result.id}.png`);
             setCurrentImage(image);
         } catch (error) {
-            const image = require(`../cards/bang_cards/character/blackjack.png`);
-            setCurrentImage(image); // or set to a default image
+            setCurrentImage(initialImage);
         }
     }
 
     const handleOnSelect = (item) => {
         try {
-            const image = require(`../cards/bang_cards/character/${item.name}.png`);
+            const image = require(`../cards/bang_cards/character/${item.id}.png`);
             setCurrentImage(image);
         } catch (error) {
-            const image = require(`../cards/bang_cards/character/blackjack.png`);
-            setCurrentImage(image); // or set to a default image
+            setCurrentImage(initialImage); // or set to a default image
         }
         setSelectedCharacter(item);
     }
 
     const handleAddPlayer = (event) => {
         event.preventDefault(); // This line prevents the form from being submitted which in turn prevents the page from being refreshed
-        addNewPlayer(playerName,selectedCharacter);
+        addNewPlayer(playerName,selectedCharacter.name);
     };
 
     return (
@@ -71,29 +73,47 @@ export function AddPlayer({onClose}) {
                 <div className="flex">
                     {currentImage && <img src={currentImage} alt="Character"/>}
                 </div>
-                <div className="flex flex-col m-2 justify-between w-1/2 px-4 space-y-6">
-                    <div>
-                        <h1 className="mb-2 text-2xl font-bold leading-tight">
+                <div className="flex flex-col m-4 justify-between w-1/2 px-4 space-y-6 bg-white shadow-lg rounded-lg">
+                    <div className="p-4 border-b border-gray-200">
+                        <h1 className="text-2xl font-semibold leading-tight text-gray-800">
                             New Player
                         </h1>
                     </div>
-                    <div>
+                    <div className="p-4">
                         <form onSubmit={handleAddPlayer}>
-                            <div className={"flex flex-col space-y-4"}>
+                            <div className="flex flex-col space-y-4">
                                 <input
                                     onChange={(e) => setPlayerName(e.target.value)}
-                                    className="w-full px-5 py-5 border rounded focus:border-blue-500 focus:outline-none"
-                                    type="text" placeholder="Name"/>
-                                <ReactSearchAutocomplete
+                                    className="w-full px-4 py-2 border rounded focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+                                    type="text" placeholder="Name"
+                                />
+                                <ReactSearchAutocomplete<Item>
                                     items={items}
                                     onSearch={handleOnSearch}
                                     onHover={handleOnHover}
                                     onSelect={handleOnSelect}
                                     autoFocus
+                                    showIcon={false}
+                                    styling={{
+                                        height: "44px",
+                                        border: "1px solid #dfe1e5",
+                                        borderRadius: "8px",
+                                        backgroundColor: "white",
+                                        boxShadow: "rgba(32, 33, 36, 0.1) 0px 1px 6px 0px",
+                                        color: "#212121",
+                                        hoverBackgroundColor: "#f7f7f7",
+                                        fontSize: "16px",
+                                        fontFamily: "Arial, sans-serif",
+                                        iconColor: "grey",
+                                        lineColor: "rgb(232, 234, 237)",
+                                        placeholderColor: "grey",
+                                        clearIconMargin: '3px 14px 0 0',
+                                        searchIconMargin: '0 0 0 16px'
+                                    }}
                                 />
                                 <button
                                     type="submit"
-                                    className="block w-full py-3 mt-3 text-white bg-blue-500 rounded shadow-lg hover:bg-blue-600">
+                                    className="block w-full py-2 text-black bg-gray-200 shadow rounded hover:shadow-xl outline-5 transition duration-150 ease-in-out">
                                     Add
                                 </button>
                             </div>

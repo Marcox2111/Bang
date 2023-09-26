@@ -47,17 +47,17 @@ export function GameProvider({children}) {
     const [activePlayerID, setActivePlayerID] = useState<string | null>(null);
 
 
-    const addNewPlayer = (name:string,character:string) => {
+    const addNewPlayer = (name:string,char:string) => {
 
         const newPlayer: Player = {
             id: name, // This will give a new ID based on the current number of players
             character: {
-                id: 'defaultCharacterId', // You can adjust this as needed
-                title: character
+                id: char, // You can adjust this as needed
+                title: char
             },
             role: {
-                id: 'defaultRoleId', // You can adjust this as needed
-                title: 'Default Role'
+                id: 'role', // You can adjust this as needed
+                title: 'role'
             },
             Hand: [],
             Ground: []
