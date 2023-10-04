@@ -21,12 +21,10 @@ export function List({id, type, cards}: ListProps) {
         }
     });
 
-    const addCard = (type : string) => {
-        const newId = Math.random().toString(36).substring(2, 10);
-        const newCard = {id: newId, title: newId}; // Adjust as needed
-        addCardToPlayerHand(type,newCard);
-    };
+    function addCard()
+    {
 
+    }
 
 
     return (
@@ -45,7 +43,7 @@ export function List({id, type, cards}: ListProps) {
                     />
                 ))}
                 {/*{type === "Hand" && (*/}
-                    <button onClick={() => addCard(type)} className="inline-block px-4 py-8 cursor-pointer select-none">
+                    <button onClick={() => addCard()} className="inline-block px-4 py-8 cursor-pointer select-none">
                         <div className="card-button"></div>
                     </button>
                 {/*)}*/}

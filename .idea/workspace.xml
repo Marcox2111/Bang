@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Modal Window">
-      <change afterPath="$PROJECT_DIR$/src/components/DraggableCard.tsx" afterDir="false" />
+    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Fixed Bug Role and Searchbox">
+      <change afterPath="$PROJECT_DIR$/src/components/AddCard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/addPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/addPlayer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cards/downloadimages.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cards/downloadimages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/addPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddPlayer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/playerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globalStyles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +57,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2023.2.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -81,6 +82,9 @@
       <workItem from="1695557205213" duration="10616000" />
       <workItem from="1695615242984" duration="7725000" />
       <workItem from="1695666615298" duration="283000" />
+      <workItem from="1695701986816" duration="7326000" />
+      <workItem from="1695878367889" duration="4555000" />
+      <workItem from="1696256899764" duration="6090000" />
     </task>
     <task id="LOCAL-00001" summary="Dunno">
       <option name="closed" value="true" />
@@ -122,17 +126,43 @@
       <option name="project" value="LOCAL" />
       <updated>1695615367977</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Fixed Bug Role and Searchbox">
+      <option name="closed" value="true" />
+      <created>1695702057742</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1695702057744</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Dunno" />
     <MESSAGE value="PlayerContainer" />
     <MESSAGE value="Drag and Drop" />
     <MESSAGE value="Modal Window" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modal Window" />
+    <MESSAGE value="Fixed Bug Role and Searchbox" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Bug Role and Searchbox" />
   </component>
 </project>

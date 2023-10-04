@@ -7,7 +7,7 @@ type Item = {
     name: string;
 }
 
-export function AddPlayer({onClose}) {
+export function AddPlayer() {
     const {addNewPlayer} = useGame();
     const initialImage = require("../cards/bang_cards/character/bartcassidy.png");
     const [currentImage, setCurrentImage] = useState(initialImage);
@@ -68,8 +68,6 @@ export function AddPlayer({onClose}) {
     return (
         <div className="fixed inset-0 flex items-center justify-center min-h-screen">
             <div className="relative flex justify-center max-w-xl py-4 m-auto bg-white shadow-2xl">
-                <span onClick={onClose}
-                      className="absolute top-0 right-0 block w-10 h-5 -mt-2 -mr-4 text-xs text-center text-gray-600 transform rotate-45 bg-white rounded shadow-md cursor-pointer hover:bg-gray-100">close</span>
                 <div className="flex">
                     {currentImage && <img src={currentImage} alt="Character"/>}
                 </div>
@@ -124,3 +122,4 @@ export function AddPlayer({onClose}) {
         </div>
     );
 }
+

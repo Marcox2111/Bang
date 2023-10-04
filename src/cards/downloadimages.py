@@ -31,4 +31,5 @@ for card in card_names:
     else:
         print(f"Failed to download {image_name}")
 
+
 print("Download completed!")
