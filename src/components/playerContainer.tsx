@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Hero} from './hero';
 import {List} from './list';
 import {Card} from "./card";
-import {useGame} from "../context/context";
+import {useGame} from "../context/Context";
 import {DndContext, DragOverlay} from '@dnd-kit/core';
 import {DraggableCard} from "./DraggableCard";
 

@@ -1,36 +1,42 @@
 import React, {createContext, useContext, useState} from 'react';
 
-type CardType = {
+export type Card = {
     id: string;
     title: string;
 };
 
-type Player = {
-    id: string;
-    character: CardType;
-    role: CardType;
-    Hand: CardType[];
-    Ground: CardType[];
+export type Player = {
+    id: number;
+    name: string;
+    character: string;
+    role: string;
+    Hand: Card[];
+    Ground: Card[];
 };
 
 type GameContextType = {
-    activePlayerID: string | null;
-    addCardToPlayerHand: (type: string, newCard: CardType) => void;
-    addNewPlayer: (name: string, character: string) => void;
+    activePlayerID: number | null;
+    addCardToPlayerHand: (type: string, newCard: Card) => void;
     moveCardList: (startList: string, endList: string, startIndex: number, endIndex: number) => void;
     players: Player[];
+    setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
     removeCardActivePlayer: (cardIndex: string) => void;
-    setActivePlayerID: React.Dispatch<React.SetStateAction<string | null>>;
+    setActivePlayerID: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 const defaultContext: GameContextType = {
     activePlayerID: null,
     players: [],
-    setActivePlayerID: () => {},  // This is a placeholder and will be overridden by the actual function
-    moveCardList: () => {},    // Placeholder
-    removeCardActivePlayer: () => {},  // Placeholder
-    addCardToPlayerHand: () => {},  // Placeholder
-    addNewPlayer: () => {}  // Placeholder
+    setPlayers: () => {
+    },   // This is a placeholder and will be overridden by the actual function
+    setActivePlayerID: () => {
+    },  // This is a placeholder and will be overridden by the actual function
+    moveCardList: () => {
+    },    // Placeholder
+    removeCardActivePlayer: () => {
+    },  // Placeholder
+    addCardToPlayerHand: () => {
+    },  // Placeholder
 };
 
 const GameContext = createContext<GameContextType>(defaultContext);
@@ -44,29 +50,29 @@ export function GameProvider({children}) {
     // useState è un hook di react che mi restituisce il player e una funzione setPlayers che mi permette di modificare questi player
     //<Player[]> è un cast per dire che players è un array di Player, lo inizializzo creando solo un player per ora che non ha nessuna carta o niente
     const [players, setPlayers] = useState<Player[]>([]);
-    const [activePlayerID, setActivePlayerID] = useState<string | null>(null);
+    const [activePlayerID, setActivePlayerID] = useState<number | null>(null);
 
 
-    const addNewPlayer = (name:string,char:string) => {
+    // const addNewPlayer = (name:string,char:string) => {
+    //
+    //     const newPlayer: Player = {
+    //         id: name, // This will give a new ID based on the current number of players
+    //         character: {
+    //             id: char, // You can adjust this as needed
+    //             title: char
+    //         },
+    //         role: {
+    //             id: 'role', // You can adjust this as needed
+    //             title: 'role'
+    //         },
+    //         Hand: [],
+    //         Ground: []
+    //     };
+    //
+    //     setPlayers(prevPlayers => [...prevPlayers, newPlayer]);
+    // };
 
-        const newPlayer: Player = {
-            id: name, // This will give a new ID based on the current number of players
-            character: {
-                id: char, // You can adjust this as needed
-                title: char
-            },
-            role: {
-                id: 'role', // You can adjust this as needed
-                title: 'role'
-            },
-            Hand: [],
-            Ground: []
-        };
-
-        setPlayers(prevPlayers => [...prevPlayers, newPlayer]);
-    };
-
-    const removeCardActivePlayer = (cardIndex:string) => {
+    const removeCardActivePlayer = (cardIndex: string) => {
         // const newHand = activePlayer.Hand.filter(c => c.id !== cardIndex);
         // setActivePlayer({
         //     ...activePlayer,
@@ -86,14 +92,14 @@ export function GameProvider({children}) {
                 const updatedPlayers = [...prevPlayers];
                 const updatedPlayer = {...updatedPlayers[playerIndex]};
                 const updatedList = [...updatedPlayer[startList]];
-        
+
                 // Move the card within the list
                 updatedList.splice(endIndex, 0, ...updatedList.splice(startIndex, 1));
-        
+
                 // Update the player's list and the players array
                 updatedPlayer[startList] = updatedList;
                 updatedPlayers[playerIndex] = updatedPlayer;
-        
+
                 return updatedPlayers;
             });
         } else {
@@ -103,16 +109,16 @@ export function GameProvider({children}) {
                 const updatedPlayer = {...updatedPlayers[playerIndex]};
                 const updatedStartList = [...updatedPlayer[startList]];
                 const updatedEndList = [...updatedPlayer[endList]];
-        
+
                 // Move the card from the start list to the end list
                 updatedEndList.splice(endIndex, 0, card);
                 updatedStartList.splice(startIndex, 1);
-        
+
                 // Update the player's lists and the players array
                 updatedPlayer[startList] = updatedStartList;
                 updatedPlayer[endList] = updatedEndList;
                 updatedPlayers[playerIndex] = updatedPlayer;
-        
+
                 return updatedPlayers;
             });
         }
@@ -120,27 +126,28 @@ export function GameProvider({children}) {
     };
 
 
-    const addCardToPlayerHand = (type: "Hand" | "Ground", newCard: CardType) => {
-        
+    const addCardToPlayerHand = (type: "Hand" | "Ground", newCard: Card) => {
+
         setPlayers(prevPlayers => {
             const playerIndex = prevPlayers.findIndex(player => player.id === activePlayerID);
-            
+
             if (playerIndex === -1) return prevPlayers; // If the player is not found, return the original array
-        
+
             const updatedPlayer = {...prevPlayers[playerIndex]};
             updatedPlayer[type] = [...updatedPlayer[type], newCard];
-        
+
             const updatedPlayers = [...prevPlayers];
             updatedPlayers[playerIndex] = updatedPlayer;
-        
+
             return updatedPlayers;
         });
-        
+
     };
 
 
     return (
-        <GameContext.Provider value={{setActivePlayerID, activePlayerID, players, addNewPlayer, moveCardList, removeCardActivePlayer, addCardToPlayerHand}}>
+        <GameContext.Provider
+            value={{setActivePlayerID, activePlayerID, players, setPlayers, moveCardList, removeCardActivePlayer, addCardToPlayerHand}}>
             {children}
         </GameContext.Provider>
     );

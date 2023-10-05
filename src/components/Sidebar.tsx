@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from "classnames";
-import {useGame} from "../context/context";
+import {useGame} from "../context/Context";
 
 // add NavItem prop to component prop
 type Props = {

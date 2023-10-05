@@ -1,125 +1,126 @@
-import React, {useState} from "react";
-import {useGame} from "../context/context";
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-
-type Item = {
-    id: string;
-    name: string;
-}
+import React, {useCallback, useState} from "react";
+import {Player, useGame} from '../context/Context';
+import {PlayerForm} from "./PlayerForm";
 
 export function AddPlayer() {
-    const {addNewPlayer} = useGame();
-    const initialImage = require("../cards/bang_cards/character/bartcassidy.png");
-    const [currentImage, setCurrentImage] = useState(initialImage);
-    const [playerName, setPlayerName] = useState(''); // For the input textbox
-    const [selectedCharacter, setSelectedCharacter] = useState<Item | null>(null);
+    // playerCount state is used to determine how many PlayerForm components to render.
+    const [playerCount, setplayerCount] = useState(1); // Start with one form
 
 
+    const {setPlayers} = useGame();
 
-    const items = [
-        'Bart Cassidy',
-        'Black Jack',
-        'Calamity Janet',
-        'El Gringo',
-        'Jesse Jones',
-        'Jourdonnais',
-        'Kit Carlson',
-        'Lucky Duke',
-        'Paul Regret',
-        'Pedro Ramirez',
-        'Rose Doolan',
-        'Sid Ketchum',
-        'Slab The Killer',
-        'Suzy Lafayette',
-        'Vulture Sam',
-        'Willy The Kid'
-    ].map(name => ({
-        id: name.toLowerCase().replace(/\s+/g, ''),  // Convert to lowercase and remove spaces
-        name: name
-    }));
 
-    const handleOnSearch = (string, results) => {
+    // formData state holds the data from each PlayerForm component.
+    // It's an array where each element is an object containing a name and character.
+    const [playerData, setPlayerData] = useState<Array<{ name: string, character: string | null }>>([]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // Map over playerData to create new Player objects
+        const newPlayers: Player[] = playerData.map((data, index) => ({
+            id: index,
+            name: data.name,
+            character: data.character || '', // Handle the case where character is null
+            role: '', // You need to set this value
+            Hand: [], // Initialize Hand as an empty array
+            Ground: [] // Initialize Ground as an empty array
+        }));
+
+        // Use setPlayers to update the players in your context
+        setPlayers(newPlayers);
     }
 
-    const handleOnHover = (result) => {
-        try {
-            const image = require(`../cards/bang_cards/character/${result.id}.png`);
-            setCurrentImage(image);
-        } catch (error) {
-            setCurrentImage(initialImage);
-        }
-    }
+    // useCallback is used to memoize the handlePlayerDataChange function.
+    // This means the function will retain its identity across renders unless its dependencies change.
+    // This is useful for performance reasons, especially when passing the function as a prop to child components.
+    const handlePlayerDataChange = useCallback((index: number, data: { name: string, character: string }) => {
+        // This function updates the formData state with the data from a PlayerForm component.
+        // It uses the previous state to create a new array, updates the element at the specified index, and returns the new array.
+        setPlayerData(prevData => {
+            const newData = [...prevData];
+            newData[index] = data;
+            return newData;
+        });
+    }, []); // Empty dependency array means this callback never re-creates unless the component unmounts and remounts.
 
-    const handleOnSelect = (item) => {
-        try {
-            const image = require(`../cards/bang_cards/character/${item.id}.png`);
-            setCurrentImage(image);
-        } catch (error) {
-            setCurrentImage(initialImage); // or set to a default image
-        }
-        setSelectedCharacter(item);
-    }
-
-    const handleAddPlayer = (event) => {
-        event.preventDefault(); // This line prevents the form from being submitted which in turn prevents the page from being refreshed
-        addNewPlayer(playerName,selectedCharacter.name);
-    };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center min-h-screen">
-            <div className="relative flex justify-center max-w-xl py-4 m-auto bg-white shadow-2xl">
-                <div className="flex">
-                    {currentImage && <img src={currentImage} alt="Character"/>}
-                </div>
-                <div className="flex flex-col m-4 justify-between w-1/2 px-4 space-y-6 bg-white shadow-lg rounded-lg">
-                    <div className="p-4 border-b border-gray-200">
-                        <h1 className="text-2xl font-semibold leading-tight text-gray-800">
-                            New Player
-                        </h1>
+        // <div className="flex flex-col justify-between items-center h-screen w-screen bg-gray-400 p-0 m-0 sm:p-4">
+        //     <form onSubmit={handleSubmit}
+        //           className="flex flex-col justify-between items-center bg-gray-300 h-full w-full sm:min-w-max sm:w-auto mb-auto">
+        //         <div className="text-2xl font-bold mt-4 mb-4">Add Players</div>
+        //
+        //         <div className="flex flex-col justify-between items-center bg-cyan-900 h-full">
+        //             <div className="bg-white h-full flex-grow-0 overflow-y-auto">
+        //                 <div className="flex flex-col">
+        //                     {Array.from({length: playerCount}, (_, i) => (
+        //                         <PlayerForm key={i} index={i} onPlayerDataChange={handlePlayerDataChange}/>
+        //                     ))}
+        //                     <button onClick={() => setplayerCount(playerCount + 1)}
+        //                             className="block w-10 h-10 bg-cyan-700 justify-center rounded-full shadow cursor-pointer select-none hover:scale-105 transition duration-300 ease-in-out mt-4">
+        //
+        //                     </button>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //         <div className="flex-none">
+        //             <button
+        //                 type={"submit"}
+        //                 className="block h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600 mt-4 mb-4">
+        //                 Done
+        //             </button>
+        //         </div>
+        //     </form>
+        // </div>
+
+//     return (
+//         <div className="flex items-center justify-center bg-white min-h-screen ">
+//             <form onSubmit={handleSubmit} className="flex flex-col items-center max-w-xl p-4 bg-white shadow-2xl rounded-xl min-w-max ">
+//                 <div className="flex justify-between items-center">
+//                     {Array.from({length: playerCount}, (_, i) => (
+//                         // Pass the handlePlayerDataChange function to each PlayerForm component
+//                         <PlayerForm key={i} index={i} onPlayerDataChange={handlePlayerDataChange} />
+//                     ))}
+//                     <button onClick={() => setplayerCount(playerCount + 1)} className="block w-10 h-10 bg-cyan-700 justify-center rounded-full shadow cursor-pointer select-none hover:scale-105 transition duration-300 ease-in-out">
+//
+//                     </button>
+//                 </div>
+//                 <button
+//                     type={"submit"}
+//                     className="block h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600">
+//                     Done
+//                 </button>
+//             </form>
+//         </div>
+//     );
+// }
+
+        <div
+            className="flex flex-col justify-between h-screen w-screen p-0 m-0 sm:p-4 sm:w-auto sm:min-h-screen sm:items-center sm:justify-center">
+            <form onSubmit={handleSubmit}
+                  className="flex flex-col justify-between items-center h-full w-full sm:h-auto sm:w-auto sm:shadow-2xl sm:rounded-xl">
+                <div className="flex-1 text-2xl font-bold mt-4 mb-4">Add Players</div>
+                <div className="h-full w-full overflow-y-auto sm:overflow-x-auto sm:h-auto sm:w-auto">
+                    <div className="flex flex-col w-full sm:h-auto sm:w-auto sm:flex-row">
+                        {Array.from({length: playerCount}, (_, i) => (
+                            <PlayerForm key={i} index={i} onPlayerDataChange={handlePlayerDataChange}/>
+                        ))}
+                        <button onClick={() => setplayerCount(playerCount + 1)}
+                                className=" flex items-center justify-center self-center shrink-0 w-20 h-20 m-10 cursor-pointer">
+                            <div
+                                className="w-10 h-10 bg-cyan-700 rounded-full shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out"/>
+                        </button>
                     </div>
-                    <div className="p-4">
-                        <form onSubmit={handleAddPlayer}>
-                            <div className="flex flex-col space-y-4">
-                                <input
-                                    onChange={(e) => setPlayerName(e.target.value)}
-                                    className="w-full px-4 py-2 border rounded focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
-                                    type="text" placeholder="Name"
-                                />
-                                <ReactSearchAutocomplete<Item>
-                                    items={items}
-                                    onSearch={handleOnSearch}
-                                    onHover={handleOnHover}
-                                    onSelect={handleOnSelect}
-                                    autoFocus
-                                    showIcon={false}
-                                    styling={{
-                                        height: "44px",
-                                        border: "1px solid #dfe1e5",
-                                        borderRadius: "8px",
-                                        backgroundColor: "white",
-                                        boxShadow: "rgba(32, 33, 36, 0.1) 0px 1px 6px 0px",
-                                        color: "#212121",
-                                        hoverBackgroundColor: "#f7f7f7",
-                                        fontSize: "16px",
-                                        fontFamily: "Arial, sans-serif",
-                                        iconColor: "grey",
-                                        lineColor: "rgb(232, 234, 237)",
-                                        placeholderColor: "grey",
-                                        clearIconMargin: '3px 14px 0 0',
-                                        searchIconMargin: '0 0 0 16px'
-                                    }}
-                                />
-                                <button
-                                    type="submit"
-                                    className="block w-full py-2 text-black bg-gray-200 shadow rounded hover:shadow-xl outline-5 transition duration-150 ease-in-out">
-                                    Add
-                                </button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
-            </div>
+                <button type="submit" onClick={handleSubmit}
+                        className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600">
+                    Done
+                </button>
+            </form>
         </div>
+
+
     );
+
 }
 

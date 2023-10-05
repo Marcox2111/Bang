@@ -1,6 +1,6 @@
 import React from "react";
 import {DraggableCard} from "./DraggableCard";
-import {useGame} from "../context/context";
+import {useGame} from "../context/Context";
 import {useDroppable} from '@dnd-kit/core';
 import {SortableContext} from "@dnd-kit/sortable";
 

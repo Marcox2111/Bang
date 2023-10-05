@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
-import {GameProvider} from "./context/context";
+import {GameProvider} from "./context/Context";
 import "./styles/globalStyles.css";
 import Layout from "./components/Layout";
 import {PlayerContainer} from "./components/playerContainer";
@@ -11,9 +11,7 @@ function App() {
     return (
         <GameProvider>
             <main>
-                <Layout>
-                    <AddPlayer />
-                </Layout>
+                <AddPlayer />
             </main>
         </GameProvider>
     );

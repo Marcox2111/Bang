@@ -4,17 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Fixed Bug Role and Searchbox">
-      <change afterPath="$PROJECT_DIR$/src/components/AddCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Layout.tsx" afterDir="false" />
+    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Refactoring everything">
+      <change afterPath="$PROJECT_DIR$/src/components/PlayerForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/downloadimages.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cards/downloadimages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/addPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddPlayer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddPlayer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hero.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/playerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/Context.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globalStyles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +87,8 @@
       <workItem from="1695701986816" duration="7326000" />
       <workItem from="1695878367889" duration="4555000" />
       <workItem from="1696256899764" duration="6090000" />
+      <workItem from="1696433604445" duration="6956000" />
+      <workItem from="1696455230979" duration="34143000" />
     </task>
     <task id="LOCAL-00001" summary="Dunno">
       <option name="closed" value="true" />
@@ -134,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695702057744</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Refactoring everything">
+      <option name="closed" value="true" />
+      <created>1696435710744</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1696435710744</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,6 +175,7 @@
     <MESSAGE value="Drag and Drop" />
     <MESSAGE value="Modal Window" />
     <MESSAGE value="Fixed Bug Role and Searchbox" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Bug Role and Searchbox" />
+    <MESSAGE value="Refactoring everything" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring everything" />
   </component>
 </project>
