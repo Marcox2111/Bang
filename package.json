@@ -15,7 +15,7 @@
     "react-dom": "^18.0.0",
     "react-scripts": "^5.0.0",
     "react-search-autocomplete": "^8.5.2",
-    "turnstone": "^2.2.0"
+    "react-select": "^5.7.7"
   },
   "scripts": {
     "start": "react-scripts start",

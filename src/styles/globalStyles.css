@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    input {
+        @apply p-4 h-11 border-2 rounded;
+    }
+}
+
+
+.react-select-container{
+    @apply h-11
+}
+
+.react-select__control{
+    @apply w-auto h-auto
+
+}
+
+.react-select__value-container{
+    @apply h-auto w-auto border-2 rounded;
+}
+
+.react-select__input-container{
+    @apply h-auto w-auto ;
+}
+
 .hide-scroll-bar {
     -ms-overflow-style: none;
     scrollbar-width: none;

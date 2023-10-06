@@ -45,71 +45,23 @@ export function AddPlayer() {
 
 
     return (
-        // <div className="flex flex-col justify-between items-center h-screen w-screen bg-gray-400 p-0 m-0 sm:p-4">
-        //     <form onSubmit={handleSubmit}
-        //           className="flex flex-col justify-between items-center bg-gray-300 h-full w-full sm:min-w-max sm:w-auto mb-auto">
-        //         <div className="text-2xl font-bold mt-4 mb-4">Add Players</div>
-        //
-        //         <div className="flex flex-col justify-between items-center bg-cyan-900 h-full">
-        //             <div className="bg-white h-full flex-grow-0 overflow-y-auto">
-        //                 <div className="flex flex-col">
-        //                     {Array.from({length: playerCount}, (_, i) => (
-        //                         <PlayerForm key={i} index={i} onPlayerDataChange={handlePlayerDataChange}/>
-        //                     ))}
-        //                     <button onClick={() => setplayerCount(playerCount + 1)}
-        //                             className="block w-10 h-10 bg-cyan-700 justify-center rounded-full shadow cursor-pointer select-none hover:scale-105 transition duration-300 ease-in-out mt-4">
-        //
-        //                     </button>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //         <div className="flex-none">
-        //             <button
-        //                 type={"submit"}
-        //                 className="block h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600 mt-4 mb-4">
-        //                 Done
-        //             </button>
-        //         </div>
-        //     </form>
-        // </div>
-
-//     return (
-//         <div className="flex items-center justify-center bg-white min-h-screen ">
-//             <form onSubmit={handleSubmit} className="flex flex-col items-center max-w-xl p-4 bg-white shadow-2xl rounded-xl min-w-max ">
-//                 <div className="flex justify-between items-center">
-//                     {Array.from({length: playerCount}, (_, i) => (
-//                         // Pass the handlePlayerDataChange function to each PlayerForm component
-//                         <PlayerForm key={i} index={i} onPlayerDataChange={handlePlayerDataChange} />
-//                     ))}
-//                     <button onClick={() => setplayerCount(playerCount + 1)} className="block w-10 h-10 bg-cyan-700 justify-center rounded-full shadow cursor-pointer select-none hover:scale-105 transition duration-300 ease-in-out">
-//
-//                     </button>
-//                 </div>
-//                 <button
-//                     type={"submit"}
-//                     className="block h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600">
-//                     Done
-//                 </button>
-//             </form>
-//         </div>
-//     );
-// }
 
         <div
-            className="flex flex-col justify-between h-screen w-screen p-0 m-0 sm:p-4 sm:w-auto sm:min-h-screen sm:items-center sm:justify-center">
+            className="flex flex-col justify-between h-screen w-screen p-0 m-0 sm:p-4 sm:min-h-screen sm:items-center sm:justify-center">
             <form onSubmit={handleSubmit}
-                  className="flex flex-col justify-between items-center h-full w-full sm:h-auto sm:w-auto sm:shadow-2xl sm:rounded-xl">
+                  className="flex flex-col justify-between items-center h-full sm:h-auto sm:shadow-2xl sm:rounded-xl sm:max-w-full">
                 <div className="flex-1 text-2xl font-bold mt-4 mb-4">Add Players</div>
-                <div className="h-full w-full overflow-y-auto sm:overflow-x-auto sm:h-auto sm:w-auto">
-                    <div className="flex flex-col w-full sm:h-auto sm:w-auto sm:flex-row">
+                <div className="h-full w-full overflow-auto hide-scroll-bar">
+                    <div className="flex flex-col sm:flex-row">
                         {Array.from({length: playerCount}, (_, i) => (
                             <PlayerForm key={i} index={i} onPlayerDataChange={handlePlayerDataChange}/>
                         ))}
-                        <button onClick={() => setplayerCount(playerCount + 1)}
-                                className=" flex items-center justify-center self-center shrink-0 w-20 h-20 m-10 cursor-pointer">
-                            <div
-                                className="w-10 h-10 bg-cyan-700 rounded-full shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out"/>
-                        </button>
+                        <div className="flex justify-center items-center">
+                            <button onClick={() => setplayerCount(playerCount + 1)}
+                                    className="flex items-center justify-center self-center shrink-0 w-20 h-20 m-4 cursor-pointer">
+                                <div className="w-10 h-10 bg-cyan-700 rounded-full shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out"/>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" onClick={handleSubmit}

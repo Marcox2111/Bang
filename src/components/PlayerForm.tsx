@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {ReactSearchAutocomplete} from 'react-search-autocomplete'
+import character from '../cards/bang_cards/character/character.json';
+import Select from "react-select";
 
 type Item = {
     id: string;
@@ -16,29 +17,8 @@ type PlayerFormProps = {
 
 
 export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
-    const items = [
-        'Bart Cassidy',
-        'Black Jack',
-        'Calamity Janet',
-        'El Gringo',
-        'Jesse Jones',
-        'Jourdonnais',
-        'Kit Carlson',
-        'Lucky Duke',
-        'Paul Regret',
-        'Pedro Ramirez',
-        'Rose Doolan',
-        'Sid Ketchum',
-        'Slab The Killer',
-        'Suzy Lafayette',
-        'Vulture Sam',
-        'Willy The Kid'
-    ].map(name => ({
-        id: name.toLowerCase().replace(/\s+/g, ''),  // Convert to lowercase and remove spaces
-        name: name
-    }));
 
-    const initialImage = require(`../cards/bang_cards/character/${items[Math.floor(Math.random() * items.length)].id}.png`);
+    const initialImage = require(`../cards/bang_cards/character/${character[Math.floor(Math.random() * character.length)].value}.png`);
     const [currentImage, setCurrentImage] = useState(initialImage);
     // playerName and playerCharacter are local states holding the input values of the form.
     const [playerName, setPlayerName] = useState<string>(''); // State for the player's name
@@ -58,7 +38,7 @@ export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
 
     const handleOnHover = (result) => {
         try {
-            const image = require(`../cards/bang_cards/character/${result.id}.png`);
+            const image = require(`../cards/bang_cards/character/${result}.png`);
             setCurrentImage(image);
         } catch (error) {
             setCurrentImage(initialImage);
@@ -75,42 +55,40 @@ export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
         setPlayerCharacter(item);
     }
 
+    const CustomOption = ({innerProps, data, label}) => (
+        <div {...innerProps} onMouseEnter={() => handleOnHover(data.value)}>
+            {label}
+        </div>
+    );
+
+
     return (
-        <div className="flex flex-row m-4 items-center justify-between p-4 space-y-4 space-x-4 bg-white border rounded-lg sm:shrink-0 sm:flex-col">
-            <div className="w-32 h-32 rounded-full overflow-hidden sm:w-auto sm:h-auto sm:rounded-none">
-                {currentImage && <img src={currentImage} alt="Character"/>}
+        <div
+            className="flex flex-row items-center justify-between p-4 m-4 sm:space-y-4 space-x-4 bg-white border rounded-lg sm:space-x-0 sm:flex-col">
+            <div
+                className="w-32 h-32 sm:w-52 border-2 border-amber-500 sm:h-auto sm:rounded-none sm:border-0 rounded-full overflow-hidden">
+                {currentImage && <img src={currentImage} alt="Character" className="w-full h-full object-cover"/>}
             </div>
-            <div className="flex flex-col flex-1 space-y-4">
+            <div className="flex flex-col flex-1 space-y-4 m-4">
                 <input
                     autoComplete="nope"
                     onChange={(e) => setPlayerName(e.target.value)}
-                    className="w-full px-4 py-2 border rounded transition duration-150 ease-in-out"
+                    className="w-full"
                     type="text" placeholder="Name"
                 />
-                <ReactSearchAutocomplete<Item>
-                    items={items}
-                    onSearch={handleOnSearch}
-                    onHover={handleOnHover}
-                    onSelect={handleOnSelect}
-                    autoFocus
-                    showIcon={false}
-                    placeholder={'Character'}
-                    styling={{
-                        height: "44px",
-                        border: "1px solid #dfe1e5",
-                        borderRadius: "8px",
-                        backgroundColor: "white",
-                        boxShadow: "rgba(32, 33, 36, 0.1) 0px 1px 6px 0px",
-                        color: "#212121",
-                        hoverBackgroundColor: "#f7f7f7",
-                        fontSize: "16px",
-                        iconColor: "grey",
-                        lineColor: "rgb(232, 234, 237)",
-                        placeholderColor: "grey",
-                        clearIconMargin: '3px 14px 0 0',
-                        searchIconMargin: '0 0 0 16px'
+
+                <Select
+                    className="react-select-container"
+                    classNamePrefix={"react-select"}
+                    unstyled={true}
+                    components={{
+                        DropdownIndicator: () => null,
+                        IndicatorSeparator: () => null,
+                        Option: CustomOption,
                     }}
+                    options={character}
                 />
+
             </div>
         </div>
     );

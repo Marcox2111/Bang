@@ -4,18 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Refactoring everything">
-      <change afterPath="$PROJECT_DIR$/src/components/PlayerForm.tsx" afterDir="false" />
+    <list default="true" id="20dd789e-2370-4e34-9ca6-b11d46670568" name="Changes" comment="Mobile First">
+      <change afterPath="$PROJECT_DIR$/src/cards/bang_cards/character/character.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddPlayer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hero.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/playerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/Context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PlayerForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlayerForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globalStyles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,6 +60,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\src\cards\bang_cards\character" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\src\components" />
     </key>
   </component>
@@ -88,7 +83,7 @@
       <workItem from="1695878367889" duration="4555000" />
       <workItem from="1696256899764" duration="6090000" />
       <workItem from="1696433604445" duration="6956000" />
-      <workItem from="1696455230979" duration="34143000" />
+      <workItem from="1696455230979" duration="65090000" />
     </task>
     <task id="LOCAL-00001" summary="Dunno">
       <option name="closed" value="true" />
@@ -146,7 +141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696435710744</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Mobile First">
+      <option name="closed" value="true" />
+      <created>1696511659076</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1696511659076</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,6 +179,7 @@
     <MESSAGE value="Modal Window" />
     <MESSAGE value="Fixed Bug Role and Searchbox" />
     <MESSAGE value="Refactoring everything" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring everything" />
+    <MESSAGE value="Mobile First" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mobile First" />
   </component>
 </project>
