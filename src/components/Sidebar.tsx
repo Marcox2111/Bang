@@ -55,19 +55,10 @@ export function Sidebar({collapsed,setCollapsed,shown}: Props) {
                             }
                         }}
                                 className="font-medium text-gray-600 hover:text-green-400 p-2 rounded-lg bg-gray-100 hover:bg-green-100">
-                            {player.id}
+                            {player.name}
                         </button>
                     ))}
-                    <button key={"newplayer"}
-                            className="font-medium border-4 border-white text-gray-600 hover:text-green-400 p-2 rounded-lg hover:bg-green-100">
-                        New Player
-                    </button>
                 </div>
-
-                <a href="#"
-                   className="flex font-medium text-gray-600 hover:text-green-400 p-2 rounded-lg hover:bg-green-100">
-                    Discard
-                </a>
             </div>
         </div>
     );

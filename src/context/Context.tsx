@@ -53,24 +53,6 @@ export function GameProvider({children}) {
     const [activePlayerID, setActivePlayerID] = useState<number | null>(null);
 
 
-    // const addNewPlayer = (name:string,char:string) => {
-    //
-    //     const newPlayer: Player = {
-    //         id: name, // This will give a new ID based on the current number of players
-    //         character: {
-    //             id: char, // You can adjust this as needed
-    //             title: char
-    //         },
-    //         role: {
-    //             id: 'role', // You can adjust this as needed
-    //             title: 'role'
-    //         },
-    //         Hand: [],
-    //         Ground: []
-    //     };
-    //
-    //     setPlayers(prevPlayers => [...prevPlayers, newPlayer]);
-    // };
 
     const removeCardActivePlayer = (cardIndex: string) => {
         // const newHand = activePlayer.Hand.filter(c => c.id !== cardIndex);

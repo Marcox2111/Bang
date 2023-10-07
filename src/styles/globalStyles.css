@@ -4,26 +4,16 @@
 
 @layer base {
     input {
-        @apply p-4 h-11 border-2 rounded;
+        @apply p-4 h-11 rounded shadow;
     }
 }
 
 
-.react-select-container{
-    @apply h-11
-}
 
-.react-select__control{
-    @apply w-auto h-auto
-
-}
-
-.react-select__value-container{
-    @apply h-auto w-auto border-2 rounded;
-}
-
-.react-select__input-container{
-    @apply h-auto w-auto ;
+.search-input .wrapper:first-child {
+    border:none;
+    box-shadow: 0 0 0 0 rgb(0 0 0 / 0.1) !important;
+    border-radius: 0.25rem;
 }
 
 .hide-scroll-bar {

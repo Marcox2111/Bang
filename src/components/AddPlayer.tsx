@@ -2,7 +2,7 @@ import React, {useCallback, useState} from "react";
 import {Player, useGame} from '../context/Context';
 import {PlayerForm} from "./PlayerForm";
 
-export function AddPlayer() {
+export function AddPlayer({setIsPlayerAdded}) {
     // playerCount state is used to determine how many PlayerForm components to render.
     const [playerCount, setplayerCount] = useState(1); // Start with one form
 
@@ -28,6 +28,7 @@ export function AddPlayer() {
 
         // Use setPlayers to update the players in your context
         setPlayers(newPlayers);
+        setIsPlayerAdded(true);
     }
 
     // useCallback is used to memoize the handlePlayerDataChange function.
@@ -48,8 +49,7 @@ export function AddPlayer() {
 
         <div
             className="flex flex-col justify-between h-screen w-screen p-0 m-0 sm:p-4 sm:min-h-screen sm:items-center sm:justify-center">
-            <form onSubmit={handleSubmit}
-                  className="flex flex-col justify-between items-center h-full sm:h-auto sm:shadow-2xl sm:rounded-xl sm:max-w-full">
+            <div className="flex flex-col justify-between items-center h-full sm:h-auto sm:shadow-2xl sm:rounded-xl sm:max-w-full">
                 <div className="flex-1 text-2xl font-bold mt-4 mb-4">Add Players</div>
                 <div className="h-full w-full overflow-auto hide-scroll-bar">
                     <div className="flex flex-col sm:flex-row">
@@ -59,7 +59,11 @@ export function AddPlayer() {
                         <div className="flex justify-center items-center">
                             <button onClick={() => setplayerCount(playerCount + 1)}
                                     className="flex items-center justify-center self-center shrink-0 w-20 h-20 m-4 cursor-pointer">
-                                <div className="w-10 h-10 bg-cyan-700 rounded-full shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out"/>
+                                <div className="w-10 h-10 bg-cyan-700 rounded-full shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                </div>
                             </button>
                         </div>
                     </div>
@@ -68,7 +72,7 @@ export function AddPlayer() {
                         className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600">
                     Done
                 </button>
-            </form>
+            </div>
         </div>
 
 

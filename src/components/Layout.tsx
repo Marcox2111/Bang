@@ -5,11 +5,7 @@ import {Sidebar} from "./Sidebar";
 const Layout = (props: PropsWithChildren) => {
     const [collapsed, setSidebarCollapsed] = useState(false);
     const [showSidebar, setShowSidebar] = useState(true);
-    const [showAddPlayerModal, setShowAddPlayerModal] = useState(false);
-
-    const toggleAddPlayerModal = () => {
-        setShowAddPlayerModal(prev => !prev);
-    };
+    
 
     return (
         // this is the alternative in case you don't want to use classnames

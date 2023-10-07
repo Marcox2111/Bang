@@ -1,17 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import { createRoot } from 'react-dom/client';
 import {GameProvider} from "./context/Context";
 import "./styles/globalStyles.css";
-import Layout from "./components/Layout";
-import {PlayerContainer} from "./components/playerContainer";
 import {AddPlayer} from "./components/AddPlayer";
+import {Game} from "./components/Game";
 
 function App() {
+    const [isPlayerAdded, setIsPlayerAdded] = useState(false);
 
     return (
         <GameProvider>
             <main>
-                <AddPlayer />
+                {isPlayerAdded ? <Game /> : <AddPlayer setIsPlayerAdded={setIsPlayerAdded} />}
             </main>
         </GameProvider>
     );

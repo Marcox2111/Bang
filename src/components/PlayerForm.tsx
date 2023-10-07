@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import character from '../cards/bang_cards/character/character.json';
-import Select from "react-select";
+import {ReactSearchAutocomplete} from "react-search-autocomplete";
 
 type Item = {
     id: string;
@@ -18,7 +18,7 @@ type PlayerFormProps = {
 
 export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
 
-    const initialImage = require(`../cards/bang_cards/character/${character[Math.floor(Math.random() * character.length)].value}.png`);
+    const initialImage = require(`../cards/bang_cards/character/${character[Math.floor(Math.random() * character.length)].id}.png`);
     const [currentImage, setCurrentImage] = useState(initialImage);
     // playerName and playerCharacter are local states holding the input values of the form.
     const [playerName, setPlayerName] = useState<string>(''); // State for the player's name
@@ -29,6 +29,8 @@ export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
         // When playerName or playerCharacter changes, this effect will run and call the
         // onPlayerDataChange function prop, passing the current playerName and playerCharacter as an argument.
         // This informs the parent component of the changes to playerName and playerCharacter.
+        // Notify parent for each change for immediate user feedback or input validation.
+        // For instance, disable "Done" button for empty or duplicate player names.
         onPlayerDataChange(index, {name: playerName, character: playerCharacter});
     }, [playerName, playerCharacter]); // Dependency array: effect runs when values in this array change
 
@@ -52,14 +54,8 @@ export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
         } catch (error) {
             setCurrentImage(initialImage); // or set to a default image
         }
-        setPlayerCharacter(item);
+        setPlayerCharacter(item.id);
     }
-
-    const CustomOption = ({innerProps, data, label}) => (
-        <div {...innerProps} onMouseEnter={() => handleOnHover(data.value)}>
-            {label}
-        </div>
-    );
 
 
     return (
@@ -77,16 +73,16 @@ export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
                     type="text" placeholder="Name"
                 />
 
-                <Select
-                    className="react-select-container"
-                    classNamePrefix={"react-select"}
-                    unstyled={true}
-                    components={{
-                        DropdownIndicator: () => null,
-                        IndicatorSeparator: () => null,
-                        Option: CustomOption,
-                    }}
-                    options={character}
+                <ReactSearchAutocomplete<Item>
+                    items={character}
+                    onSearch={handleOnSearch}
+                    onHover={handleOnHover}
+                    onSelect={handleOnSelect}
+                    autoFocus
+                    showIcon={false}
+                    showClear={false}
+                    placeholder={'Character'}
+                    className={"search-input"}
                 />
 
             </div>

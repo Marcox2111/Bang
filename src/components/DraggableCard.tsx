@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import { Card } from './card';
 
-export function DraggableCard({cardID, cardName}) {
+export function DraggableCard({id, cardName}) {
     const {
         setNodeRef,
         attributes,
@@ -11,7 +11,7 @@ export function DraggableCard({cardID, cardName}) {
         transition,
         isDragging,
     } = useSortable({
-        id: cardID,
+        id: id,
         data: {
             type: "Card",
         },
@@ -25,7 +25,7 @@ export function DraggableCard({cardID, cardName}) {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <Card cardID={cardID} cardName={cardName} />
+            <Card id={id} cardName={cardName} />
         </div>
     );
 }
