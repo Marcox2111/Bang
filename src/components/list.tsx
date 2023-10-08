@@ -1,17 +1,14 @@
 import React from "react";
-import {useGame} from "../context/Context";
 import {Card} from "./card";
-
+import { CardType } from '../types';
 
 type ListProps = {
     id: string
     type: string;
-    cards: { id: string, title: string }[];
+    cards: CardType[];
 };
 
-
 export function List({id, type, cards}: ListProps) {
-
 
     return (
         <div

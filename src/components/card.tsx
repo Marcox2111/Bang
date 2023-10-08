@@ -1,13 +1,23 @@
 import React from "react";
 
-export function Card({id, cardName}) {
+type CardProps = {
+    id: string;
+    cardName: string;
+};
+
+export function Card({id, cardName}: CardProps) {
+    let image;
+    try {
+        image = require(`../cards/bang_cards/${cardName}.png`);
+    } catch (err) {
+        console.error(err);
+        image = require('../cards/bang_cards/barile.png'); // Fallback to a default image
+    }
+
     return (
-        <button className="inline-block px-4 py-8 cursor-pointer select-none">
-            <div className="w-64 h-64 max-w-xs rounded-lg shadow-md bg-white">
-                <div className="p-4">
-                    <div className="font-bold">{cardName}</div>
-                </div>
-            </div>
-        </button>
+        <div
+            className="flex justify-center items-center">
+            {image && <img src={image} alt="Character" className={""}/>}
+        </div>
     );
 }

@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from "react";
-import {Player, useGame} from '../context/Context';
+import {useGame} from '../context/Context';
+import {Player, CardType} from "../types";
 import {PlayerForm} from "./PlayerForm";
 
 export function AddPlayer({setIsPlayerAdded}) {
@@ -14,15 +15,23 @@ export function AddPlayer({setIsPlayerAdded}) {
     // It's an array where each element is an object containing a name and character.
     const [playerData, setPlayerData] = useState<Array<{ name: string, character: string | null }>>([]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const fixedCards: CardType[] = [
+        { id: '1', title: 'bang' },
+        { id: '2', title: 'carabine' },
+        { id: '3', title: 'duello' },
+        { id: '4', title: 'indiani' },
+        { id: '5', title: 'indiani' }
+    ];
+
+
+    const handleSubmit = () => {
         // Map over playerData to create new Player objects
         const newPlayers: Player[] = playerData.map((data, index) => ({
             id: index,
             name: data.name,
             character: data.character || '', // Handle the case where character is null
             role: '', // You need to set this value
-            Hand: [], // Initialize Hand as an empty array
+            Hand: fixedCards, // Initialize Hand as an empty array
             Ground: [] // Initialize Ground as an empty array
         }));
 

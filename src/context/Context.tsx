@@ -1,22 +1,9 @@
 import React, {createContext, useContext, useState} from 'react';
-
-export type Card = {
-    id: string;
-    title: string;
-};
-
-export type Player = {
-    id: number;
-    name: string;
-    character: string;
-    role: string;
-    Hand: Card[];
-    Ground: Card[];
-};
+import {CardType, Player} from "../types";
 
 type GameContextType = {
     activePlayerID: number | null;
-    addCardToPlayerHand: (type: string, newCard: Card) => void;
+    addCardToPlayerHand: (type: string, newCard: CardType) => void;
     moveCardList: (startList: string, endList: string, startIndex: number, endIndex: number) => void;
     players: Player[];
     setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
@@ -50,7 +37,7 @@ export function GameProvider({children}) {
     // useState è un hook di react che mi restituisce il player e una funzione setPlayers che mi permette di modificare questi player
     //<Player[]> è un cast per dire che players è un array di Player, lo inizializzo creando solo un player per ora che non ha nessuna carta o niente
     const [players, setPlayers] = useState<Player[]>([]);
-    const [activePlayerID, setActivePlayerID] = useState<number | null>(null);
+    const [activePlayerID, setActivePlayerID] = useState<number>(0);
 
 
 
@@ -108,7 +95,7 @@ export function GameProvider({children}) {
     };
 
 
-    const addCardToPlayerHand = (type: "Hand" | "Ground", newCard: Card) => {
+    const addCardToPlayerHand = (type: "Hand" | "Ground", newCard: CardType) => {
 
         setPlayers(prevPlayers => {
             const playerIndex = prevPlayers.findIndex(player => player.id === activePlayerID);

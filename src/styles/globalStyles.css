@@ -8,8 +8,6 @@
     }
 }
 
-
-
 .search-input .wrapper:first-child {
     border:none;
     box-shadow: 0 0 0 0 rgb(0 0 0 / 0.1) !important;
@@ -27,5 +25,20 @@
 
 .card-button {
     @apply w-64 h-64 border-14 border-white max-w-xs rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out;
+}
+
+.circular {
+    display: grid;
+    place-items: center;
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid black;
+
+}
+
+.circular > .card {
+    grid-area: 1/1;
+    overflow: hidden;
 }
 
