@@ -23,22 +23,19 @@
     display: none;
 }
 
-.card-button {
-    @apply w-64 h-64 border-14 border-white max-w-xs rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out;
-}
 
 .circular {
+    touch-action: none;
     display: grid;
     place-items: center;
     position: relative;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 2px solid black;
-
 }
 
 .circular > .card {
     grid-area: 1/1;
     overflow: hidden;
+    pointer-events: none;
 }
 

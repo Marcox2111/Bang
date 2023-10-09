@@ -3,7 +3,11 @@ import {useGame} from '../context/Context';
 import {Player, CardType} from "../types";
 import {PlayerForm} from "./PlayerForm";
 
-export function AddPlayer({setIsPlayerAdded}) {
+type AddPlayerProps = {
+    setIsPlayerAdded: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function AddPlayer({setIsPlayerAdded}: AddPlayerProps) {
     // playerCount state is used to determine how many PlayerForm components to render.
     const [playerCount, setplayerCount] = useState(1); // Start with one form
 

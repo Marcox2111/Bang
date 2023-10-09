@@ -1,49 +1,10 @@
 import React, {useState} from 'react';
-import {Hero} from './hero';
-import {List} from './list';
-import {Card} from "./card";
 import {useGame} from "../context/Context";
-import {DndContext, DragOverlay} from '@dnd-kit/core';
-import {DraggableCard} from "./DraggableCard";
 
 
 export function PlayerContainer() {
-    const {activePlayerID, players, moveCardList} = useGame()
+    const {activePlayerID, players} = useGame()
     const [activeId, setActiveId] = useState(null)
-
-    const handleDragEnd = (event) => {
-        return;
-    }
-
-    const handleDragStart = (event) => {
-        setActiveId(event.active.id);
-    };
-
-    const handleDragOver = (event) => {
-        if (!event.over || event.active.id === event.over.id) return;
-    
-        const activeId = event.active.id;
-        const activePlayer = players.find(p => p.id === activePlayerID);
-        if (!activePlayer) return;
-    
-        const ActiveList = event.active.data.current?.sortable?.containerId;
-        const OverList = event.over.data.current?.sortable?.containerId || event.over.id.split('_').slice(2).join('_');
-    
-        const isActiveCard = event.active.data.current?.type === "Card";
-        const isOverCard = event.over.data.current?.type === "Card";
-    
-        if (!ActiveList || !OverList) return;
-    
-        const activeIndex = activePlayer[ActiveList]?.findIndex(card => card.id === activeId);
-        if (activeIndex === -1) return;
-    
-        const endIndex = isOverCard ? activePlayer[OverList]?.findIndex(card => card.id === event.over.id) : activePlayer[OverList]?.length;
-    
-        if (endIndex !== undefined) {
-            return moveCardList(ActiveList, OverList, activeIndex, endIndex);
-        }
-    };
-    
 
 
     return (

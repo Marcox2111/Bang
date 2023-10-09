@@ -35,19 +35,19 @@ export function PlayerForm({index, onPlayerDataChange}: PlayerFormProps) {
     }, [playerName, playerCharacter]); // Dependency array: effect runs when values in this array change
 
 
-    const handleOnSearch = (string, results) => {
+    const handleOnSearch = () => {
     }
 
-    const handleOnHover = (result) => {
+    const handleOnHover = (item:Item) => {
         try {
-            const image = require(`../cards/bang_cards/character/${result}.png`);
+            const image = require(`../cards/bang_cards/character/${item}.png`);
             setCurrentImage(image);
         } catch (error) {
             setCurrentImage(initialImage);
         }
     }
 
-    const handleOnSelect = (item) => {
+    const handleOnSelect = (item:Item) => {
         try {
             const image = require(`../cards/bang_cards/character/${item.id}.png`);
             setCurrentImage(image);

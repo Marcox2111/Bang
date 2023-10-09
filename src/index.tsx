@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 import {GameProvider} from "./context/Context";
 import "./styles/globalStyles.css";
 import {AddPlayer} from "./components/AddPlayer";
@@ -18,6 +18,12 @@ function App() {
 }
 
 export default App;
-const domNode = document.getElementById("root");
-const root = createRoot(domNode);
-root.render(<App />);
+
+const root = ReactDOM.createRoot(
+    document.getElementById('root') as HTMLElement
+);
+root.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);

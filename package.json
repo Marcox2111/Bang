@@ -1,34 +1,49 @@
 {
   "name": "basic-with-select-item",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "",
-  "keywords": [],
-  "main": "src/index.js",
   "dependencies": {
-    "@dnd-kit/core": "^6.0.8",
-    "@dnd-kit/sortable": "^7.0.2",
-    "@types/react": "^18.2.22",
-    "@types/react-dom": "^18.2.7",
+    "@react-spring/web": "^9.7.3",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.58",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.11",
+    "@use-gesture/react": "^10.3.0",
     "classnames": "^2.3.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
     "react-search-autocomplete": "^8.5.2",
-    "react-select": "^5.7.7"
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
     "tailwindcss": "^3.3.3"
   }
