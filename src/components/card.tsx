@@ -16,7 +16,7 @@ export function Card({id, cardName}: CardProps) {
 
     return (
         <div
-            className="flex justify-center items-center">
+            className="flex justify-center items-center pointer-events-none">
             {image && <img src={image} alt="Character" className={""}/>}
         </div>
     );
