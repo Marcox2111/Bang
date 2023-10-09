@@ -1,7 +1,7 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {Card} from "./card";
 import {CardType} from "../types";
-import {motion, PanInfo} from 'framer-motion';
+import {motion, PanInfo, useSpring} from 'framer-motion';
 
 
 type CarouselProps = {
@@ -10,7 +10,6 @@ type CarouselProps = {
 }
 
 export function Carousel({cards, divWidth}: CarouselProps) {
-    const [rotation, setRotation] = React.useState(0);
     const totalCards = cards.length;
     const rotInc = Math.PI / 22;
     const minRotation = (0.8 - Math.floor(totalCards / 2)) * rotInc * 180 / Math.PI;
@@ -18,9 +17,14 @@ export function Carousel({cards, divWidth}: CarouselProps) {
     const CarouselWidth = divWidth / Math.sin(3 / 2 * rotInc)
     const CardWidth = CarouselWidth / 13;
     const CardHeight = CardWidth * 1.57;
-    const rotationRef = useRef(0);
+    const rotation = useSpring(0, { stiffness: 100, damping: 10 });
 
-    const calculateTransformations = useCallback((index: number) => {
+    useEffect(() => {
+        rotation.set(0); // Set initial value
+    }, []); // Empty dependency array means this useEffect runs once on mount
+
+
+    function calculateTransformations (index: number) {
         const adjustedIndex = index - Math.floor(totalCards / 2);
         const translateX = (CarouselWidth / 2 - CardWidth / 1.9) * Math.cos(rotInc * adjustedIndex - Math.PI / 2);
         const translateY = (CarouselWidth / 2 - CardHeight / 1.9) * Math.sin(rotInc * adjustedIndex - Math.PI / 2);
@@ -31,7 +35,7 @@ export function Carousel({cards, divWidth}: CarouselProps) {
             translateY,
             rotationRad,
         };
-    }, [rotation]);
+    }
 
     const {
         translateX: initialX,
@@ -39,23 +43,21 @@ export function Carousel({cards, divWidth}: CarouselProps) {
         rotationRad: initialAngle
     } = calculateTransformations(Math.floor(totalCards / 2));
 
-    function onPan(event: PointerEvent, info: PanInfo) {
-        const newRotation = info.offset.x / 10 + rotationRef.current; // Adjust this calculation
-        const clampedRotation = Math.max(minRotation, Math.min(maxRotation, newRotation));
-        setRotation(clampedRotation);
-    }
 
+    const onPan = (event: PointerEvent, info: PanInfo) => {
+        const newRotation = info.offset.x / 10; // Adjust this calculation
+        const clampedRotation = Math.max(minRotation, Math.min(maxRotation, newRotation));
+        rotation.set(clampedRotation); // Use rotation.set() to update the rotation value
+    };
 
 
     return (
         <motion.div
             className="circular"
             onPan={onPan}
-            onPanEnd={(event, info) => rotationRef.current = rotation}
-            animate={{rotate: rotation}}
-            transition={{type:"spring",damping:8, stiffness:100}}
             style={{
                 width: `${CarouselWidth}px`,
+                rotate: rotation
             }}>
             {cards.map((card, index) => {
                 const {translateX, translateY, rotationRad} = calculateTransformations(index);
