@@ -6,18 +6,19 @@ import {motion, PanInfo, useSpring} from 'framer-motion';
 
 type CarouselProps = {
     cards: CardType[];
-    divWidth: number;
+    divHeight: number;
 }
 
-export function Carousel({cards, divWidth}: CarouselProps) {
+export function Carousel({cards, divHeight}: CarouselProps) {
     const totalCards = cards.length;
-    const rotInc = Math.PI / 22;
+    const maxCards = 44;
+    const rotInc = 2*Math.PI / maxCards;
     const minRotation = (0.8 - Math.floor(totalCards / 2)) * rotInc * 180 / Math.PI;
     const maxRotation = (Math.floor(totalCards / 2) - 0.8) * rotInc * 180 / Math.PI;
-    const CarouselWidth = divWidth / Math.sin(3 / 2 * rotInc)
-    const CardWidth = CarouselWidth / 13;
-    const CardHeight = CardWidth * 1.57;
-    const rotation = useSpring(0, { stiffness: 100, damping: 10 });
+    const CardHeight = divHeight/1.1;
+    const CardWidth = CardHeight/1.556;
+    const CarouselDiameter = 1.7*(CardHeight + maxCards*CardWidth/(2*Math.PI));
+    const rotation = useSpring(0, { stiffness: 100, damping: 12 });
 
     useEffect(() => {
         rotation.set(0); // Set initial value
@@ -26,8 +27,8 @@ export function Carousel({cards, divWidth}: CarouselProps) {
 
     function calculateTransformations (index: number) {
         const adjustedIndex = index - Math.floor(totalCards / 2);
-        const translateX = (CarouselWidth / 2 - CardWidth / 1.9) * Math.cos(rotInc * adjustedIndex - Math.PI / 2);
-        const translateY = (CarouselWidth / 2 - CardHeight / 1.9) * Math.sin(rotInc * adjustedIndex - Math.PI / 2);
+        const translateX = (CarouselDiameter / 2 - CardWidth / 1.9) * Math.cos(rotInc * adjustedIndex - Math.PI / 2);
+        const translateY = (CarouselDiameter / 2 - CardHeight / 1.9) * Math.sin(rotInc * adjustedIndex - Math.PI / 2);
         const rotationRad = rotInc * adjustedIndex;
 
         return {
@@ -56,7 +57,7 @@ export function Carousel({cards, divWidth}: CarouselProps) {
             className="circular"
             onPan={onPan}
             style={{
-                width: `${CarouselWidth}px`,
+                width: `${CarouselDiameter}px`,
                 rotate: rotation
             }}>
             {cards.map((card, index) => {
@@ -75,6 +76,7 @@ export function Carousel({cards, divWidth}: CarouselProps) {
                         style={{
                             width: `${CardWidth}px`,
                             height: `${CardHeight}px`,
+                            transform: `translate(${translateX}px, ${translateY}px) rotate(${rotationRad}rad)`
                         }}
                     >
                         <Card id={card.id} cardName={card.title}/>
