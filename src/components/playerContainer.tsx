@@ -1,39 +1,32 @@
-import React, {useState} from 'react';
-import {useGame} from "../context/Context";
+import React from 'react';
+import Carousel from "./Carousel";
+import {useMediaQuery} from "react-responsive";
+import {useResizeDetector} from "react-resize-detector";
+import {Player} from "../types";
+
+type PlayerContainerProps = {
+    player: Player;
+}
+
+export function PlayerContainer({ player }: PlayerContainerProps) {
+    const isSmallScreen = useMediaQuery({maxWidth: 640});
 
 
-export function PlayerContainer() {
-    const {activePlayerID, players} = useGame()
-    const [activeId, setActiveId] = useState(null)
+    const {height: carHeight,ref:carRef} = useResizeDetector();
+    const {width: containerWidth,ref:containerDiv} = useResizeDetector();
 
 
     return (
-        // activePlayerID ? (
-        //     <div className="grid grid-cols-4 justify-between items-center">
-        //         <div className="col-span-3 flex flex-col">
-        //             <DndContext
-        //                 onDragStart={handleDragStart}
-        //                 onDragOver={handleDragOver}
-        //                 onDragEnd={handleDragEnd}
-        //             >
-        //                 <List id={`Player_${activePlayerID}_Hand`} type="Hand" cards={players.find(p => p.id === activePlayerID)?.Hand}/>
-        //                 <List id={`Player_${activePlayerID}_Ground`} type="Ground" cards={players.find(p => p.id === activePlayerID)?.Ground}/>
-        //
-        //                 <DragOverlay dropAnimation={{
-        //                     duration: 500,
-        //                     easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
-        //                 }}>
-        //                     {activeId ? <DraggableCard cardID={activeId} cardName={activeId}/> : null}
-        //                 </DragOverlay>
-        //             </DndContext>
-        //         </div>
-        //         <div className="col-span-1">
-        //             <Hero/>
-        //         </div>
-        //     </div>
-        // ) : (
-            <div >
+        <div
+            className="flex flex-col justify-between h-full w-full overflow-hidden p-0 m-0 sm:p-4 sm:min-h-screen sm:items-center sm:justify-center touch-none">
+            <div ref={containerDiv}
+                 className="flex flex-col justify-between items-center h-full w-full sm:shadow-2xl sm:rounded-xl max-w-full">
+                <div className="text-2xl font-bold mt-4 mb-4">{player.name}</div>
+                <div ref={carRef} className="basis-1/3 overflow-hidden sm:basis-1/4">
+                    {carHeight > 0 && <Carousel divHeight={carHeight} divWidth={containerWidth} cards={player.Hand}/>}
+                </div>
             </div>
-        // )
+        </div>
+
     );
 }
