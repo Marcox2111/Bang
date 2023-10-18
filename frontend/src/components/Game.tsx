@@ -1,48 +1,50 @@
 import React from "react";
 import {useGame} from "../context/Context";
 import {PlayerContainer} from "./playerContainer";
+import {useResizeDetector} from "react-resize-detector";
 
 
 export function Game() {
     const {players} = useGame();
+    const {width: containerWidth,ref:containerDiv} = useResizeDetector();
 
 
     return (
-            <div
+        <div className="w-screen h-screen overflow-hidden">
+            <div ref={containerDiv}
+                className="w-full h-full"
                 style={{
-                    perspective: "10000cm",
                     transformStyle: "preserve-3d",
                     position: "absolute",
                     border: "1px solid black",
-                    height: "50%",
-                    width: "50%",
-                    left: "25%",
-                    top: "25%",
                     transform: `rotateY(0deg)`,
-                    transition: "transform 1s"
+                    transition: "transform 1s",
+                    left: "0%",
+                    top: "0%",
                 }}
             >
                 {players.map((objectPlayer, index) => {
                     return (
-                        // <PlayerContainer key={index} player={objectPlayer} />
                         <div key={index} style={{
-                            backgroundColor: `hsl(${index * (360 / players.length)}, 100%, 70%)`,
                             position: "absolute",
                             width: "100%",
                             height: "100%",
                             border: "5px inset silver",
-                            // top: "calc(50% - 75px)",
-                            // left: "calc(50% - 75px)",
+                            top: "0%",
+                            left: "0%",
+                            background: "white",
                             transform: `
-                        rotateY(${index * (360 / players.length)+30}deg)
-                        translateZ(300px)
-                        `,
+                                rotateY(${index * (360 / players.length) + 0}deg)
+                                translateZ(${Math.round((containerWidth/2)/Math.tan(Math.PI/players.length))}px)
+                            `,
                             transition: "transform 1s"
                         }}>
-                            <PlayerContainer key={index} player={objectPlayer}/>
+                            <PlayerContainer player={objectPlayer} key={index}/>
                         </div>
                     );
                 })}
             </div>
+        </div>
+
     )
 }
