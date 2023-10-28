@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ChatGateway } from './app.gateway';
+import { LobbyGateway } from './lobby.gateway';
+import { LobbyService } from './lobby.service';
+
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [ChatGateway],
+  providers: [LobbyGateway, LobbyService],
 })
 export class AppModule {}

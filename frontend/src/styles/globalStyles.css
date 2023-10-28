@@ -1,3 +1,5 @@
+@import "drawer.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +9,6 @@
         @apply p-4 h-11 rounded shadow;
     }
 }
-
 
 .search-input .wrapper:first-child {
     border:none;
@@ -32,12 +33,11 @@
     position: relative;
     aspect-ratio: 1;
     border-radius: 50%;
+    border: 5px solid #e5e7eb;
 }
 
 .circular > .card {
     grid-area: 1/1;
     user-select: none;
-    /*overflow: hidden;*/
-    /*pointer-events: none;*/
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
-import {Card} from "./card";
-import { CardType } from '../types';
+import {CardComponent} from "./CardComponent";
+import { CardType } from '../../../shared/types';
 
 type ListProps = {
     id: string
@@ -14,7 +14,7 @@ export function List({id, type, cards}: ListProps) {
         <div
             className="flex flex-grow overflow-x-scroll overflow-y-visible hide-scroll-bar">
             {cards.map((card, index) => (
-                <Card key={card.id} id={card.id} cardName={card.title}/>
+                <CardComponent key={card.id} card={card}/>
             ))}
         </div>
     );

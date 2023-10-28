@@ -3,7 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ServerOptions } from 'socket.io';
 import { join } from 'path';
-import { AppModule } from './app.module';
+import {AppModule} from "./app.module";
 
 export class SocketAdapter extends IoAdapter {
   createIOServer(
@@ -30,7 +30,6 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:3000',
   });
-  console.log(app)
   app.useWebSocketAdapter(new SocketAdapter(app));
   await app.listen(3001);
 }

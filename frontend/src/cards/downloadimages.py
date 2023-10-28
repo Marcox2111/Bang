@@ -4,7 +4,7 @@ import os
 # Base URL for the images
 BASE_URL = "https://bang.dvgiochi.com/content/1/cards/"
 DIRECTORY_NAME = 'bang_cards'
-# Card names extracted from the table
+# CardComponent names extracted from the table
 card_names = [
     "Barile", "Dinamite", "Mirino", "Mustang", "Prigione", "Remington", "Rev. Carabine", "Schofield",
     "Volcanic", "Winchester", "Bang!", "Birra", "Cat Balou", "Diligenza", "Duello", "Emporio", "Gatling",
