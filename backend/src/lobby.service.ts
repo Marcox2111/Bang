@@ -7,18 +7,42 @@ import {Room} from './objects/room.model';
 export class LobbyService {
     private rooms = new Map<string, Room>();
 
-    private emitRoomInfo(client: Socket) {
-        const roomID = client.data.roomID;
+    // Helper function to handle errors
+    private handleError(client: Socket, message: string): void {
+        client.emit('error', {message});
+    }
+
+    // Helper function to get client data
+    private getClientData(
+        client: Socket,
+    ): { roomID: string; playerName: string } | null {
+        const {roomID, playerName} = client.data;
+        if (!roomID || !playerName) {
+            this.handleError(client, 'Invalid client data');
+            return null;
+        }
+        return {roomID, playerName};
+    }
+
+    // Emit room info to a client
+    private emitRoomInfo(client: Socket): void {
+        const clientData = this.getClientData(client);
+        if (!clientData) return;
+
+        const {roomID, playerName} = clientData;
         const room = this.rooms.get(roomID);
-        const playerName = client.data.playerName;
         if (!room) {
-            client.emit('error', {message: 'Room not found'});
+            this.handleError(client, 'Room not found');
             return;
         }
         client.emit('roomInfo', room.toClient(playerName));
     }
 
-    createRoom(client: Socket, roomID: string, playerName: string): { success: boolean; message?: string } {
+    createRoom(
+        client: Socket,
+        roomID: string,
+        playerName: string,
+    ): { success: boolean; message?: string } {
         client.data = {roomID, playerName};
 
         if (this.rooms.has(roomID)) {
@@ -37,7 +61,11 @@ export class LobbyService {
         return {success: true};
     }
 
-    joinRoom(client: Socket, roomID: string, playerName: string): { success: boolean; message?: string } {
+    joinRoom(
+        client: Socket,
+        roomID: string,
+        playerName: string,
+    ): { success: boolean; message?: string } {
         client.data = {roomID, playerName};
         const room = this.rooms.get(roomID);
 
@@ -52,17 +80,19 @@ export class LobbyService {
         return {success: true};
     }
 
-    getRoomInfo(client: Socket) {
+    getRoomInfo(client: Socket): void {
         this.emitRoomInfo(client);
     }
 
-    removePlayer(client: Socket) {
-        const roomID = client.data.roomID;
-        const playerName = client.data.playerName;
+    removePlayer(client: Socket): void {
+        const clientData = this.getClientData(client);
+        if (!clientData) return;
+
+        const {roomID, playerName} = clientData;
         const room = this.rooms.get(roomID);
 
         if (!room) {
-            client.emit('error', {message: 'Room not found'});
+            this.handleError(client, 'Room not found');
             return;
         }
 
@@ -75,12 +105,15 @@ export class LobbyService {
         }
     }
 
-    handleReady(client: Socket) {
-        const roomID = client.data.roomID;
+    handleReady(client: Socket): void {
+        const clientData = this.getClientData(client);
+        if (!clientData) return;
+
+        const {roomID} = clientData;
         const room = this.rooms.get(roomID);
 
         if (!room) {
-            client.emit('error', {message: 'Room not found'});
+            this.handleError(client, 'Room not found');
             return;
         }
 
@@ -89,15 +122,14 @@ export class LobbyService {
         client.to(roomID).emit('startGame');
     }
 
-    //SONO PIGRO, NON ME NE FOTTE FACCIO TUTTO IN UN UNICO FILE
+    handleStartTurn(client: Socket): void {
+        const clientData = this.getClientData(client);
+        if (!clientData) return;
 
-
-    handleStartTurn(client: Socket) {
-        const roomID = client.data.roomID;
-        const playerName = client.data.playerName;
+        const {roomID, playerName} = clientData;
         const room = this.rooms.get(roomID);
         if (!room) {
-            client.emit('error', {message: 'Room not found'});
+            this.handleError(client, 'Room not found');
             return;
         }
         room.startTurnDraw(playerName);
@@ -105,8 +137,18 @@ export class LobbyService {
         client.to(roomID).emit('playerAction');
     }
 
-    handleNext(client: Socket) {
-        this.emitRoomInfo(client)
-    }
+    handleNext(client: Socket): void {
+        const clientData = this.getClientData(client);
+        if (!clientData) return;
 
+        const {roomID, playerName} = clientData;
+        const room = this.rooms.get(roomID);
+        if (!room) {
+            this.handleError(client, 'Room not found');
+            return;
+        }
+        room.nextTurn();
+        client.emit('playerAction');
+        client.to(roomID).emit('playerAction');
+    }
 }

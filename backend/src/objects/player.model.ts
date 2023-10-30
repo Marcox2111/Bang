@@ -22,6 +22,11 @@ export class Player {
 
     addCards(cards: Card[]) {
         this.cards.push(...cards);
+        this.arrangeCards()
+    }
+
+    private arrangeCards() {
+        this.cards.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     playCard(cardId: string, target?: Player) {

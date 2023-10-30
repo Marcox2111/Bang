@@ -35,10 +35,10 @@ export function PlayerCarousel() {
                                 rotateY(${index * (360 / players.length) + rotationPlayer}deg)
                                 translateZ(${Math.round((containerWidth / 2) / Math.tan(Math.PI / players.length))}px)
                             `,
-                        transition: "transform 0.5s"
+                        transition: "transform 1.32s"
                     }}>
-                        {objectPlayer.id === clientPlayer.id ? <PlayerContainer player={objectPlayer}/> :
-                            <EnemyContainer player={objectPlayer}/>}
+                        {objectPlayer.id === clientPlayer.id ? <PlayerContainer key={objectPlayer.id} player={objectPlayer}/> :
+                            <EnemyContainer key={objectPlayer.id} player={objectPlayer}/>}
                     </div>
                 );
             })}

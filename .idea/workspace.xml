@@ -4,55 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="Inizio a fare il backend">
-      <change afterPath="$PROJECT_DIR$/backend/src/lobby.gateway.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/lobby.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/objects/card.model.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/objects/cardfactory.model.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/objects/deck.model.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/objects/player.model.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/objects/room.model.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/CharChoice.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/EnemyContainer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/EquippedCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Lobby.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/PlayerCarousel.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/PlayerList.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/TargetMap.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/context/ShowCardContext.tsx" afterDir="false" />
+    <list default="true" id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="Eh tante cose, mo non mi ricordo">
       <change afterPath="$PROJECT_DIR$/frontend/src/context/SocketContext.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/context/constants.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/context/socket.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/dev/README.md" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frontend/src/dev/index.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frontend/src/dev/palette.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/styles/drawer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shared/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/app.gateway.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/lobby.gateway.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/lobby.gateway.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/lobby.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/lobby.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/objects/player.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/objects/player.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/objects/room.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/objects/room.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/cards/downloadimages.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/cards/downloadimages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddPlayer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Carousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Carousel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Game.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Game.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerForm.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Sidebar.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/CardComponent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/hero.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/list.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/EnemyContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/EnemyContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Lobby.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Lobby.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerCarousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerCarousel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/playerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/playerContainer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/context/Context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/Context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/globalStyles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/types.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tailwind.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +45,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="JsBowerSettings">
+    <bower-package value="" />
+    <bower.json value="" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -95,13 +67,16 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Marco/Documents/JavaScript/basic-with-select-item&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Marco/Documents/JavaScript/basic-with-select-item/frontend&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\Marco\\AppData\\Roaming\\npm\\node_modules\\prettier&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Marco\\Documents\\JavaScript\\basic-with-select-item\\backend\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -118,6 +93,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\frontend" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\backend\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -128,7 +104,7 @@
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\backend\ù" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.start">
     <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/frontend/package.json" />
       <command value="run" />
@@ -139,13 +115,27 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="npm.start" />
+        <item itemvalue="npm.test" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="" />
@@ -164,6 +154,8 @@
       <workItem from="1698262533297" duration="22000" />
       <workItem from="1698262823437" duration="115000" />
       <workItem from="1698262946719" duration="58665000" />
+      <workItem from="1698477412294" duration="7525000" />
+      <workItem from="1698563408062" duration="13474000" />
     </task>
     <task id="LOCAL-00001" summary="Inizio a fare il backend">
       <option name="closed" value="true" />
@@ -173,7 +165,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697643809865</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Eh tante cose, mo non mi ricordo">
+      <option name="closed" value="true" />
+      <created>1698477722765</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1698477722765</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,6 +190,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Inizio a fare il backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inizio a fare il backend" />
+    <MESSAGE value="Eh tante cose, mo non mi ricordo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Eh tante cose, mo non mi ricordo" />
   </component>
 </project>

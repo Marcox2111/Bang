@@ -21,11 +21,10 @@ export function Lobby({setCurrentPage}: AddPlayerProps) {
     }
 
     useEffect(() => {
-        let startGameReceived = false;
 
         updateRoomInfo();
 
-        socket.on('playerJoined', ()=> {
+        socket.on('playerJoined', () => {
             updateRoomInfo();
         });
 

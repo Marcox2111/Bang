@@ -4,18 +4,21 @@ import {
     OnGatewayInit,
     SubscribeMessage,
     WebSocketGateway,
-    WebSocketServer
+    WebSocketServer,
 } from '@nestjs/websockets';
 import {Server, Socket} from 'socket.io';
 import {Inject, Logger} from '@nestjs/common';
 import {LobbyService} from './lobby.service';
 
 @WebSocketGateway()
-export class LobbyGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+export class LobbyGateway
+    implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() wss: Server;
     private logger: Logger = new Logger('LobbyGateway');
 
-    constructor(@Inject(LobbyService) private readonly lobbyService: LobbyService) {
+    constructor(
+        @Inject(LobbyService) private readonly lobbyService: LobbyService,
+    ) {
     }
 
     afterInit(server: any) {
@@ -32,8 +35,15 @@ export class LobbyGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     }
 
     @SubscribeMessage('createRoom')
-    handleRoomCreation(client: Socket, data: { roomID: string; playerName: string }): void {
-        const result = this.lobbyService.createRoom(client, data.roomID, data.playerName);
+    handleRoomCreation(
+        client: Socket,
+        data: { roomID: string; playerName: string },
+    ): void {
+        const result = this.lobbyService.createRoom(
+            client,
+            data.roomID,
+            data.playerName,
+        );
         if (result.success) {
             this.logger.debug(`Room created: ${data.roomID}`);
         } else {
@@ -42,8 +52,15 @@ export class LobbyGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     }
 
     @SubscribeMessage('joinRoom')
-    handleRoomJoin(client: Socket, data: { roomID: string; playerName: string }) {
-        const result = this.lobbyService.joinRoom(client, data.roomID, data.playerName);
+    handleRoomJoin(
+        client: Socket,
+        data: { roomID: string; playerName: string },
+    ) {
+        const result = this.lobbyService.joinRoom(
+            client,
+            data.roomID,
+            data.playerName,
+        );
         if (result.success) {
             this.logger.debug(`Joined room: ${data.roomID}`);
         } else {
@@ -64,12 +81,12 @@ export class LobbyGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     //SONO PIGRO, NON ME NE FOTTE FACCIO TUTTO IN UN UNICO FILE, DA QUI PARTE IL GIOCO
 
     @SubscribeMessage('startTurnDraw')
-    handleStartTurn(client:Socket){
-        this.lobbyService.handleStartTurn(client)
+    handleStartTurn(client: Socket) {
+        this.lobbyService.handleStartTurn(client);
     }
 
     @SubscribeMessage('passTurn')
-    handleNextTurn(client:Socket){
-        this.lobbyService.handleNext(client)
+    handleNextTurn(client: Socket) {
+        this.lobbyService.handleNext(client);
     }
 }

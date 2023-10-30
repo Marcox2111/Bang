@@ -3,85 +3,99 @@ import {Deck} from "./deck.model";
 import {RoomType} from "../../../shared/types";
 
 export class Room {
-    id: string;
-    players: Player[];  // Changed from Set<Player> to Player[]
-    deck: Deck;
-    currentPlayerIndex: number;
+    readonly id: string;
+    private players: Player[] = []; // initialize here, type inferred
+    private deck = new Deck(); // initialize here, type inferred
+    private currentPlayerIndex = 0; // initialize here, type inferred
 
     constructor(roomID: string) {
         this.id = roomID;
-        this.players = [];  // Changed from new Set() to []
-        this.deck = new Deck();
     }
 
     toClient(playerName: string): RoomType {
         return {
             id: this.id,
-            players: this.players.map(player => ({  // Removed Array.from
+            players: this.players.map((player) => ({
                 id: player.id,
                 isHost: player.isHost,
                 name: player.name,
                 range: player.range,
                 turn: player.turn,
-                cards: player.name === playerName ? player.cards.map(card => ({  // Removed Array.from
-                    id: card.id,
-                    name: card.name,
-                    target: card.target
-                })) : player.cards.map(card => ({  // Removed Array.from
-                    id: card.id,
-                    name: "hidden",
-                    target: null,
-                })),
+                cards:
+                    player.name === playerName
+                        ? player.cards.map((card) => ({
+                            id: card.id,
+                            name: card.name,
+                            target: card.target,
+                        }))
+                        : player.cards.map((card) => ({
+                            id: card.id,
+                            name: "hidden",
+                            target: null,
+                        })),
                 character: null,
                 hp: player.hp,
-                role: player.name === playerName || player.role === "Sheriff" ? player.role : null,
+                role:
+                    player.name === playerName || player.role === "Sheriff"
+                        ? player.role
+                        : null,
             })),
         };
     }
 
-    addPlayer(player: Player) {
-        this.players.push(player);  // Changed from this.players.add to this.players.push
+    addPlayer(player: Player): void {
+        this.players.push(player);
     }
 
-    removePlayer(playerName: string) {
-        const playerIndex = this.players.findIndex(player => player.name === playerName);  // Changed to findIndex
+    removePlayer(playerName: string): void {
+        const playerIndex = this.players.findIndex(
+            (player) => player.name === playerName,
+        );
         if (playerIndex !== -1) {
-            this.players.splice(playerIndex, 1);  // Changed to splice
+            this.players.splice(playerIndex, 1);
         }
     }
 
     isEmpty(): boolean {
-        return this.players.length === 0;  // Changed from this.players.size to this.players.length
+        return this.players.length === 0;
     }
 
     assignRoles() {
-        const numPlayers = this.players.length;  // Changed from this.players.size to this.players.length
+        const numPlayers = this.players.length; // Changed from this.players.size to this.players.length
         let roles: string[];
 
         switch (numPlayers) {
             case 1:
-                roles = ['Sheriff'];
+                roles = ["Sheriff"];
                 break;
             case 2:
-                roles = ['Sheriff', 'Renegade'];
+                roles = ["Sheriff", "Renegade"];
                 break;
             case 3:
-                roles = ['Sheriff', 'Renegade', 'Outlaw'];
+                roles = ["Sheriff", "Renegade", "Outlaw"];
                 break;
             case 4:
-                roles = ['Sheriff', 'Renegade', 'Outlaw', 'Outlaw'];
+                roles = ["Sheriff", "Renegade", "Outlaw", "Outlaw"];
                 break;
             case 5:
-                roles = ['Sheriff', 'Renegade', 'Outlaw', 'Outlaw', 'Deputy'];
+                roles = ["Sheriff", "Renegade", "Outlaw", "Outlaw", "Deputy"];
                 break;
             case 6:
-                roles = ['Sheriff', 'Renegade', 'Outlaw', 'Outlaw', 'Outlaw', 'Deputy'];
+                roles = ["Sheriff", "Renegade", "Outlaw", "Outlaw", "Outlaw", "Deputy"];
                 break;
             case 7:
-                roles = ['Sheriff', 'Renegade', 'Outlaw', 'Outlaw', 'Outlaw', 'Deputy', 'Deputy'];
+                roles = [
+                    "Sheriff",
+                    "Renegade",
+                    "Outlaw",
+                    "Outlaw",
+                    "Outlaw",
+                    "Deputy",
+                    "Deputy",
+                ];
                 break;
             default:
-                throw new Error('Invalid number of players for role assignment');
+                throw new Error("Invalid number of players for role assignment");
         }
 
         // Shuffle roles
@@ -93,7 +107,7 @@ export class Room {
         // Assign shuffled roles to players
         this.players.forEach((player, index) => {
             player.role = roles[index];
-            if (roles[index] === 'Sheriff') {
+            if (roles[index] === "Sheriff") {
                 this.currentPlayerIndex = index;
                 player.turn = true;
             }
@@ -101,20 +115,20 @@ export class Room {
     }
 
     startGame() {
-        this.assignRoles()
-        this.distributeCards()
+        this.assignRoles();
+        this.distributeCards();
     }
 
     distributeCards() {
         this.players.forEach((player, index) => {
-            const nCards = player.hp + (player.role === "Sheriff" ? 1 : 0)
-            this.drawCards(player, nCards)
-        })
+            const nCards = player.hp + (player.role === "Sheriff" ? 1 : 0);
+            this.drawCards(player, nCards);
+        });
     }
 
     startTurnDraw(playerName) {
-        const player= this.players.find(player => player.name ===playerName)
-        this.drawCards(player,2)
+        const player = this.players.find((player) => player.name === playerName);
+        this.drawCards(player, 2);
     }
 
     drawCards(player: Player, numberOfCards: number) {
@@ -122,13 +136,13 @@ export class Room {
         player.addCards(cards);
     }
 
-
     nextTurn() {
         // Set current player's turn to false
         this.players[this.currentPlayerIndex].turn = false;
 
         // Move to the next player
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+        this.currentPlayerIndex =
+            (this.currentPlayerIndex + 1) % this.players.length;
 
         // Set the new current player's turn to true
         this.players[this.currentPlayerIndex].turn = true;
@@ -142,5 +156,4 @@ export class Room {
         const actualDistance = Math.min(directDistance, circularDistance);
         return actualDistance <= player.range;
     }
-
 }
