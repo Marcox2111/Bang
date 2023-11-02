@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
 import "./styles/globalStyles.css";
 import {AddPlayer} from "./components/AddPlayer";
 import {Lobby} from "./components/Lobby";
@@ -8,9 +7,7 @@ import {GameProvider} from "./context/Context";
 import {PAGES} from "./context/constants";
 import {Game} from "./components/Game";
 import {ShowCardProvider} from "./context/ShowCardContext";
-import {DevSupport} from "@react-buddy/ide-toolbox";
-import {ComponentPreviews, useInitial} from "./dev";
-
+import reportWebVitals from "./reportWebVitals";
 function App() {
     const [currentPage, setCurrentPage] = useState(PAGES.ADD_PLAYER);
 
@@ -33,15 +30,11 @@ export default App;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <DevSupport ComponentPreviews={ComponentPreviews}
-                    useInitialHook={useInitial}
-        >
             <App/>
-        </DevSupport>
     </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals();

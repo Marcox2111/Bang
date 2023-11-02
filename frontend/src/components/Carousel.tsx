@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useMemo, useCallback, useState} from 'react';
+import React, {useEffect, useRef, useCallback, useState} from 'react';
 import {CardComponent} from './CardComponent';
 import {motion, PanInfo, useSpring} from 'framer-motion';
 import {CardType} from '../../../shared/types';
@@ -84,10 +84,6 @@ export function Carousel({cards, divHeight, divWidth}: CarouselProps) {
         [minRotation, maxRotation, rotation],
     );
 
-    const initialTransformations = useMemo(
-        () => calculateTransformations(cards.length / 2),
-        [calculateTransformations, cards.length],
-    );
 
     const initialTransform: Transformation = calculateTransformations(cards.length / 2)
     const [prevTransforms, setPrevTransforms] = useState<Transformation[]>(
@@ -143,8 +139,9 @@ export function Carousel({cards, divHeight, divWidth}: CarouselProps) {
                                 width: `${CardWidth}px`,
                                 height: `${CardHeight}px`,
                             }}
+                            whileHover={{transform: `translate(${nowTransform.translateX}px, ${nowTransform.translateY}px) rotate(${nowTransform.rotationRad}rad) scale(1.05)`, zIndex:100}}
                         >
-                            <CardComponent card={card}/>
+                            <CardComponent key={card.id} card={card}/>
                         </motion.div>
                     );
                 })}

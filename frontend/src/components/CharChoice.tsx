@@ -1,11 +1,11 @@
 import React from "react";
 
-type CardProps = {
+type CharProps = {
     role: string;
-    setRoleandchar: React.Dispatch<React.SetStateAction<boolean>>;
+    setRoleAndChar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function CharChoice({role,setRoleandchar}: CardProps) {
+export function CharChoice({role,setRoleAndChar}: CharProps) {
     let image;
     try {
         image = require(`../cards/bang_cards/role/${role}.png`);
@@ -15,7 +15,7 @@ export function CharChoice({role,setRoleandchar}: CardProps) {
     }
 
     return (
-        <div onClick={() => setRoleandchar(false)}
+        <div onClick={() => setRoleAndChar(false)}
              className="flex align-middle items-center justify-center w-full h-full">
             <div
                 className="flex justify-center items-center pointer-events-none">

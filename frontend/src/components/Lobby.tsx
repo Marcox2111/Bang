@@ -8,7 +8,7 @@ type AddPlayerProps = {
 };
 
 export function Lobby({setCurrentPage}: AddPlayerProps) {
-    const {players, updateRoomInfo} = useGame();
+    const {players} = useGame();
     const clientPlayer = players.find(player => player.name === socket.data.playerName);
 
     function handleDisconnect() {
@@ -22,15 +22,10 @@ export function Lobby({setCurrentPage}: AddPlayerProps) {
 
     useEffect(() => {
 
-        updateRoomInfo();
-
-        socket.on('playerJoined', () => {
-            updateRoomInfo();
-        });
 
 
         socket.on('startGame', () => {
-            updateRoomInfo();
+            console.log("test")
             setCurrentPage(PAGES.GAME);
         });
 
@@ -38,7 +33,6 @@ export function Lobby({setCurrentPage}: AddPlayerProps) {
         return () => {
             // Clean up the socket listener when the component unmounts
             socket.off('startGame');
-            socket.off('playerJoined');
         };
     }, []);
 

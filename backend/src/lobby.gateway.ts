@@ -9,6 +9,7 @@ import {
 import {Server, Socket} from 'socket.io';
 import {Inject, Logger} from '@nestjs/common';
 import {LobbyService} from './lobby.service';
+import {CardType} from "../../shared/types";
 
 @WebSocketGateway()
 export class LobbyGateway
@@ -68,10 +69,6 @@ export class LobbyGateway
         }
     }
 
-    @SubscribeMessage('requestRoomInfo')
-    handleRoomInfoRequest(client: Socket) {
-        this.lobbyService.getRoomInfo(client);
-    }
 
     @SubscribeMessage('ready')
     handleReady(client: Socket) {
@@ -88,5 +85,10 @@ export class LobbyGateway
     @SubscribeMessage('passTurn')
     handleNextTurn(client: Socket) {
         this.lobbyService.handleNext(client);
+    }
+
+    @SubscribeMessage('discardCard')
+    handleDiscardCard(client: Socket, cardID: string) {
+        this.lobbyService.handleDiscardCard(client, cardID);
     }
 }

@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {Socket} from 'socket.io';
 import {Player} from './objects/player.model';
 import {Room} from './objects/room.model';
+import {CardType} from "../../shared/types";
 
 @Injectable()
 export class LobbyService {
@@ -13,9 +14,7 @@ export class LobbyService {
     }
 
     // Helper function to get client data
-    private getClientData(
-        client: Socket,
-    ): { roomID: string; playerName: string } | null {
+    private getClientData(client: Socket): { roomID: string; playerName: string } | null {
         const {roomID, playerName} = client.data;
         if (!roomID || !playerName) {
             this.handleError(client, 'Invalid client data');
@@ -29,60 +28,60 @@ export class LobbyService {
         const clientData = this.getClientData(client);
         if (!clientData) return;
 
-        const {roomID, playerName} = clientData;
+        const {roomID} = clientData;
         const room = this.rooms.get(roomID);
         if (!room) {
             this.handleError(client, 'Room not found');
             return;
         }
-        client.emit('roomInfo', room.toClient(playerName));
+
+        room.forEachPlayer(player => {
+            const playerName = player.name;
+            const playerSocket = room.getPlayerSocket(playerName);
+
+            if (playerSocket) {
+                playerSocket.emit('roomInfo', room.toClient(playerName));
+            } else {
+                console.error(`No socket found for player ${playerName}`);
+            }
+        });
     }
 
-    createRoom(
-        client: Socket,
-        roomID: string,
-        playerName: string,
-    ): { success: boolean; message?: string } {
-        client.data = {roomID, playerName};
+    createRoom(clientSocket: Socket, roomID: string, playerName: string,): { success: boolean; message?: string } {
+        clientSocket.data = {roomID, playerName};
 
         if (this.rooms.has(roomID)) {
             return {success: false, message: 'Room already exists'};
         }
 
-        const newPlayer = new Player(roomID, playerName);
+        const newPlayer = new Player(roomID, playerName, clientSocket);
         newPlayer.isHost = true;
 
         const room = new Room(roomID);
         room.addPlayer(newPlayer);
         this.rooms.set(roomID, room);
 
-        client.join(roomID);
-        client.emit('roomCreated', {roomID, playerName});
+        clientSocket.join(roomID);
+        clientSocket.emit('roomCreated', {roomID, playerName});
+        this.emitRoomInfo(clientSocket)
         return {success: true};
     }
 
-    joinRoom(
-        client: Socket,
-        roomID: string,
-        playerName: string,
-    ): { success: boolean; message?: string } {
-        client.data = {roomID, playerName};
+    joinRoom(clientSocket: Socket, roomID: string, playerName: string,): { success: boolean; message?: string } {
+        clientSocket.data = {roomID, playerName};
         const room = this.rooms.get(roomID);
 
         if (!room) {
             return {success: false, message: 'Room not found'};
         }
 
-        room.addPlayer(new Player(roomID, playerName));
-        client.join(roomID);
-        client.emit('joinedRoom', {roomID, playerName});
-        client.to(roomID).emit('playerJoined');
+        room.addPlayer(new Player(roomID, playerName, clientSocket));
+        clientSocket.join(roomID);
+        clientSocket.emit('joinedRoom', {roomID, playerName});
+        this.emitRoomInfo(clientSocket)
         return {success: true};
     }
 
-    getRoomInfo(client: Socket): void {
-        this.emitRoomInfo(client);
-    }
 
     removePlayer(client: Socket): void {
         const clientData = this.getClientData(client);
@@ -105,50 +104,63 @@ export class LobbyService {
         }
     }
 
-    handleReady(client: Socket): void {
-        const clientData = this.getClientData(client);
+    handleReady(clientSocket: Socket): void {
+        const clientData = this.getClientData(clientSocket);
         if (!clientData) return;
 
         const {roomID} = clientData;
         const room = this.rooms.get(roomID);
 
         if (!room) {
-            this.handleError(client, 'Room not found');
+            this.handleError(clientSocket, 'Room not found');
             return;
         }
 
         room.startGame();
-        client.emit('startGame');
-        client.to(roomID).emit('startGame');
+        this.emitRoomInfo(clientSocket)
+        clientSocket.emit('startGame');
+        clientSocket.to(roomID).emit('startGame');
     }
 
-    handleStartTurn(client: Socket): void {
-        const clientData = this.getClientData(client);
+    handleStartTurn(clientSocket: Socket): void {
+        const clientData = this.getClientData(clientSocket);
         if (!clientData) return;
 
         const {roomID, playerName} = clientData;
         const room = this.rooms.get(roomID);
         if (!room) {
-            this.handleError(client, 'Room not found');
+            this.handleError(clientSocket, 'Room not found');
             return;
         }
         room.startTurnDraw(playerName);
-        client.emit('playerAction');
-        client.to(roomID).emit('playerAction');
+        this.emitRoomInfo(clientSocket)
     }
 
-    handleNext(client: Socket): void {
-        const clientData = this.getClientData(client);
+    handleNext(clientSocket: Socket): void {
+        const clientData = this.getClientData(clientSocket);
         if (!clientData) return;
 
         const {roomID, playerName} = clientData;
         const room = this.rooms.get(roomID);
         if (!room) {
-            this.handleError(client, 'Room not found');
+            this.handleError(clientSocket, 'Room not found');
             return;
         }
-        room.nextTurn();
-        client.emit('playerAction');
-        client.to(roomID).emit('playerAction');
+        if (room.nextTurn(playerName)) {
+            this.emitRoomInfo(clientSocket);
+        }
+    }
+
+    handleDiscardCard(clientSocket: Socket, cardID: string): void {
+        const clientData = this.getClientData(clientSocket);
+        if (!clientData) return;
+        const {roomID, playerName} = clientData;
+        const room = this.rooms.get(roomID);
+        if (!room) {
+            this.handleError(clientSocket, 'Room not found');
+            return;
+        }
+        room.discardCard(playerName, cardID)
+        this.emitRoomInfo(clientSocket)
     }
 }
