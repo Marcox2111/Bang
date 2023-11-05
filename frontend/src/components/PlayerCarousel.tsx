@@ -1,12 +1,12 @@
-import React, { useMemo } from "react";
-import { useGame } from "../context/Context";
-import { PlayerContainer } from "./playerContainer";
-import { useResizeDetector } from "react-resize-detector";
-import { EnemyContainer } from "./EnemyContainer";
+import React, {useMemo} from "react";
+import {useGame} from "../context/Context";
+import {PlayerContainer} from "./playerContainer";
+import {useResizeDetector} from "react-resize-detector";
+import {EnemyContainer} from "./EnemyContainer";
 
 export function PlayerCarousel() {
-    const { players, rotationPlayer, clientPlayer } = useGame();
-    const { width: containerWidth, ref: containerDiv } = useResizeDetector();
+    const {players, rotationPlayer, clientPlayer} = useGame();
+    const {width: containerWidth, ref: containerDiv} = useResizeDetector();
 
     const translateZValue = useMemo(() => {
         return Math.round((containerWidth / 2) / Math.tan(Math.PI / players.length));
@@ -18,14 +18,11 @@ export function PlayerCarousel() {
                 const rotationDegree = index * (360 / players.length) + rotationPlayer;
                 return (
                     <div key={objectPlayer.id} className="player-card" style={{
-                        transform: `
-                            rotateY(${rotationDegree}deg)
-                            translateZ(${translateZValue}px)
-                        `
+                        transform: `rotateY(${rotationDegree}deg) translateZ(${translateZValue}px)`
                     }}>
                         {objectPlayer.id === clientPlayer.id
-                            ? <PlayerContainer key={objectPlayer.id} player={objectPlayer} />
-                            : <EnemyContainer key={objectPlayer.id} player={objectPlayer} />
+                            ? <PlayerContainer key={objectPlayer.id} player={objectPlayer}/>
+                            : <EnemyContainer key={objectPlayer.id} player={objectPlayer}/>
                         }
                     </div>
                 );
