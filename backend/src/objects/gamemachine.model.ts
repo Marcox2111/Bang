@@ -1,7 +1,10 @@
-import {createMachine} from "xstate";
+import { createMachine, assign } from "xstate";
 
 export const machine = createMachine(
     {
+        context: {
+            currentCard: "null",
+        },
         id: "game",
         initial: "Lobby",
         states: {
@@ -63,92 +66,49 @@ export const machine = createMachine(
                                 states: {
                                     PlayingCard: {
                                         on: {
-                                            CARD_PLAYED: [
-                                                {
-                                                    target: "Saloon",
-                                                    cond: "isSaloonCard",
-                                                },
-                                                {
-                                                    target: "BangEffect",
-                                                    cond: "isBangEffect",
-                                                },
-                                                {
-                                                    target: "Duel",
-                                                    cond: "isDuelCard",
-                                                },
-                                                {
-                                                    target: "Saloon",
-                                                },
-                                            ],
+                                            CARD_PLAYED: {
+                                                target: "CardEffect",
+                                                actions: assign({ currentCard: (context, event) => event.card }),
+                                            },
                                         },
                                     },
-                                    Saloon: {},
-                                    BangEffect: {
-                                        initial: "TargetSelection",
+                                    CardEffect: {
+                                        initial: "HandlingEffect",
                                         states: {
-                                            "TargetSelection": {
-                                                on: {
-                                                    "Event 1": [
+                                            HandlingEffect: {
+                                                invoke: {
+                                                    src: "handleCardEffect",
+                                                },
+                                            },
+                                            AwaitingReaction: {
+                                                invoke: {
+                                                    src: "handleCardEffect",
+                                                    onDone: [
                                                         {
-                                                            target: "New state 1",
-                                                            cond: "isSingleTarget",
-                                                        },
-                                                        {
-                                                            target: "New state 1",
-                                                            cond: "isOtherTarget",
+                                                            target: "CheckGameOver",
+                                                            actions: assign({
+                                                                allPlayersReacted: (context, event) => event.data.allPlayersReacted,
+                                                            }),
                                                         },
                                                     ],
                                                 },
                                             },
-                                            "New state 1": {},
-                                        },
-                                    },
-                                    Duel: {
-                                        initial: "ChallengedResponse",
-                                        states: {
-                                            ChallengedResponse: {
-                                                on: {
-                                                    BANG_PLAYED: {
-                                                        target: "ChallengerResponse",
-                                                    },
-                                                    NO_BANGS: {
-                                                        target: "DUEL_RESOLUTION",
-                                                    },
+                                            CheckGameOver: {
+                                                invoke: {
+                                                    src: "checkGameOver",
+                                                    id: "gameover",
+                                                    onDone: [
+                                                        {
+                                                            target: "#game.PlayingTurn.GameOver",
+                                                        },
+                                                    ],
+                                                    onError: [
+                                                        {
+                                                            target: "#game.PlayingTurn.MainPhase.Action.PlayingCard",
+                                                        },
+                                                    ],
                                                 },
                                             },
-                                            ChallengerResponse: {
-                                                on: {
-                                                    BANG_PLAYED: {
-                                                        target: "ChallengedResponse",
-                                                    },
-                                                    NO_BANGS: {
-                                                        target: "DUEL_RESOLUTION",
-                                                    },
-                                                },
-                                            },
-                                            DUEL_RESOLUTION: {
-                                                on: {
-                                                    DUEL_RESOLVED: {
-                                                        target: "#game.PlayingTurn.MainPhase.Action.CheckGameOver",
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                    CheckGameOver: {
-                                        invoke: {
-                                            src: "checkGaveOver",
-                                            id: "gameover",
-                                            onDone: [
-                                                {
-                                                    target: "#game.PlayingTurn.GameOver",
-                                                },
-                                            ],
-                                            onError: [
-                                                {
-                                                    target: "PlayingCard",
-                                                },
-                                            ],
                                         },
                                     },
                                 },
@@ -162,17 +122,13 @@ export const machine = createMachine(
         schema: {
             events: {} as
                 | { type: "START_GAME" }
-                | { type: "ROLES_ASSIGNED" }
-                | { type: "CARDS_DISTRIBUTED" }
-                | { type: "PRE_DRAWING_RESOLVED" }
-                | { type: "PRE_ACTION_RESOLVED" }
-                | { type: "" }
                 | { type: "CARDS_DRAWN" }
                 | { type: "CARD_PLAYED" }
-                | { type: "BANG_PLAYED" }
-                | { type: "NO_BANGS" }
-                | { type: "DUEL_RESOLVED" }
-                | { type: "Event 1" },
+                | { type: "ROLES_ASSIGNED" }
+                | { type: "CARDS_DISTRIBUTED" }
+                | { type: "PRE_ACTION_RESOLVED" }
+                | { type: "PRE_DRAWING_RESOLVED" },
+            context: {} as { currentCard: string },
         },
         predictableActionArguments: true,
         preserveActionOrder: true,
@@ -180,21 +136,15 @@ export const machine = createMachine(
     {
         actions: {},
         services: {
-            checkGaveOver: createMachine({
+            handleCardEffect: createMachine({
+                /* ... */
+            }),
+
+            checkGameOver: createMachine({
                 /* ... */
             }),
         },
-        guards: {
-            isSaloonCard: (context, event) => false,
-
-            isBangEffect: (context, event) => false,
-
-            isDuelCard: (context, event) => false,
-
-            isSingleTarget: (context, event) => false,
-
-            isOtherTarget: (context, event) => false,
-        },
+        guards: {},
         delays: {},
     },
 );
