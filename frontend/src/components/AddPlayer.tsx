@@ -1,56 +1,47 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import character from "../cards/bang_cards/character/character.json";
-import {socket} from "../context/socket";
-import {PAGES} from "../context/constants";
+import { PAGES } from "../context/constants";
+import { useGame } from "../context/Context";
 
 type AddPlayerProps = {
     setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function AddPlayer({setCurrentPage}: AddPlayerProps) {
-    const initialImage = require(`../cards/bang_cards/character/${character[Math.floor(Math.random() * character.length)].id}.png`);
+export function AddPlayer({ setCurrentPage }: AddPlayerProps) {
     const [playerName, setPlayerName] = useState<string>('');
     const [roomID, setRoomID] = useState<string>('');
+    const { createRoom, joinRoom } = useGame()
 
     const isValidInputs = () => playerName !== "" && roomID !== "";
 
-    const handleCreateRoom = () => {
-        if (isValidInputs()) {
-            socket.connect();
-            socket.emit("createRoom", {roomID, playerName});
+
+    const handleCreateRoom = async () => {
+        if (playerName !== "") {
+            try {
+                await createRoom('game', { playerName });
+                setCurrentPage(PAGES.LOBBY);
+            } catch (error) {
+                console.error("Error creating room:", error);
+                // Handle error (e.g., show message to user)
+            }
         }
     };
 
-    const handleJoinRoom = () => {
+    const handleJoinRoom = async () => {
         if (isValidInputs()) {
-            socket.connect();
-            socket.emit("joinRoom", {roomID, playerName});
+            try {
+                await joinRoom(roomID, { playerName });
+                setCurrentPage(PAGES.LOBBY);
+            } catch (error) {
+                console.error("Error joining room:", error);
+                // Handle error (e.g., show message to user)
+            }
         }
     };
-
-    useEffect(() => {
-        const onRoomCreated = (data) => {
-            socket.data = data;
-            setCurrentPage(PAGES.LOBBY);
-        };
-
-        const onJoinedRoom = (data) => {
-            socket.data = data;
-            setCurrentPage(PAGES.LOBBY);
-        };
-
-        socket.on('roomCreated', onRoomCreated);
-        socket.on('joinedRoom', onJoinedRoom);
-
-        return () => {
-            socket.off('roomCreated', onRoomCreated);
-            socket.off('joinedRoom', onJoinedRoom);
-        };
-    }, []);
 
     const renderButton = (label, action) => (
         <button
-            type="submit"
+            type="button" // Changed from "submit" to "button" since we're not submitting a form
             onClick={action}
             className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600">
             {label}
@@ -67,11 +58,7 @@ export function AddPlayer({setCurrentPage}: AddPlayerProps) {
                     <div className="flex flex-col h-full justify-center align-middle sm:flex-row">
                         <div
                             className="flex flex-col items-center justify-between p-4 m-4 space-y-4 bg-white border rounded-lg space-x-0 ">
-                            <div className="h-auto w-52 border-amber-500 rounded-none overflow-hidden">
-                                {initialImage &&
-                                    <img src={initialImage} alt="Character" className="w-full h-full object-cover"/>}
-                            </div>
-                            <div className="flex flex-col flex-1 space-y-4 m-4">
+
                                 <input
                                     autoComplete="nope"
                                     onChange={(e) => setPlayerName(e.target.value)}
@@ -79,6 +66,8 @@ export function AddPlayer({setCurrentPage}: AddPlayerProps) {
                                     type="text"
                                     placeholder="Name"
                                 />
+                                {renderButton("Create Room", handleCreateRoom)}
+
                                 <input
                                     autoComplete="nope"
                                     placeholder="Room ID"
@@ -86,14 +75,11 @@ export function AddPlayer({setCurrentPage}: AddPlayerProps) {
                                     type="text"
                                     onChange={(e) => setRoomID(e.target.value)}
                                 />
-                            </div>
+                                {renderButton("Join Room", handleJoinRoom)}
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row space-x-4">
-                    {renderButton("Create Room", handleCreateRoom)}
-                    {renderButton("Join Room", handleJoinRoom)}
-                </div>
+
             </div>
         </div>
     );

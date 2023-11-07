@@ -1,20 +1,24 @@
 import React from 'react';
 import Carousel from './Carousel';
 // import {useMediaQuery} from "react-responsive";
-import {useResizeDetector} from 'react-resize-detector';
-import {PlayerType} from '../../../shared/types';
-import {useGame} from '../context/Context';
+import { useResizeDetector } from 'react-resize-detector';
+import { PlayerType } from '../../../shared/types';
+import { useGame } from '../context/Context';
 
 type PlayerContainerProps = {
     player: PlayerType;
 };
 
-export function EnemyContainer({player}: PlayerContainerProps) {
+export function EnemyContainer({ player }: PlayerContainerProps) {
     // const isSmallScreen = useMediaQuery({maxWidth: 640});
-    const {RotatePlayer} = useGame();
+    //TODO da rifare completamente questa parte del rotate,magari il container deve essere sempre lo stesso, da pensare
+    const RotatePlayer=((test: string) => {
+        return 0
+    })
 
-    const {height: carHeight, ref: carRef} = useResizeDetector();
-    const {width: containerWidth, ref: containerDiv} = useResizeDetector();
+
+    const { height: carHeight, ref: carRef } = useResizeDetector();
+    const { width: containerWidth, ref: containerDiv } = useResizeDetector();
 
     return (
         <div className="flex flex-col justify-between h-full w-full overflow-hidden p-0 m-0 touch-none">

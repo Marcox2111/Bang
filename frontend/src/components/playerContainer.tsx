@@ -1,22 +1,20 @@
 import React from "react";
 import Carousel from "./Carousel";
-import {useResizeDetector} from "react-resize-detector";
-import {PlayerType} from "../../../shared/types";
-import {EquippedCard} from "./EquippedCard";
-import {useGame} from "../context/Context";
-// import {useMediaQuery} from "react-responsive";
+import { useResizeDetector } from "react-resize-detector";
+import { PlayerType } from "../../../shared/types";
+import { EquippedCard } from "./EquippedCard";
+import { useGame } from "../context/Context";
 
 type PlayerContainerProps = {
     player: PlayerType;
 };
 
-export function PlayerContainer({player}: PlayerContainerProps) {
-    // const isSmallScreen = useMediaQuery({maxWidth: 640});
-    const {followPlayingPlayer, RotatePlayer, isYourTurn, drawCards, passTurn} =
-        useGame();
+export function PlayerContainer({ player }: PlayerContainerProps) {
 
-    const {height: carHeight, ref: carRef} = useResizeDetector();
-    const {width: containerWidth, ref: containerDiv} = useResizeDetector();
+    const { isYourTurn } = useGame();
+
+    const { height: carHeight, ref: carRef } = useResizeDetector();
+    const { width: containerWidth, ref: containerDiv } = useResizeDetector();
 
     return (
         <div className="flex flex-col justify-between h-full w-full overflow-hidden p-0 m-0 touch-none">
@@ -31,18 +29,17 @@ export function PlayerContainer({player}: PlayerContainerProps) {
                 </div>
                 <div className="flex flex-grow w-full justify-between items-center">
                     <div className="flex flex-grow space-x-4 justify-between">
-                        <div className="items-center" onClick={() => RotatePlayer("left")}>
+                        <div className="items-center" onClick={() => { }}>
                             B
                         </div>
                         <div
                             className="items-center"
                             onClick={() => {
-                                if (isYourTurn()) drawCards();
                             }}
                         >
                             mazzo
                         </div>
-                        <div className="items-center" onClick={() => RotatePlayer("right")}>
+                        <div className="items-center" onClick={() => { }}>
                             F
                         </div>
                     </div>
@@ -50,12 +47,7 @@ export function PlayerContainer({player}: PlayerContainerProps) {
                 <div
                     className="flex h-1/12 items-center"
                     onClick={() => {
-                        if (isYourTurn()) {
-                            passTurn();
-                            followPlayingPlayer();
-                        } else {
-                            followPlayingPlayer();
-                        }
+
                     }}
 
                 >
@@ -85,7 +77,7 @@ export function PlayerContainer({player}: PlayerContainerProps) {
                     )}
                 </div>
                 <div className="flex h-[5%] w-full justify-center items-center">
-                    <EquippedCard/>
+                    <EquippedCard />
                 </div>
             </div>
         </div>

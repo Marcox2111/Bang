@@ -16,7 +16,7 @@ type ShowCardProviderProps = { children: ReactNode };
 
 
 export function ShowCardProvider({children}: ShowCardProviderProps) {
-    const {isYourTurn,discardCard} = useGame()
+    const {isYourTurn} = useGame()
     const [selectedCard, setSelectedCard] = useState<CardType | null>(null);
     const [showTargetMap, setShowTargetMap] = useState<boolean>(false)
     const openCard = (card: CardType) => setSelectedCard(card);
@@ -37,7 +37,7 @@ export function ShowCardProvider({children}: ShowCardProviderProps) {
     };
 
     const handleDiscardCard = () => {
-        discardCard(selectedCard)
+        // discardCard(selectedCard)
         closeCard()
         setSelectedCard(null);
         setShowTargetMap(false);

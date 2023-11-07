@@ -1,5 +1,5 @@
-import {assign, createMachine} from "xstate";
-import {Room} from './room.model';
+import { assign, createMachine } from "xstate";
+import { Room } from './room.model';
 
 export const machine = createMachine(
     {
@@ -46,11 +46,12 @@ export const machine = createMachine(
                                     RESOLVE_FIRST_DRAW: {
                                         target: "#game.PlayingTurn.MainPhase.Action",
                                     },
-                      },
-                    },              },
-            },
+                                },
+                            },
+                        },
+                    },
 
-            MainPhase: {
+                    MainPhase: {
                         initial: "Action",
                         states: {
                             Action: {
