@@ -22,8 +22,6 @@ export function Lobby({setCurrentPage}: AddPlayerProps) {
 
     useEffect(() => {
 
-
-
         socket.on('startGame', () => {
             console.log("test")
             setCurrentPage(PAGES.GAME);

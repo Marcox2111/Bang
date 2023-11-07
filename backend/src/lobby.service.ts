@@ -2,7 +2,6 @@ import {Injectable} from '@nestjs/common';
 import {Socket} from 'socket.io';
 import {Player} from './objects/player.model';
 import {Room} from './objects/room.model';
-import {CardType} from "../../shared/types";
 
 @Injectable()
 export class LobbyService {
@@ -122,19 +121,19 @@ export class LobbyService {
         clientSocket.to(roomID).emit('startGame');
     }
 
-    handleStartTurn(clientSocket: Socket): void {
-        const clientData = this.getClientData(clientSocket);
-        if (!clientData) return;
-
-        const {roomID, playerName} = clientData;
-        const room = this.rooms.get(roomID);
-        if (!room) {
-            this.handleError(clientSocket, 'Room not found');
-            return;
-        }
-        room.startTurnDraw(playerName);
-        this.emitRoomInfo(clientSocket)
-    }
+    // handleStartTurn(clientSocket: Socket): void {
+    //     const clientData = this.getClientData(clientSocket);
+    //     if (!clientData) return;
+    //
+    //     const {roomID, playerName} = clientData;
+    //     const room = this.rooms.get(roomID);
+    //     if (!room) {
+    //         this.handleError(clientSocket, 'Room not found');
+    //         return;
+    //     }
+    //     room.startTurnDraw(playerName);
+    //     this.emitRoomInfo(clientSocket)
+    // }
 
     handleNext(clientSocket: Socket): void {
         const clientData = this.getClientData(clientSocket);

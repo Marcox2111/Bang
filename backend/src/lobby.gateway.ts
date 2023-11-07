@@ -77,10 +77,6 @@ export class LobbyGateway
 
     //SONO PIGRO, NON ME NE FOTTE FACCIO TUTTO IN UN UNICO FILE, DA QUI PARTE IL GIOCO
 
-    @SubscribeMessage('startTurnDraw')
-    handleStartTurn(client: Socket) {
-        this.lobbyService.handleStartTurn(client);
-    }
 
     @SubscribeMessage('passTurn')
     handleNextTurn(client: Socket) {

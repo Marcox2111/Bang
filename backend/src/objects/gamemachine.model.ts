@@ -1,9 +1,11 @@
-import { createMachine, assign } from "xstate";
+import {assign, createMachine} from "xstate";
+import {Room} from './room.model';
 
 export const machine = createMachine(
     {
         context: {
-            currentCard: "null",
+            room: null,
+            currentPlayerIndex: 0,
         },
         id: "game",
         initial: "Lobby",
@@ -16,9 +18,11 @@ export const machine = createMachine(
                 },
             },
             AssigningRoles: {
+                entry: 'assignRoles',  // Action to assign roles
                 on: {
                     ROLES_ASSIGNED: {
                         target: "DrawingCards",
+                        actions: 'distributeCards'  // Action to distribute cards
                     },
                 },
             },
@@ -26,6 +30,7 @@ export const machine = createMachine(
                 on: {
                     CARDS_DISTRIBUTED: {
                         target: "PlayingTurn",
+                        actions: 'startPlayingTurn'
                     },
                 },
             },
@@ -33,117 +38,84 @@ export const machine = createMachine(
                 initial: "DrawingPhase",
                 states: {
                     DrawingPhase: {
-                        initial: "PreDrawing",
+                        initial: "Drawing",
                         states: {
-                            PreDrawing: {
-                                on: {
-                                    PRE_DRAWING_RESOLVED: {
-                                        target: "Drawing",
-                                    },
-                                },
-                            },
                             Drawing: {
+                                entry: 'turnDraw',
                                 on: {
-                                    CARDS_DRAWN: {
-                                        target: "#game.PlayingTurn.MainPhase.PreAction",
+                                    RESOLVE_FIRST_DRAW: {
+                                        target: "#game.PlayingTurn.MainPhase.Action",
                                     },
-                                },
-                            },
-                        },
-                    },
-                    MainPhase: {
-                        initial: "PreAction",
+                      },
+                    },              },
+            },
+
+            MainPhase: {
+                        initial: "Action",
                         states: {
-                            PreAction: {
-                                on: {
-                                    PRE_ACTION_RESOLVED: {
-                                        target: "Action",
-                                    },
-                                },
-                            },
                             Action: {
-                                initial: "PlayingCard",
-                                states: {
-                                    PlayingCard: {
-                                        on: {
-                                            CARD_PLAYED: {
-                                                target: "CardEffect",
-                                                actions: assign({ currentCard: (context, event) => event.card }),
-                                            },
-                                        },
-                                    },
-                                    CardEffect: {
-                                        initial: "HandlingEffect",
-                                        states: {
-                                            HandlingEffect: {
-                                                invoke: {
-                                                    src: "handleCardEffect",
-                                                },
-                                            },
-                                            AwaitingReaction: {
-                                                invoke: {
-                                                    src: "handleCardEffect",
-                                                    onDone: [
-                                                        {
-                                                            target: "CheckGameOver",
-                                                            actions: assign({
-                                                                allPlayersReacted: (context, event) => event.data.allPlayersReacted,
-                                                            }),
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            CheckGameOver: {
-                                                invoke: {
-                                                    src: "checkGameOver",
-                                                    id: "gameover",
-                                                    onDone: [
-                                                        {
-                                                            target: "#game.PlayingTurn.GameOver",
-                                                        },
-                                                    ],
-                                                    onError: [
-                                                        {
-                                                            target: "#game.PlayingTurn.MainPhase.Action.PlayingCard",
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        },
+                                on: {
+                                    PASS_TURN: {
+                                        target: "#game.PlayingTurn.EndPhase",
                                     },
                                 },
                             },
                         },
                     },
-                    GameOver: {},
+                    EndPhase: {
+                        on: {
+                            RESOLVE_ENDPHASE: {
+                                target: "#game.PlayingTurn",
+                                actions: 'nextPlayer',
+                            },
+                        },
+                    },
                 },
             },
         },
         schema: {
             events: {} as
                 | { type: "START_GAME" }
-                | { type: "CARDS_DRAWN" }
-                | { type: "CARD_PLAYED" }
+                | { type: "RESOLVE_FIRST_DRAW" }
                 | { type: "ROLES_ASSIGNED" }
                 | { type: "CARDS_DISTRIBUTED" }
-                | { type: "PRE_ACTION_RESOLVED" }
-                | { type: "PRE_DRAWING_RESOLVED" },
-            context: {} as { currentCard: string },
+                | { type: "PASS_TURN" }
+                | { type: "RESOLVE_ENDPHASE" },
         },
         predictableActionArguments: true,
         preserveActionOrder: true,
     },
     {
-        actions: {},
-        services: {
-            handleCardEffect: createMachine({
-                /* ... */
+        actions: {
+            assignRoles: assign((context, event) => {
+                context.room.assignRoles();
+                const startPlayerIndex = context.room.getStartPlayerIndex();
+                return {
+                    ...context,
+                    currentPlayerIndex: startPlayerIndex,
+                };
             }),
-
-            checkGameOver: createMachine({
-                /* ... */
+            distributeCards: (context, event) => {
+                context.room.distributeCards();
+            },
+            startPlayingTurn: (context) => {
+                // ... (your logic here)
+            },
+            turnDraw: (context) => {
+                const player = context.room.players[context.currentPlayerIndex]
+                context.room.startTurnDraw(player)
+            },
+            nextPlayer: assign((context) => {
+                const nextPlayerIndex = (context.currentPlayerIndex + 1) % context.room.players.length;
+                context.room.players[context.currentPlayerIndex].turn = false;
+                context.room.players[nextPlayerIndex].turn = true;
+                return {
+                    ...context,
+                    currentPlayerIndex: nextPlayerIndex
+                };
             }),
         },
+        services: {},
         guards: {},
         delays: {},
     },
