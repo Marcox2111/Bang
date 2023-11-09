@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import character from "../cards/bang_cards/character/character.json";
-import { PAGES } from "../context/constants";
-import { useGame } from "../context/Context";
+import {PAGES} from "../context/constants";
+import {useGame} from "../context/Context";
 
 type AddPlayerProps = {
     setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function AddPlayer({ setCurrentPage }: AddPlayerProps) {
+export function AddPlayer({setCurrentPage}: AddPlayerProps) {
     const [playerName, setPlayerName] = useState<string>('');
     const [roomID, setRoomID] = useState<string>('');
-    const { createRoom, joinRoom } = useGame()
+    const {createRoom, joinRoom} = useGame()
 
     const isValidInputs = () => playerName !== "" && roomID !== "";
 
@@ -18,7 +18,7 @@ export function AddPlayer({ setCurrentPage }: AddPlayerProps) {
     const handleCreateRoom = async () => {
         if (playerName !== "") {
             try {
-                await createRoom('game', { playerName });
+                await createRoom('game', {name: playerName});
                 setCurrentPage(PAGES.LOBBY);
             } catch (error) {
                 console.error("Error creating room:", error);
@@ -30,7 +30,7 @@ export function AddPlayer({ setCurrentPage }: AddPlayerProps) {
     const handleJoinRoom = async () => {
         if (isValidInputs()) {
             try {
-                await joinRoom(roomID, { playerName });
+                await joinRoom(roomID, {name: playerName});
                 setCurrentPage(PAGES.LOBBY);
             } catch (error) {
                 console.error("Error joining room:", error);
@@ -59,23 +59,23 @@ export function AddPlayer({ setCurrentPage }: AddPlayerProps) {
                         <div
                             className="flex flex-col items-center justify-between p-4 m-4 space-y-4 bg-white border rounded-lg space-x-0 ">
 
-                                <input
-                                    autoComplete="nope"
-                                    onChange={(e) => setPlayerName(e.target.value)}
-                                    className="w-full"
-                                    type="text"
-                                    placeholder="Name"
-                                />
-                                {renderButton("Create Room", handleCreateRoom)}
+                            <input
+                                autoComplete="nope"
+                                onChange={(e) => setPlayerName(e.target.value)}
+                                className="w-full"
+                                type="text"
+                                placeholder="Name"
+                            />
+                            {renderButton("Create Room", handleCreateRoom)}
 
-                                <input
-                                    autoComplete="nope"
-                                    placeholder="Room ID"
-                                    className="w-full"
-                                    type="text"
-                                    onChange={(e) => setRoomID(e.target.value)}
-                                />
-                                {renderButton("Join Room", handleJoinRoom)}
+                            <input
+                                autoComplete="nope"
+                                placeholder="Room ID"
+                                className="w-full"
+                                type="text"
+                                onChange={(e) => setRoomID(e.target.value)}
+                            />
+                            {renderButton("Join Room", handleJoinRoom)}
                         </div>
                     </div>
                 </div>

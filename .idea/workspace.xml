@@ -4,26 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="Eh tante cose, mo non mi ricordo">
-      <change afterPath="$PROJECT_DIR$/backend/src/objects/discarddeck.model.ts" afterDir="false" />
+    <list default="true" id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="mi ero dimenticato il package.json">
+      <change afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/StateMachine.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Card.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Deck.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/RoomState.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/lobby.gateway.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/lobby.gateway.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/lobby.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/lobby.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/objects/player.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/objects/player.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/objects/room.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/objects/room.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Carousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Carousel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/CharChoice.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/CharChoice.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Game.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Game.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/objects/gamemachine.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/objects/gamemachine.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/src/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/app.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/MyRoom.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/GameRoom.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/MyRoomState.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Player.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Player.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddPlayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddPlayer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Lobby.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Lobby.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerCarousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerCarousel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/context/Context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/Context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/context/ShowCardContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/ShowCardContext.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/context/SocketContext.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/reportWebVitals.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/drawer.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/globalStyles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shared/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/shared/types.ts" afterDir="false" />
     </list>
+    <list id="6337df53-1fc9-40d6-adb4-962acf868626" name="mi ero dimenticato il package.json" comment="mi ero dimenticato il package.json" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,7 +48,26 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Marcox2111&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="39004c11-3de4-4509-9c58-c19e90e44d3a" />
+        <option name="url" value="git@github.com:Marcox2111/Bang.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="JsBowerSettings">
     <bower-package value="" />
@@ -62,28 +84,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Marco/Documents/JavaScript/basic-with-select-item/frontend&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\Marco\\AppData\\Roaming\\npm\\node_modules\\prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Marco\\Documents\\JavaScript\\basic-with-select-item\\backend\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Colyseus",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Marco/Documents/JavaScript/basic-with-select-item/colyseus-server/src/rooms",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\Marco\\AppData\\Roaming\\npm\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog",
+    "ts.external.directory.path": "C:\\Users\\Marco\\Documents\\JavaScript\\basic-with-select-item\\colyseus-server\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -95,15 +117,16 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\colyseus-server\src\rooms" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\frontend" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\backend\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\colyseus-server\src\rooms\schema" />
+      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\colyseus-server\src\rooms" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\frontend\src\context" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\backend\src" />
       <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\backend" />
-      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\shared" />
-      <recent name="C:\Users\Marco\Documents\JavaScript\basic-with-select-item\backend\ù" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -141,6 +164,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="" />
+      <changelist id="6337df53-1fc9-40d6-adb4-962acf868626" name="mi ero dimenticato il package.json" comment="" />
       <created>1697643451604</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -160,7 +184,12 @@
       <workItem from="1698563408062" duration="13474000" />
       <workItem from="1698663227314" duration="5045000" />
       <workItem from="1698690365969" duration="17701000" />
-      <workItem from="1698932763317" duration="873000" />
+      <workItem from="1698932763317" duration="3476000" />
+      <workItem from="1699082998899" duration="6899000" />
+      <workItem from="1699105890329" duration="18107000" />
+      <workItem from="1699293702397" duration="3682000" />
+      <workItem from="1699381217832" duration="10479000" />
+      <workItem from="1699504386704" duration="19024000" />
     </task>
     <task id="LOCAL-00001" summary="Inizio a fare il backend">
       <option name="closed" value="true" />
@@ -186,7 +215,55 @@
       <option name="project" value="LOCAL" />
       <updated>1698663385815</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Refactor of how the client retrieve data, added discard card">
+      <option name="closed" value="true" />
+      <created>1698941902094</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698941902094</updated>
+    </task>
+    <task id="LOCAL-00005" summary="gamemachine ci provo, committo prima del disastro">
+      <option name="closed" value="true" />
+      <created>1699171901132</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1699171901132</updated>
+    </task>
+    <task id="LOCAL-00006" summary="questa è una cosa su cui tornerò">
+      <option name="closed" value="true" />
+      <created>1699172065259</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1699172065259</updated>
+    </task>
+    <task id="LOCAL-00007" summary="I'm trying so hard">
+      <option name="closed" value="true" />
+      <created>1699337108990</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1699337108990</updated>
+    </task>
+    <task id="LOCAL-00008" summary="mi ero dimenticato il package.json">
+      <option name="closed" value="true" />
+      <created>1699381582739</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1699381582739</updated>
+    </task>
+    <task id="LOCAL-00009" summary="mi ero dimenticato il package.json">
+      <option name="closed" value="true" />
+      <created>1699381644509</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1699381644509</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,9 +275,25 @@
       </list>
     </option>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Inizio a fare il backend" />
     <MESSAGE value="Eh tante cose, mo non mi ricordo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Eh tante cose, mo non mi ricordo" />
+    <MESSAGE value="Refactor of how the client retrieve data, added discard card" />
+    <MESSAGE value="gamemachine ci provo, committo prima del disastro" />
+    <MESSAGE value="questa è una cosa su cui tornerò" />
+    <MESSAGE value="I'm trying so hard" />
+    <MESSAGE value="mi ero dimenticato il package.json" />
+    <option name="LAST_COMMIT_MESSAGE" value="mi ero dimenticato il package.json" />
   </component>
 </project>

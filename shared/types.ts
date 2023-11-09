@@ -12,9 +12,8 @@ export type PlayerType = {
     range: number;
     turn: boolean;
     cards: CardType[];
-    character: string | null;
     hp: number;
-    role: string | null;
+    role: string;
 }
 
 export type RoomType = {

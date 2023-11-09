@@ -1,13 +1,13 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { CardType, PlayerType, RoomType } from '../../../shared/types';
-import { Client, Room } from 'colyseus.js';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {PlayerType} from '../../../shared/types';
+import {Client, Room} from 'colyseus.js';
 
 type GameContextType = {
     players: PlayerType[];
-    clientPlayer: PlayerType;
+    clientPlayer: PlayerType | null;
     isYourTurn: () => boolean;
     rotationPlayer: number;
-    room: Room;
+    room: Room | null;
     createRoom: (roomName: string, options: any) => Promise<void>;
     joinRoom: (roomId: string, options: any) => Promise<void>;
 };
@@ -15,14 +15,13 @@ type GameContextType = {
 const defaultContext: GameContextType = {
     players: [],
     clientPlayer: null,
-    isYourTurn: () => {
-        return false;
-    },
-    room: null,
+    isYourTurn: () => false,
     rotationPlayer: 0,
-    createRoom: async () => {},
-    joinRoom: async () => {},
-
+    room: null,
+    createRoom: async () => {
+    },
+    joinRoom: async () => {
+    },
 };
 
 const GameContext = createContext<GameContextType>(defaultContext);
@@ -31,52 +30,70 @@ export function useGame() {
     return useContext(GameContext);
 }
 
-export function GameProvider({ children }) {
-    const [client, setClient] = useState(null);
-    const [room, setRoom] = useState(null);
+export function GameProvider({children}) {
+    const [client, setClient] = useState<Client | null>(null);
+    const [room, setRoom] = useState<Room | null>(null);
     const [players, setPlayers] = useState<PlayerType[]>([]);
-    const [clientPlayer, setClientPlayer] = useState<PlayerType>(null);
+    const [clientPlayer, setClientPlayer] = useState<PlayerType | null>(null);
     const [rotationPlayer, setRotationPlayer] = useState(0);
-    const [followPlayer, setFollowPlayer] = useState(false);
 
-
-    // Initialize Colyseus client
     useEffect(() => {
         const newClient = new Client('ws://localhost:2567');
         setClient(newClient);
     }, []);
 
-    // Function to create a room
+    useEffect(() => {
+        if (!room) return;
+
+        const onStateChange = (state) => {
+            const allPlayers = state.players.map(createPlayerObject);
+            const myPlayer = allPlayers.find(p => p.id === room.sessionId);
+
+            setPlayers(allPlayers);
+            setClientPlayer(myPlayer || null);
+        };
+
+        room.onStateChange(onStateChange);
+
+    }, [room]);
+
+    const createPlayerObject = (playerData) => {
+        return {
+            id: playerData.id,
+            isHost: playerData.isHost,
+            name: playerData.name,
+            range: playerData.range,
+            turn: playerData.turn,
+            hp: playerData.hp,
+            role: playerData.role || 'unknown',
+        };
+    };
+
     const createRoom = async (roomName, options) => {
-        if (client) {
-            try {
-                const newRoom = await client.create(roomName, options);
-                setRoom(newRoom);
-                console.log(newRoom)
-                // Handle room logic here
-            } catch (error) {
-                console.error("Create room error:", error);
-            }
+        if (!client) return;
+        try {
+            const newRoom = await client.create(roomName, options);
+            setRoom(newRoom);
+        } catch (error) {
+            console.error("Create room error:", error);
         }
     };
 
-    // Function to join a room
     const joinRoom = async (roomId, options) => {
-        if (client) {
-            try {
-                const newRoom = await client.joinById(roomId, options);
-                setRoom(newRoom);
-                console.log(newRoom)
-                // Handle room logic here
-            } catch (error) {
-                console.error("Join room error:", error);
-            }
+        if (!client) {
+            console.log("Client is not initialized, cannot join room.");
+            return;
         }
-    }
-
+        try {
+            const newRoom = await client.joinById(roomId, options);
+            setRoom(newRoom);
+        } catch (error) {
+            console.error("Join room error:", error);
+        }
+    };
 
     const isYourTurn = () => {
-        return clientPlayer.turn;
+        return clientPlayer?.turn || false;
     };
 
     return (

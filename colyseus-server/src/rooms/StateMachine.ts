@@ -1,10 +1,9 @@
-import { assign, createMachine } from "xstate";
+import {createMachine} from "xstate";
 
 export const machine = createMachine(
     {
         context: {
             room: null,
-            currentPlayerIndex: 0,
         },
         id: "game",
         initial: "Lobby",
@@ -21,15 +20,14 @@ export const machine = createMachine(
                 on: {
                     ROLES_ASSIGNED: {
                         target: "DrawingCards",
-                        actions: 'distributeCards'  // Action to distribute cards
                     },
                 },
             },
             DrawingCards: {
+                entry: 'distributeCards',
                 on: {
                     CARDS_DISTRIBUTED: {
                         target: "PlayingTurn",
-                        actions: 'startPlayingTurn'
                     },
                 },
             },
@@ -43,7 +41,7 @@ export const machine = createMachine(
                                 entry: 'turnDraw',
                                 on: {
                                     RESOLVE_FIRST_DRAW: {
-                                        target: "#game.PlayingTurn.MainPhase.Action",
+                                        target: "#game.PlayingTurn.MainPhase",
                                     },
                                 },
                             },
@@ -63,10 +61,10 @@ export const machine = createMachine(
                         },
                     },
                     EndPhase: {
+                        entry: 'nextPlayer',
                         on: {
                             RESOLVE_ENDPHASE: {
                                 target: "#game.PlayingTurn",
-                                actions: 'nextPlayer',
                             },
                         },
                     },
@@ -87,33 +85,18 @@ export const machine = createMachine(
     },
     {
         actions: {
-            assignRoles: assign((context, event) => {
-                context.room.assignRoles();
-                const startPlayerIndex = context.room.getStartPlayerIndex();
-                return {
-                    ...context,
-                    currentPlayerIndex: startPlayerIndex,
-                };
-            }),
-            distributeCards: (context, event) => {
-                context.room.distributeCards();
+            assignRoles: (context, event) => {
+                context.room.assignRolesToPlayers();
             },
-            startPlayingTurn: (context) => {
-                // ... (your logic here)
+            distributeCards: (context, event) => {
+
             },
             turnDraw: (context) => {
-                const player = context.room.players[context.currentPlayerIndex]
-                context.room.startTurnDraw(player)
+
             },
-            nextPlayer: assign((context) => {
-                const nextPlayerIndex = (context.currentPlayerIndex + 1) % context.room.players.length;
-                context.room.players[context.currentPlayerIndex].turn = false;
-                context.room.players[nextPlayerIndex].turn = true;
-                return {
-                    ...context,
-                    currentPlayerIndex: nextPlayerIndex
-                };
-            }),
+            nextPlayer: (context, event) => {
+
+            },
         },
         services: {},
         guards: {},

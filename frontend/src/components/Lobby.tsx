@@ -7,9 +7,16 @@ type AddPlayerProps = {
 };
 
 export function Lobby({ setCurrentPage }: AddPlayerProps) {
-    const { players, room } = useGame();
-    // const clientPlayer = players.find(player => player.name === socket.data.playerName);
+    const { players,clientPlayer, room } = useGame();
 
+    function handleDisconnect() {
+        room.leave();
+        setCurrentPage(PAGES.ADD_PLAYER);
+    }
+
+    function handleStart() {
+        room.send("sss")
+    }
 
     return (
         <div
@@ -24,7 +31,7 @@ export function Lobby({ setCurrentPage }: AddPlayerProps) {
                         {players.map((player, index) => (
                             <div
                                 key={index}
-                                className={`m-2 p-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 text-xl font-semibold border border-gray-200 ${true ? 'bg-blue-200' : 'bg-white'}`}  // Conditionally apply background color
+                                className={`m-2 p-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 text-xl font-semibold border border-gray-200 ${player.id===clientPlayer.id ? 'bg-blue-200' : 'bg-white'}`}  // Conditionally apply background color
                             >
                                 {player.name}
                             </div>
@@ -32,15 +39,18 @@ export function Lobby({ setCurrentPage }: AddPlayerProps) {
                     </div>
                 </div>
                 <div className="flex flex-row space-x-4">
+                    {clientPlayer?.isHost &&
                     <button
-                        type="submit"
+                        onClick={handleStart}
+                        type="button"
                         className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600"
                     >
                         Start
                     </button>
-
+                    }
                     <button
-                        type="submit"
+                        onClick={handleDisconnect}
+                        type="button"
                         className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600"
                     >
                         Leave
