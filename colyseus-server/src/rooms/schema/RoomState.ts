@@ -1,13 +1,16 @@
 // RoomState.ts
 import {Schema, ArraySchema, type} from "@colyseus/schema";
-import {Player} from "./Player"; // Make sure this path is correct
+import {Player} from "./Player";
+import {Deck} from "./Deck"; // Make sure this path is correct
 
 export class RoomState extends Schema {
     @type([Player]) players: ArraySchema<Player>;
+    @type(Deck) deck: Deck
 
     constructor() {
         super();
         this.players = new ArraySchema<Player>();
+        this.deck = new Deck();
     }
 
     createPlayer(playerID: string, playerName: string): Player {

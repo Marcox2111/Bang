@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 import {useGame} from "../context/Context";
-import {PlayerContainer} from "./playerContainer";
+import {PlayerContainer} from "./PlayerContainer";
 import {useResizeDetector} from "react-resize-detector";
 import {EnemyContainer} from "./EnemyContainer";
 
@@ -18,7 +18,8 @@ export function PlayerCarousel() {
                 const rotationDegree = index * (360 / players.length) + rotationPlayer;
                 return (
                     <div key={objectPlayer.id} className="player-card" style={{
-                        transform: `rotateY(${rotationDegree}deg) translateZ(${translateZValue}px)`
+                        transform: `rotateY(${rotationDegree}deg) translateZ(${translateZValue}px)`,
+                        transition: 'transform 2s',
                     }}>
                         {objectPlayer.id === clientPlayer.id
                             ? <PlayerContainer key={objectPlayer.id} player={objectPlayer}/>

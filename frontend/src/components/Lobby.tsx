@@ -1,13 +1,23 @@
-import React, { useEffect } from "react";
-import { useGame } from "../context/Context";
-import { PAGES } from "../context/constants";
+import React, {useEffect} from "react";
+import {useGame} from "../context/Context";
+import {PAGES} from "../context/constants";
 
 type AddPlayerProps = {
     setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function Lobby({ setCurrentPage }: AddPlayerProps) {
-    const { players,clientPlayer, room } = useGame();
+export function Lobby({setCurrentPage}: AddPlayerProps) {
+    const {players, clientPlayer, room} = useGame();
+
+    useEffect(() => {
+        const removeListener = room.onMessage("gameStarted", () => {
+            room.onStateChange((state) =>
+                setCurrentPage(PAGES.GAME))
+        });
+        return () => {
+            removeListener()
+        }
+    }, []);
 
     function handleDisconnect() {
         room.leave();
@@ -15,7 +25,7 @@ export function Lobby({ setCurrentPage }: AddPlayerProps) {
     }
 
     function handleStart() {
-        room.send("sss")
+        room.send("start")
     }
 
     return (
@@ -31,7 +41,7 @@ export function Lobby({ setCurrentPage }: AddPlayerProps) {
                         {players.map((player, index) => (
                             <div
                                 key={index}
-                                className={`m-2 p-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 text-xl font-semibold border border-gray-200 ${player.id===clientPlayer.id ? 'bg-blue-200' : 'bg-white'}`}  // Conditionally apply background color
+                                className={`m-2 p-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 text-xl font-semibold border border-gray-200 ${player.id === clientPlayer.id ? 'bg-blue-200' : 'bg-white'}`}  // Conditionally apply background color
                             >
                                 {player.name}
                             </div>
@@ -40,13 +50,13 @@ export function Lobby({ setCurrentPage }: AddPlayerProps) {
                 </div>
                 <div className="flex flex-row space-x-4">
                     {clientPlayer?.isHost &&
-                    <button
-                        onClick={handleStart}
-                        type="button"
-                        className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600"
-                    >
-                        Start
-                    </button>
+                        <button
+                            onClick={handleStart}
+                            type="button"
+                            className="mt-4 mb-4 h-10 w-32 text-white bg-red-500 rounded-xl shadow-md transition duration-300 ease-in-out hover:bg-red-600"
+                        >
+                            Start
+                        </button>
                     }
                     <button
                         onClick={handleDisconnect}

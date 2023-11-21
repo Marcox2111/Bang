@@ -3,6 +3,7 @@ import {CardComponent} from './CardComponent';
 import {motion, PanInfo, useSpring} from 'framer-motion';
 import {CardType} from '../../../shared/types';
 import {useShowCard} from '../context/ShowCardContext';
+import {useGame} from "../context/Context";
 
 type CarouselProps = {
     cards: CardType[];
@@ -39,8 +40,9 @@ const useCarouselCalculations = (totalCards, divHeight, divWidth, maxCards) => {
     };
 };
 
-export function Carousel({cards, divHeight, divWidth}: CarouselProps) {
+export function CardCarousel({cards, divHeight, divWidth}: CarouselProps) {
     const {openCard} = useShowCard();
+    const {isYourTurn} = useGame();
     const isPanning = useRef(false);
     const rotation = useSpring(0, {stiffness: 100, damping: 12});
     const rotationRef = useRef(0);
@@ -116,6 +118,7 @@ export function Carousel({cards, divHeight, divWidth}: CarouselProps) {
                                 if (
                                     !isPanning.current &&
                                     card.name !== 'hidden'
+                                    && isYourTurn()
                                 ) {
                                     openCard(card);
                                 }
@@ -150,4 +153,4 @@ export function Carousel({cards, divHeight, divWidth}: CarouselProps) {
     );
 }
 
-export default Carousel;
+export default CardCarousel;

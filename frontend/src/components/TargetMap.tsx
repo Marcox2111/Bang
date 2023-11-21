@@ -24,9 +24,8 @@ const DISABLED_COLOR = {
 };
 
 
-
 export function TargetMap({card, onCloseCard}: TargetMapProps) {
-    const {players, clientPlayer} = useGame();
+    const {players, clientPlayer, playCard} = useGame();
     const playerIndex = players.indexOf(clientPlayer);
     const [selectedTarget, setSelectedTarget] = useState<PlayerType | null>(null);
 
@@ -60,32 +59,33 @@ export function TargetMap({card, onCloseCard}: TargetMapProps) {
     }
 
 
-    function playCard() {
-        let target: PlayerType | PlayerType[] | null = null;
+    function handlePlayCard() {
+        let target: PlayerType[] = [];
 
         switch (card.target) {
             case 'self':
-                target = clientPlayer;
+                target = [clientPlayer];
                 break;
             case 'others':
                 target = players.filter(p => p !== clientPlayer);
                 break;
             case 'all':
-                target = players;
+                target = [...players]; // Copy of the players array
                 break;
             case 'single':
             case 'any':
             case 'one':
-                target = selectedTarget;
+                if (selectedTarget) {
+                    target = [selectedTarget];
+                }
                 break;
             default:
                 break;
         }
-
-        console.log(card);
-        console.log(target);
+        playCard(card, target);
         onCloseCard();
     }
+
 
     const PlayerIcon = ({player, index}: { player: PlayerType; index: number }) => {
         const adjustedIndex = (index - playerIndex + players.length) % players.length;
@@ -96,14 +96,23 @@ export function TargetMap({card, onCloseCard}: TargetMapProps) {
             <motion.div
                 className={`card flex justify-center items-center rounded-full`}
                 key={index}
-                onTap={() => selectTarget(player)}
+                onClick={e => {
+                    e.stopPropagation();
+                    selectTarget(player);
+                }}
                 transition={{duration: 0.32}}
                 style={{
                     width: playerDiameter,
                     height: playerDiameter,
                 }}
-                initial={{transform: `translate(${translateX}px, ${translateY}px)`, backgroundColor:`${INACTIVE_COLOR.background}`}}
-                animate={{transform: `translate(${translateX}px, ${translateY}px)`, backgroundColor:`${getPlayerClass(player,adjustedIndex)}`}}
+                initial={{
+                    transform: `translate(${translateX}px, ${translateY}px)`,
+                    backgroundColor: `${INACTIVE_COLOR.background}`
+                }}
+                animate={{
+                    transform: `translate(${translateX}px, ${translateY}px)`,
+                    backgroundColor: `${getPlayerClass(player, adjustedIndex)}`
+                }}
                 whileHover={{transform: `translate(${translateX}px, ${translateY}px) scale(1.10)`}}
                 whileTap={{transform: `translate(${translateX}px, ${translateY}px) scale(0.95)`}}
             >
@@ -125,15 +134,19 @@ export function TargetMap({card, onCloseCard}: TargetMapProps) {
             ))}
             <motion.div
                 className={`card flex justify-center items-center rounded-full`}
-                onTap={isUseButtonDisabled ? undefined : playCard}
+                onClick={e => {
+                    e.stopPropagation();
+                    if (isUseButtonDisabled) return;
+                    else handlePlayCard();
+                }}
                 style={{
                     width: playerDiameter,
                     height: playerDiameter,
                 }}
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
-                animate={{ backgroundColor: `${isUseButtonDisabled ? DISABLED_COLOR.background : ACTIVE_COLOR.background}`}}
-                initial={{ scale: 1}}
+                animate={{backgroundColor: `${isUseButtonDisabled ? DISABLED_COLOR.background : ACTIVE_COLOR.background}`}}
+                initial={{scale: 1}}
             >
                 Use
             </motion.div>

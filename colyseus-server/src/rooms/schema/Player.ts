@@ -32,6 +32,7 @@ export class Player extends Schema {
         this.id = playerID;
         this.name = playerName;
         this.hp = 5;
+        this.cards = new ArraySchema<Card>(); // Initialize the array
     }
 
     addCards(cards: Card[]) {

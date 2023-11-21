@@ -53,8 +53,22 @@ export const machine = createMachine(
                         states: {
                             Action: {
                                 on: {
+                                    BANG_PLAYED: {
+                                        target: 'WaitForReaction',
+                                    },
+                                    BEER_PLAYED:{
+                                        target: 'Action',
+                                    },
                                     PASS_TURN: {
+                                        cond: 'canPassTurn',
                                         target: "#game.PlayingTurn.EndPhase",
+                                    },
+                                },
+                            },
+                            WaitForReaction: {
+                                on: {
+                                    MISSED_REACTED: {
+                                        target: 'Action',
                                     },
                                 },
                             },
@@ -78,7 +92,11 @@ export const machine = createMachine(
                 | { type: "ROLES_ASSIGNED" }
                 | { type: "CARDS_DISTRIBUTED" }
                 | { type: "PASS_TURN" }
+                | { type: "BANG_PLAYED" }
+                | { type: "BEER_PLAYED" }
+                | { type: "MISSED_REACTED" }
                 | { type: "RESOLVE_ENDPHASE" },
+
         },
         predictableActionArguments: true,
         preserveActionOrder: true,
@@ -89,17 +107,21 @@ export const machine = createMachine(
                 context.room.assignRolesToPlayers();
             },
             distributeCards: (context, event) => {
-
+                context.room.distributeCardsToPlayer();
             },
             turnDraw: (context) => {
-
+                context.room.turnDraw();
             },
             nextPlayer: (context, event) => {
-
+                context.room.nextPlayer();
             },
         },
         services: {},
-        guards: {},
+        guards: {
+            canPassTurn: (context, event) => {
+                return context.room.canPlayerPassTurn();
+            }
+        },
         delays: {},
     },
 );

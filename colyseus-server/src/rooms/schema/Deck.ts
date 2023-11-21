@@ -22,6 +22,7 @@ export class Deck extends Schema {
         this.createCards("saloon", 2);
         this.createCards("gatling", 3);
         this.createCards("panico", 3);
+        this.createCards("mancato",12);
 
         // Shuffle the deck
         this.shuffle();
@@ -37,24 +38,36 @@ export class Deck extends Schema {
     createCards(name: string, quantity: number) {
         for (let i = 0; i < quantity; i++) {
             // Since the cards are in the deck, we'll set their owner to an empty string for now
-            this._cards.push(this.createCard(name, "deck"));
+            this._cards.push(this.createCard(name, "Deck"));
         }
     }
+
 
     shuffle() {
-        // Shuffle the cards in the deck
-        for (let i = this._cards.length - 1; i > 0; i--) {
+        // Convert ArraySchema to a regular array
+        const regularArray = Array.from(this._cards);
+
+        // Perform the shuffle on the regular array
+        for (let i = regularArray.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [this._cards[i], this._cards[j]] = [this._cards[j], this._cards[i]];
+            [regularArray[i], regularArray[j]] = [regularArray[j], regularArray[i]];
         }
+
+        // Clear the ArraySchema
+        this._cards.clear();
+
+        // Push the shuffled elements back into the ArraySchema
+        regularArray.forEach(card => this._cards.push(card));
+
+        // this._cards.map((card) => console.log(card.name))
+
     }
 
-    deal(numberOfCards: number, owner: string): ArraySchema<Card> {
+    deal(numberOfCards: number): ArraySchema<Card> {
         const dealtCards = new ArraySchema<Card>();
         for (let i = 0; i < numberOfCards; i++) {
             if (this._cards.length > 0) {
                 const card = this._cards.shift();
-                card.owner = owner
                 dealtCards.push(card);
             }
         }

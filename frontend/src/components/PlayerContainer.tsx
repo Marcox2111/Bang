@@ -1,17 +1,16 @@
-import React from 'react';
-import CardCarousel from './CardCarousel';
-// import {useMediaQuery} from "react-responsive";
-import {useResizeDetector} from 'react-resize-detector';
-import {PlayerType} from '../../../shared/types';
-import {useGame} from '../context/Context';
+import React from "react";
+import CardCarousel from "./CardCarousel";
+import {useResizeDetector} from "react-resize-detector";
+import {PlayerType} from "../../../shared/types";
 import {EquippedCard} from "./EquippedCard";
+import {useGame} from "../context/Context";
 
 type PlayerContainerProps = {
     player: PlayerType;
 };
 
-export function EnemyContainer({player}: PlayerContainerProps) {
-
+export function PlayerContainer({player}: PlayerContainerProps) {
+    const {passTurn} = useGame()
 
     const {height: carHeight, ref: carRef} = useResizeDetector();
     const {width: containerWidth, ref: containerDiv} = useResizeDetector();
@@ -31,25 +30,12 @@ export function EnemyContainer({player}: PlayerContainerProps) {
 
                 </div>
                 <div
-                    className="flex h-1/12 items-center"
+                    className="flex h-[4%] items-center"
                     onClick={() => {
-
+                        passTurn();
                     }}
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-                        />
-                    </svg>
+                    Passa
                 </div>
                 <div ref={carRef} className="flex h-1/4 w-full justify-center">
                     {carHeight > 0 && (
