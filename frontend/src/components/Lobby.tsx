@@ -17,7 +17,7 @@ export function Lobby({setCurrentPage}: AddPlayerProps) {
         return () => {
             removeListener()
         }
-    }, []);
+    });
 
     function handleDisconnect() {
         room.leave();

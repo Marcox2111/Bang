@@ -3,7 +3,6 @@ import CardCarousel from './CardCarousel';
 // import {useMediaQuery} from "react-responsive";
 import {useResizeDetector} from 'react-resize-detector';
 import {PlayerType} from '../../../shared/types';
-import {useGame} from '../context/Context';
 import {EquippedCard} from "./EquippedCard";
 
 type PlayerContainerProps = {
@@ -28,28 +27,7 @@ export function EnemyContainer({player}: PlayerContainerProps) {
                     <div className="flex w-1/3 justify-center ">{player.hp}</div>
                 </div>
                 <div className="flex flex-grow ">
-
-                </div>
-                <div
-                    className="flex h-1/12 items-center"
-                    onClick={() => {
-
-                    }}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-                        />
-                    </svg>
+                    //TODO: ADD DECK OR SOMETHING I STILL DON'T KNOW
                 </div>
                 <div ref={carRef} className="flex h-1/4 w-full justify-center">
                     {carHeight > 0 && (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import CardCarousel from "./CardCarousel";
 import {useResizeDetector} from "react-resize-detector";
 import {PlayerType} from "../../../shared/types";
@@ -10,7 +10,16 @@ type PlayerContainerProps = {
 };
 
 export function PlayerContainer({player}: PlayerContainerProps) {
-    const {passTurn} = useGame()
+    const {passTurn, reactToCard, isYourTurn, reactedCard} = useGame()
+
+    const handleNoReaction = () => {
+        // Implement logic for when the player has no reaction cards
+    };
+
+
+    useEffect(() => {
+        console.log(reactToCard)
+    }, [reactToCard])
 
     const {height: carHeight, ref: carRef} = useResizeDetector();
     const {width: containerWidth, ref: containerDiv} = useResizeDetector();
@@ -26,16 +35,24 @@ export function PlayerContainer({player}: PlayerContainerProps) {
                     <div className="flex w-1/3 justify-center ">{player.name}</div>
                     <div className="flex w-1/3 justify-center ">{player.hp}</div>
                 </div>
-                <div className="flex flex-grow ">
+                {isYourTurn() ?
+                    <div className="flex flex-grow ">
 
-                </div>
-                <div
-                    className="flex h-[4%] items-center"
-                    onClick={() => {
-                        passTurn();
-                    }}
+                    </div>
+                    :
+                    <div className="flex flex-grow ">
+                        {reactToCard.type != null ?
+                            <div className="flex w-full justify-center">{reactToCard.type}</div> :
+                            <div/>
+                        }
+                    </div>
+                }
+                <div className="flex h-[4%] items-center"
+                     onClick={() => {
+                         isYourTurn() ? passTurn() : handleNoReaction();
+                     }}
                 >
-                    Passa
+                    {isYourTurn() ? "Pass" : "No Reaction"}
                 </div>
                 <div ref={carRef} className="flex h-1/4 w-full justify-center">
                     {carHeight > 0 && (

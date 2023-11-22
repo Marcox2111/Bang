@@ -85,7 +85,7 @@ export class GameRoom extends Room<RoomState> {
                 break;
             case "playCard":
                 const {card: cardtoplay, targets} = value;
-                this.playCard(cardtoplay, targets)
+                this.playCard(player, cardtoplay, targets)
                 break;
             case "missedReaction":
                 const missedCard: CardType = value;
@@ -169,7 +169,7 @@ export class GameRoom extends Room<RoomState> {
     }
 
     distributeCardsToPlayer() {
-        this.state.players.forEach((player, index) => {
+        this.state.players.forEach((player) => {
             const nCards = player.hp + (player.role === "sceriffo" ? 1 : 0);
             this.drawCards(player, nCards);
         });
@@ -199,62 +199,57 @@ export class GameRoom extends Room<RoomState> {
         return this.state.players[this.currentPlayerIndex].cards.length <= this.state.players[this.currentPlayerIndex].hp
     }
 
-    playCard(card: CardType, targets: PlayerType[]) {
+    playCard(player: Player, card: CardType, targets: PlayerType[]) {
         switch (card.name) {
             case 'bang':
             case 'gatling':
-                this.handleBangEffect(targets);
+                // Pass the player and the card to handleBangEffect
+                this.handleBangEffect(player, targets, card);
                 break;
             case 'birra':
             case 'saloon':
+                // Assuming similar changes for other effect handlers if needed
                 this.handleBeerEffect(targets);
                 break;
             case 'indiani':
-                this.handleIndianiEffect(targets);
+                // Assuming similar changes for other effect handlers if needed
+                this.handleIndianiEffect(player, targets, card);
                 break;
-
             //... other card types
             default:
                 console.warn("Unknown card type:", card.name);
         }
-        this.discardCard(this.state.players[this.currentPlayerIndex], card)
-
+        this.discardCard(player, card);
     }
 
 
-    notifyPlayerToReact(targetPlayer: Player, type: string) {
-        // Send a message to the target player
-        // The client will receive this message and show a UI to react to the Bang
-        switch (type) {
-            case "bang":
-                this.broadcast("reactToBang", targetPlayer.id);
-                break;
-            case "indiani":
-                this.broadcast("reactToIndiani", targetPlayer.id);
-                break;
-            //... other card types
-            default:
-                console.warn("Unknown card type:", type);
+// Modify sendToPlayer to include the additional data in the message
+    sendToPlayer(playerId: string, messageType: string, data: any = null) {
+        const client = this.clients.find(c => c.sessionId === playerId);
+        if (client) {
+            client.send(messageType, data);
+        } else {
+            console.warn("Client not found for player ID:", playerId);
         }
     }
-
 
     startReactionTimer(targetPlayer: Player) {
         // You can use setTimeout to set a timer
         // When the timer expires, you can send a message to the room to indicate that the timer expired
         // The room will then transition to the next state
         setTimeout(() => {
-            if(this.playersAwaitingReaction.has(targetPlayer.id))
+            if (this.playersAwaitingReaction.has(targetPlayer.id))
                 this.handleMissedReaction(targetPlayer, null);
         }, 10000);
     }
 
-    handleBangEffect(targets: PlayerType[]) {
+    handleBangEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
         targets.forEach((target) => {
             const targetPlayer = this.state.players.find((p) => p.id === target.id);
             if (targetPlayer) {
                 this.playersAwaitingReaction.add(targetPlayer.id);
-                this.notifyPlayerToReact(targetPlayer, "bang");
+                // Include the actor player's name and card name in the notification
+                this.sendToPlayer(targetPlayer.id, "reactToCard", {actorName: actorPlayer.name, cardName: card.name});
                 this.startReactionTimer(targetPlayer)
             }
         });
@@ -265,12 +260,13 @@ export class GameRoom extends Room<RoomState> {
         }
     }
 
-    handleIndianiEffect(targets: PlayerType[]) {
+
+    handleIndianiEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
         targets.forEach((target) => {
             const targetPlayer = this.state.players.find((p) => p.id === target.id);
             if (targetPlayer) {
                 this.playersAwaitingReaction.add(targetPlayer.id);
-                this.notifyPlayerToReact(targetPlayer, "indiani");
+                this.sendToPlayer(targetPlayer.id, "reactToCard", {actorName: actorPlayer.name, cardName: card.name});
                 this.startReactionTimer(targetPlayer)
             }
         });
@@ -283,12 +279,13 @@ export class GameRoom extends Room<RoomState> {
 
 
     handleMissedReaction(player: Player, missedCard: CardType | null) {
-        if (!missedCard && missedCard.name != "mancato") {
+        // player is the player who reacted
+        if (!missedCard || missedCard.name != "mancato") {
             player.hp--;
         } else {
             this.discardCard(player, missedCard);
         }
-
+        this.sendToPlayer(player.id, "cardReacted");
         // Remove player from awaiting reaction set
         this.playersAwaitingReaction.delete(player.id);
 

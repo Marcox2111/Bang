@@ -19,7 +19,7 @@ export function PlayerCarousel() {
                 return (
                     <div key={objectPlayer.id} className="player-card" style={{
                         transform: `rotateY(${rotationDegree}deg) translateZ(${translateZValue}px)`,
-                        transition: 'transform 2s',
+                        // transition: 'transform 2s',
                     }}>
                         {objectPlayer.id === clientPlayer.id
                             ? <PlayerContainer key={objectPlayer.id} player={objectPlayer}/>

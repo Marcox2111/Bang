@@ -1,15 +1,15 @@
 import React, {createContext, useContext, useEffect, useRef, useState} from 'react';
-import {CardType, PlayerType} from '../../../shared/types';
+import {CardType, ReactionsType, PlayerType} from '../../../shared/types';
 import {Client, Room} from 'colyseus.js';
-import {PAGES} from "./constants";
+
 
 type GameContextType = {
-
     players: PlayerType[];
     clientPlayer: PlayerType | null;
     isYourTurn: () => boolean;
     rotationPlayer: number;
     room: Room | null;
+    reactToCard: ReactionsType;
     createRoom: (roomName: string, options: any) => Promise<void>;
     joinRoom: (roomId: string, options: any) => Promise<void>;
     rotateCarouselLeft: () => void;
@@ -20,27 +20,27 @@ type GameContextType = {
 };
 
 const defaultContext: GameContextType = {
-        players: [],
-        clientPlayer: null,
-        isYourTurn: () => false,
-        rotationPlayer: 0,
-        room: null,
-        createRoom: async () => {
-        },
-        joinRoom: async () => {
-        },
-        rotateCarouselLeft: () => {
-        },
-        rotateCarouselRight: () => {
-        },
-        discardCard: () => {
-        },
-        passTurn: () => {
-        },
-        playCard: () => {
-        }
+    players: [],
+    clientPlayer: null,
+    isYourTurn: () => false,
+    rotationPlayer: 0,
+    room: null,
+    reactToCard: {type: null, actor: null},
+    createRoom: async () => {
+    },
+    joinRoom: async () => {
+    },
+    rotateCarouselLeft: () => {
+    },
+    rotateCarouselRight: () => {
+    },
+    discardCard: () => {
+    },
+    passTurn: () => {
+    },
+    playCard: () => {
     }
-;
+}
 
 const GameContext = createContext<GameContextType>(defaultContext);
 
@@ -54,41 +54,85 @@ export function GameProvider({children}) {
     const [players, setPlayers] = useState<PlayerType[]>([]);
     const [clientPlayer, setClientPlayer] = useState<PlayerType | null>(null);
     const [rotationPlayer, setRotationPlayer] = useState(0);
+    const [reactToCard, setReactToCard] = useState({type: null, actor: null});
+
+
     const currentTurnIndexRef = useRef(null); // Using useRef to store the current turn index
+    const playersRef = useRef(players);
+    const clientPlayerRef = useRef(clientPlayer);
 
     useEffect(() => {
         const newClient = new Client('ws://localhost:2567');
         setClient(newClient);
     }, []);
 
+    useEffect(() => {
+        playersRef.current = players;
+        clientPlayerRef.current = clientPlayer;
+        updateRotationPlayer();
+    }, [players, clientPlayer]);
+
 
     useEffect(() => {
         if (!room) return;
 
-        const onStateChange = (state) => {
-            const allPlayers = state.players.map(createPlayerObject);
-            const myPlayer = allPlayers.find(p => p.id === room.sessionId);
-
-            // Find the index of the player whose turn it is
-            const turnplayerIndex = allPlayers.findIndex(p => p.turn === true);
-
-            // Check if the turn index has changed
-            if (currentTurnIndexRef.current !== turnplayerIndex) {
-                setRotationPlayer(-360 * turnplayerIndex / allPlayers.length);
-                currentTurnIndexRef.current = turnplayerIndex; // Update the current turn index
-            }
-
-            setPlayers(allPlayers);
-            setClientPlayer(myPlayer);
+        // Function to handle state changes
+        const handleStateChange = (state) => {
+            updatePlayersState(state);
         };
 
-        room.onStateChange(onStateChange);
-
-        // This effect will clean up the ref when the component unmounts
+        room.onMessage("reactToCard", handleReactToCard);
+        room.onMessage("cardReacted", handleCardReacted)
+        // Set up message listeners
+        room.onStateChange(handleStateChange);
+        // Cleanup function
         return () => {
             currentTurnIndexRef.current = null;
         };
-    }, [room]); // Dependency array only includes room
+    }, [room]); // Dependency array includes only 'room'
+
+
+    // Function to update players state
+    const updatePlayersState = (state) => {
+        const allPlayers = state.players.map(createPlayerObject);
+        const myPlayer = allPlayers.find(p => p.id === room.sessionId);
+        setPlayers(allPlayers);
+        setClientPlayer(myPlayer);
+    };
+
+    // Function to update rotation player
+    const updateRotationPlayer = (follow: boolean = false) => {
+        const turnPlayerIndex = playersRef.current.findIndex(p => p.turn === true);
+        console.log("Turn player index: ", turnPlayerIndex)
+        // Check if the turn index has changed
+        if (currentTurnIndexRef.current !== turnPlayerIndex || follow) {
+            console.log("Updating rotation player")
+            setRotationPlayer(-360 * turnPlayerIndex / playersRef.current.length);
+            currentTurnIndexRef.current = turnPlayerIndex;
+        }
+    };
+
+    const handleReactToCard = (value) => {
+        const currentPlayers = playersRef.current;
+        const currentClientPlayer = clientPlayerRef.current;
+
+        const index = currentPlayers.findIndex(p => p.id === currentClientPlayer?.id);
+        if (index !== -1) {
+            setRotationPlayer(-360 * index / currentPlayers.length);
+        }
+        //The value that comes from the server is { actorName: actorPlayer.name, cardName: card.name }
+        setReactToCard({type: value.cardName, actor: value.actorName});
+    };
+
+    const handleCardReacted = () => {
+        setReactToCard({type: null, actor: null})
+        updateRotationPlayer(true);
+    };
+
+    const reactedCard = () => {
+
+    };
+
 
 
     const createPlayerObject = (playerData): PlayerType => {
@@ -167,6 +211,7 @@ export function GameProvider({children}) {
                 createRoom,
                 joinRoom,
                 room,
+                reactToCard,
                 rotateCarouselLeft,
                 rotateCarouselRight,
                 discardCard,

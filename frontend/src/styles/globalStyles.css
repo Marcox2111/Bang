@@ -60,7 +60,7 @@
     width: 70%;
     height: 70%;
     transform-style: preserve-3d;
-    /*perspective: 40cm;*/
+    /*perspective: 40000cm;*/
     position: absolute;
     perspective-origin: top;
     border: 1px solid black;

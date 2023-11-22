@@ -7,7 +7,7 @@ import {GameProvider} from "./context/Context";
 import {PAGES} from "./context/constants";
 import {Game} from "./components/Game";
 import {ShowCardProvider} from "./context/ShowCardContext";
-import reportWebVitals from "./reportWebVitals";
+
 function App() {
     const [currentPage, setCurrentPage] = useState(PAGES.ADD_PLAYER);
 

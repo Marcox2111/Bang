@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import character from "../cards/bang_cards/character/character.json";
+import React, {useState} from "react";
 import {PAGES} from "../context/constants";
 import {useGame} from "../context/Context";
 
