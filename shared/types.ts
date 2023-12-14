@@ -25,11 +25,5 @@ export type RoomType = {
     players: PlayerType[];
 };
 
-export type LogItem = {
-    action: string; // e.g., "BANG!", "MISS", etc.
-    actor: string; // Name of the player who performed the action
-    target: string; // Name of the target player
-    effect: string; // Effect description
-};
 
 

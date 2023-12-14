@@ -11,12 +11,18 @@ type PlayerContainerProps = {
 };
 
 export function PlayerContainer({player}: PlayerContainerProps) {
-    const {passTurn, reactToCard, isYourTurn, reactToBang,waitingForReaction} = useGame()
+    const {passTurn, reactToCard, isYourTurn, reactToBang, reactToIndians, waitingForReaction} = useGame()
+
+    //TODO: Implement logic for when is waiting for reaction (it has also to be adjusted because the flag it goes true also for cards like beer)
 
     const handleNoReaction = () => {
         switch (reactToCard.type) {
             case 'bang':
+            case 'gatling':
                 reactToBang(null);
+                break;
+            case 'indiani':
+                reactToIndians(null);
                 break;
         }
         // Implement logic for when the player has no reaction cards
@@ -36,7 +42,8 @@ export function PlayerContainer({player}: PlayerContainerProps) {
                 ref={containerDiv}
                 className="flex flex-col justify-between items-center h-full w-full max-w-full "
             >
-                <LogComponent key={player.id} divWidth={containerWidth}/>
+                <LogComponent key={player.id}/>
+
                 <div className="flex h-[8%] justify-between items-center w-full space-x-4">
                     <div className="flex w-1/3 justify-center ">{player.role}</div>
                     <div className="flex w-1/3 justify-center ">{player.name}</div>

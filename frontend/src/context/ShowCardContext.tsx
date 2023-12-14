@@ -3,7 +3,7 @@ import {CardType} from '../../../shared/types';
 import {CardComponent} from "../components/CardComponent";
 import {TargetMap} from "../components/TargetMap";
 import {useGame} from "./Context";
-import {motion} from 'framer-motion';
+import {motion, useAnimate} from 'framer-motion';
 
 type ShowCardProps = {
     openCard: (card: CardType) => void;
@@ -16,10 +16,13 @@ type ShowCardProviderProps = { children: ReactNode };
 
 
 export function ShowCardProvider({children}: ShowCardProviderProps) {
-    const {isYourTurn, discardCard} = useGame()
+    const {isYourTurn, discardCard, clientPlayer} = useGame()
 
     const [selectedCard, setSelectedCard] = useState<CardType | null>(null);
     const [showTargetMap, setShowTargetMap] = useState<boolean>(false)
+
+    const [scope, animate] = useAnimate()
+
     const openCard = (card: CardType) => setSelectedCard(card);
 
     const closeCard = (() => {
@@ -44,6 +47,31 @@ export function ShowCardProvider({children}: ShowCardProviderProps) {
         setShowTargetMap(false);
     };
 
+    //TODO: 5 is hardcoded, should be the max HP
+    const handleCardAction = (card: CardType) => {
+        if (isYourTurn()) {
+            // Example: Handle the 'beer' card
+            switch (card.name) {
+                case 'birra':
+                    if (clientPlayer.hp === 5) {
+                        // Play an animation or show a message that HP is already full
+                        // For example, shake the card to indicate it can't be used
+                        animate(scope.current, {rotateZ: [0, 10, -10, 10, 0], transition: {duration: 0.5}})
+                    } else {
+                        // Open the TargetMap or perform the beer card action
+                        setShowTargetMap(true);
+                    }
+                    break;
+                default:
+                    // Default action for other cards
+                    setShowTargetMap(true);
+            }
+        }
+        else {
+            animate(scope.current, {rotateZ: [0, 10, -10, 10, 0], transition: {duration: 0.5}})
+        }
+    };
+
 
     return (
         <ShowCardContext.Provider value={{openCard, closeCard}}>
@@ -59,10 +87,11 @@ export function ShowCardProvider({children}: ShowCardProviderProps) {
                     {(showTargetMap && isYourTurn()) ?
                         <TargetMap card={selectedCard} onCloseCard={closeCard}/> :
                         <motion.div
+                            ref={scope}
                             {...bounceAnimation}
                             onClick={e => {
                                 e.stopPropagation();
-                                setShowTargetMap(true);
+                                handleCardAction(selectedCard);
                             }}
                             className="flex flex-col rounded-xl justify-center align-middle items-center"
                         >
@@ -77,7 +106,8 @@ export function ShowCardProvider({children}: ShowCardProviderProps) {
                                 >
                                     <span className="text-xl font-bold">X</span>
                                 </div> :
-                                <div/>}
+                                <div/>
+                            }
                         </motion.div>}
                 </div>
             )}

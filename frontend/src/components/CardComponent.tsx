@@ -15,7 +15,7 @@ export function CardComponent({cardName}: CardProps) {
 
     return (
         <div className="flex justify-center items-center h-full">
-            {image && <img src={image} alt="Character" className="max-h-full w-auto object-contain" />}
+            {image && <img src={image} alt="Character" className="max-h-full w-auto object-contain" draggable={false} />}
         </div>
     );
 

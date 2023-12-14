@@ -19,6 +19,8 @@ type GameContextType = {
     passTurn: () => void;
     playCard: (card: CardType, target: PlayerType[]) => void;
     reactToBang: (card: CardType) => void;
+    reactToIndians: (card: CardType) => void;
+    gameLogs: string[];
 };
 
 const defaultContext: GameContextType = {
@@ -44,7 +46,10 @@ const defaultContext: GameContextType = {
     playCard: () => {
     },
     reactToBang: () => {
-    }
+    },
+    reactToIndians: () => {
+    },
+    gameLogs: [],
 }
 
 const GameContext = createContext<GameContextType>(defaultContext);
@@ -61,6 +66,8 @@ export function GameProvider({children}) {
     const [rotationPlayer, setRotationPlayer] = useState(0);
     const [reactToCard, setReactToCard] = useState({type: null, actor: null});
     const [waitingForReaction, setWaitingForReaction] = useState(false);
+    const [gameLogs, setGameLogs] = useState<string[]>([]);
+
 
     const currentTurnIndexRef = useRef(null); // Using useRef to store the current turn index
     const playersRef = useRef(players);
@@ -91,7 +98,13 @@ export function GameProvider({children}) {
 
         room.onMessage("reactToCard", handleReactToCard);
         room.onMessage("cardReacted", handleCardReacted);
-        room.onMessage("EveryoneReacted", () => {setWaitingForReaction(false)});
+        room.onMessage("EveryoneReacted", () => {
+            setWaitingForReaction(false)
+        });
+        room.onMessage("Log", (log) => {
+            setGameLogs(prevLogs => [...prevLogs, log]);
+        });
+
         // Set up message listeners
         room.onStateChange(handleStateChange);
         // Cleanup function
@@ -209,6 +222,11 @@ export function GameProvider({children}) {
         room.send("missedReaction", card)
     }
 
+    const reactToIndians = (card: CardType) => {
+        console.log(card)
+        room.send("bangReaction", card)
+    }
+
     return (
         <GameContext.Provider
             value={{
@@ -227,6 +245,8 @@ export function GameProvider({children}) {
                 passTurn,
                 playCard,
                 reactToBang,
+                reactToIndians,
+                gameLogs,
             }}
         >
             {children}

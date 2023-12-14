@@ -40,9 +40,6 @@ export function EnemyContainer({player}: PlayerContainerProps) {
                         />
                     )}
                 </div>
-                <div className="flex h-[5%] w-full justify-center items-center">
-                    <EquippedCard/>
-                </div>
             </div>
         </div>
     );

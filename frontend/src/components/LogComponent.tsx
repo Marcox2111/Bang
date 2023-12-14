@@ -1,40 +1,41 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {motion, useAnimation} from 'framer-motion';
+import React, { useState } from 'react';
+import { useGame } from "../context/Context";
 
-type LogComponentProps = {
-    divWidth: number;
-};
-export function LogComponent({divWidth}: LogComponentProps) {
-    const controls = useAnimation(); // initialize the animation controls
-    const [logWidth, setLogWidth] = useState(0);
 
-    // Reference to the log message
-    const logRef = useRef(null);
+export function LogComponent() {
+    const { gameLogs } = useGame();
+    const [isExpanded, setIsExpanded] = useState(false);
 
-    useEffect(() => {
-        console.log(logRef.current.offsetWidth)
-        // Calculate the width of the log message and the container
-        if (logRef.current && divWidth) {
-            setLogWidth(logRef.current.offsetWidth);
+    const toggleLogs = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    const renderLogs = () => {
+        if (isExpanded || gameLogs.length === 0) {
+            return gameLogs.map((log, index) => (
+                <div key={index} className="text-sm border-b py-1">
+                    {log}
+                </div>
+            ));
+        } else {
+            const lastLog = gameLogs[gameLogs.length - 1];
+            return (
+                <div className="text-sm border-b py-1">
+                    {lastLog}
+                </div>
+            );
         }
-
-        // Start the animation if the log is wider than the container
-        if (logWidth > divWidth) {
-            controls.start({ // start the animation
-                x: -logWidth,
-                transition: {duration: 5, repeat: 2, ease: "linear"}
-            });
-        }
-    }, [controls, logWidth, divWidth]);
+    };
 
     return (
-            <motion.div ref={logRef} animate={controls} className="justify-start w-full whitespace-nowrap">
-                BANG! to Marco from Marco for 1 damage in Real Life (1 HP left)
-            </motion.div>
+        <div className="flex-col" onClick={toggleLogs} style={{ cursor: 'pointer' }}>
+            {renderLogs()}
+        </div>
     );
 }
 
 export default LogComponent;
+
 
 
 // import React from 'react';

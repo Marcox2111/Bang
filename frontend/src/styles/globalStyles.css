@@ -47,7 +47,7 @@
     position: relative;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 5px solid #e5e7eb;
+    /*border: 5px solid #e5e7eb;*/
 }
 
 .circular > .card {

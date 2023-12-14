@@ -43,7 +43,7 @@ const useCarouselCalculations = (totalCards, divHeight, divWidth, maxCards) => {
 
 export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselProps) {
     const {openCard} = useShowCard();
-    const {isYourTurn, reactToBang} = useGame();
+    const {isYourTurn, reactToBang, reactToIndians} = useGame();
     const isPanning = useRef(false);
     const rotation = useSpring(0, {stiffness: 100, damping: 12});
     const rotationRef = useRef(0);
@@ -94,6 +94,34 @@ export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselPro
         return true; // Apply grayscale in all other cases
     };
 
+    // New function to handle card actions
+    const handleCardAction = useCallback((card: CardType) => {
+        if (!isPanning.current && card.name !== 'hidden') {
+            if (isYourTurn()) {
+                openCard(card);
+            } else {
+                switch (reaction) {
+                    case 'bang':
+                    case 'gatling':
+                        // Action for 'bang' or 'gatling' reaction
+                        if (card.name === 'mancato') {
+                            reactToBang(card);
+                        }
+                        break;
+                    case 'indiani':
+                        // Action for 'indiani' reaction
+                        if (card.name === 'bang') {
+                            reactToIndians(card);
+                        }
+                        break;
+                    // Add more cases for different reactions
+                    default:
+                    // Default action if reaction is not matched
+                }
+            }
+        }
+    }, [isYourTurn, openCard, reaction]);
+
 
     const initialTransform: Transformation = calculateTransformations(cards.length / 2)
     const [prevTransforms, setPrevTransforms] = useState<Transformation[]>(
@@ -124,15 +152,7 @@ export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselPro
                         <motion.div
                             key={card.id}
                             className="card"
-                            onTap={() => {
-                                if (!isPanning.current && card.name !== 'hidden') {
-                                    if (isYourTurn()) {
-                                        openCard(card);
-                                    } else {
-                                        if (!grayscale) reactToBang(card)
-                                    }
-                                }
-                            }}
+                            onTap={() => handleCardAction(card)}
                             initial={{transform: `translate(${prevTransform.translateX}px, ${prevTransform.translateY}px) rotate(${prevTransform.rotationRad}rad)`}}
                             animate={{transform: `translate(${nowTransform.translateX}px, ${nowTransform.translateY}px) rotate(${nowTransform.rotationRad}rad)`}}
                             transition={{duration: 0.32}}

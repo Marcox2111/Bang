@@ -59,12 +59,12 @@ export const machine = createMachine(
                                     BEER_PLAYED:{
                                         target: 'Action',
                                     },
+                                    INDIANI_PLAYED: {
+                                        target: 'WaitForBangReaction',
+                                    },
                                     PASS_TURN: {
                                         cond: 'canPassTurn',
                                         target: "#game.PlayingTurn.EndPhase",
-                                    },
-                                    INDIANI_PLAYED: {
-                                        target: 'WaitForBangReaction',
                                     }
                                 },
                             },

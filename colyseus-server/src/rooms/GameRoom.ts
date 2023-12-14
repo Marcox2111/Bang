@@ -86,14 +86,16 @@ export class GameRoom extends Room<RoomState> {
                 this.gameService.send("PASS_TURN")
                 break;
             case "playCard":
-                console.log("playCard")
                 const {card: cardtoplay, targets}: { card: CardType, targets: PlayerType[] } = value;
                 this.playCard(player, cardtoplay, targets)
                 break;
             case "missedReaction":
-                console.log("missed")
                 const missedCard: CardType = value;
                 this.handleMissedReaction(player, missedCard)
+                break;
+            case "bangReaction":
+                const bangCard: CardType = value;
+                this.handleBangReaction(player, bangCard);
                 break;
             case "hello":
                 console.log("test", type)
@@ -217,16 +219,28 @@ export class GameRoom extends Room<RoomState> {
             case 'birra':
             case 'saloon':
                 // Assuming similar changes for other effect handlers if needed
+                this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
                 this.handleBeerEffect(targets);
                 break;
             case 'indiani':
                 // Assuming similar changes for other effect handlers if needed
+                this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
                 this.handleIndianiEffect(player, targets, card);
                 break;
             //... other card types
             default:
                 console.warn("Unknown card type:", card.name);
         }
+
+        switch (card.name) {
+            case 'bang':
+                this.BroadCastToAll("Log", `${player.name} played ${card.name} on ${targets.map(t => t.name).join(", ")}`);
+                break;
+            case 'gatling':
+                this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
+                break;
+        }
+
         //DISCARD CARD AFTER PLAYING IT
         this.discardCard(player, card);
     }
@@ -240,6 +254,12 @@ export class GameRoom extends Room<RoomState> {
         } else {
             console.warn("Client not found for player ID:", playerId);
         }
+    }
+
+    BroadCastToAll(messageType: string, data: any = null) {
+        this.clients.forEach((client) => {
+            client.send(messageType, data);
+        });
     }
 
     startReactionTimer(targetPlayer: Player) {
@@ -274,8 +294,8 @@ export class GameRoom extends Room<RoomState> {
         }
     }
 
-
     handleIndianiEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
+
         this.reactionMessageSenders(actorPlayer, card, targets)
 
         // Start WaitForReaction state if there are players who need to react
@@ -289,6 +309,7 @@ export class GameRoom extends Room<RoomState> {
         // player is the player who reacted
         if (!missedCard || missedCard.name != "mancato") {
             player.hp--;
+            this.BroadCastToAll("Log", `${player.name} lost 1 HP`);
         } else {
             this.discardCard(player, missedCard);
         }
@@ -302,6 +323,27 @@ export class GameRoom extends Room<RoomState> {
             const turnPlayer = this.findPlayerByTurn();
             this.sendToPlayer(turnPlayer.id, "EveryoneReacted");
             this.gameService.send('MISSED_REACTED');
+        }
+    }
+
+    handleBangReaction(player: Player, bangCard: CardType | null) {
+        //player is the player who reacted
+        if (!bangCard || bangCard.name != "bang") {
+            player.hp--;
+            this.BroadCastToAll("Log", `${player.name} lost 1 HP`);
+        } else {
+            this.discardCard(player, bangCard);
+        }
+        this.sendToPlayer(player.id, "cardReacted");
+        // Remove player from awaiting reaction set
+        this.playersAwaitingReaction.delete(player.id);
+
+        // Check if all reactions are received
+        if (this.playersAwaitingReaction.size === 0) {
+            // All players have reacted, move to the next state
+            const turnPlayer = this.findPlayerByTurn();
+            this.sendToPlayer(turnPlayer.id, "EveryoneReacted");
+            this.gameService.send('BANG_REACTED');
         }
     }
 
