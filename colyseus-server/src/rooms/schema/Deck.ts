@@ -20,7 +20,7 @@ export class Deck extends Schema {
         this.createCards("bang", 15);
         this.createCards("birra", 5);
         this.createCards("saloon", 2);
-        this.createCards("gatling", 3);
+        this.createCards("gatling", 14);
         this.createCards("panico", 3);
         this.createCards("mancato",12);
 

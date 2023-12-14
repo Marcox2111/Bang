@@ -72,8 +72,10 @@ export class GameRoom extends Room<RoomState> {
 
     handleGenericMessage(client: Client, type: string | number, value: any) {
         const player = this.findPlayerBySessionId(client.sessionId);
+        console.log(player.id)
+        console.log(type)
         if (!this.isValidPlayer(player)) return;
-
+        console.log("valid")
         // Now that we have the player, we can handle the message
         switch (type) {
             case "discardCard":
@@ -84,10 +86,12 @@ export class GameRoom extends Room<RoomState> {
                 this.gameService.send("PASS_TURN")
                 break;
             case "playCard":
-                const {card: cardtoplay, targets} = value;
+                console.log("playCard")
+                const {card: cardtoplay, targets}: { card: CardType, targets: PlayerType[] } = value;
                 this.playCard(player, cardtoplay, targets)
                 break;
             case "missedReaction":
+                console.log("missed")
                 const missedCard: CardType = value;
                 this.handleMissedReaction(player, missedCard)
                 break;
@@ -104,12 +108,16 @@ export class GameRoom extends Room<RoomState> {
         return this.state.players.find(p => p.id === sessionId);
     }
 
+    findPlayerByTurn() {
+        return this.state.players.find(p => p.turn === true);
+    }
+
     isValidPlayer(player: Player) {
         if (!player) {
             console.log("ERROR: message coming from invalid player.");
             return false;
         }
-        return player.alive && player.turn;
+        return player.alive && (player.turn || this.playersAwaitingReaction.has(player.id));
     }
 
     assignRolesToPlayers() {
@@ -204,7 +212,7 @@ export class GameRoom extends Room<RoomState> {
             case 'bang':
             case 'gatling':
                 // Pass the player and the card to handleBangEffect
-                this.handleBangEffect(player, targets, card);
+                this.handleBangEffect(player, card, targets);
                 break;
             case 'birra':
             case 'saloon':
@@ -219,6 +227,7 @@ export class GameRoom extends Room<RoomState> {
             default:
                 console.warn("Unknown card type:", card.name);
         }
+        //DISCARD CARD AFTER PLAYING IT
         this.discardCard(player, card);
     }
 
@@ -243,16 +252,21 @@ export class GameRoom extends Room<RoomState> {
         }, 10000);
     }
 
-    handleBangEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
+    reactionMessageSenders(actorPlayer: Player, card: CardType, targets: PlayerType[]) {
+        // Send message to all targets
         targets.forEach((target) => {
             const targetPlayer = this.state.players.find((p) => p.id === target.id);
             if (targetPlayer) {
                 this.playersAwaitingReaction.add(targetPlayer.id);
-                // Include the actor player's name and card name in the notification
                 this.sendToPlayer(targetPlayer.id, "reactToCard", {actorName: actorPlayer.name, cardName: card.name});
-                this.startReactionTimer(targetPlayer)
+                // this.startReactionTimer(targetPlayer)
             }
         });
+    }
+
+    handleBangEffect(actorPlayer: Player, card: CardType, targets: PlayerType[]) {
+
+        this.reactionMessageSenders(actorPlayer, card, targets)
 
         // Start WaitForReaction state if there are players who need to react
         if (this.playersAwaitingReaction.size > 0) {
@@ -262,18 +276,11 @@ export class GameRoom extends Room<RoomState> {
 
 
     handleIndianiEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
-        targets.forEach((target) => {
-            const targetPlayer = this.state.players.find((p) => p.id === target.id);
-            if (targetPlayer) {
-                this.playersAwaitingReaction.add(targetPlayer.id);
-                this.sendToPlayer(targetPlayer.id, "reactToCard", {actorName: actorPlayer.name, cardName: card.name});
-                this.startReactionTimer(targetPlayer)
-            }
-        });
+        this.reactionMessageSenders(actorPlayer, card, targets)
 
         // Start WaitForReaction state if there are players who need to react
         if (this.playersAwaitingReaction.size > 0) {
-            this.gameService.send('BANG_PLAYED');
+            this.gameService.send('INDIANI_PLAYED');
         }
     }
 
@@ -292,6 +299,8 @@ export class GameRoom extends Room<RoomState> {
         // Check if all reactions are received
         if (this.playersAwaitingReaction.size === 0) {
             // All players have reacted, move to the next state
+            const turnPlayer = this.findPlayerByTurn();
+            this.sendToPlayer(turnPlayer.id, "EveryoneReacted");
             this.gameService.send('MISSED_REACTED');
         }
     }
@@ -304,6 +313,8 @@ export class GameRoom extends Room<RoomState> {
                 targetPlayer.hp++;
             }
         });
+        const turnPlayer = this.findPlayerByTurn();
+        this.sendToPlayer(turnPlayer.id, "EveryoneReacted");
         this.gameService.send("BEER_PLAYED");
     }
 

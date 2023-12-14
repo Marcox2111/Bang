@@ -9,6 +9,7 @@ type CarouselProps = {
     cards: CardType[];
     divHeight: number;
     divWidth: number;
+    reaction: string | null;
 };
 
 type Transformation = {
@@ -40,9 +41,9 @@ const useCarouselCalculations = (totalCards, divHeight, divWidth, maxCards) => {
     };
 };
 
-export function CardCarousel({cards, divHeight, divWidth}: CarouselProps) {
+export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselProps) {
     const {openCard} = useShowCard();
-    const {isYourTurn} = useGame();
+    const {isYourTurn, reactToBang} = useGame();
     const isPanning = useRef(false);
     const rotation = useSpring(0, {stiffness: 100, damping: 12});
     const rotationRef = useRef(0);
@@ -86,6 +87,13 @@ export function CardCarousel({cards, divHeight, divWidth}: CarouselProps) {
         [minRotation, maxRotation, rotation],
     );
 
+    const possibleReaction = (card: CardType, reaction: string | null): boolean => {
+        if (!reaction) return false; // No reaction, no grayscale
+        if (reaction === 'indiani' && card.name === 'bang') return false;
+        if ((reaction === 'bang' || reaction === 'gatling') && card.name === 'mancato') return false;
+        return true; // Apply grayscale in all other cases
+    };
+
 
     const initialTransform: Transformation = calculateTransformations(cards.length / 2)
     const [prevTransforms, setPrevTransforms] = useState<Transformation[]>(
@@ -110,17 +118,19 @@ export function CardCarousel({cards, divHeight, divWidth}: CarouselProps) {
                 {cards.map((card, index) => {
                     const nowTransform = calculateTransformations(index);
                     const prevTransform = prevTransforms[index] || {translateX: 0, translateY: 0, rotationRad: 0};
+                    const grayscale = possibleReaction(card, reaction);
+
                     return (
                         <motion.div
                             key={card.id}
                             className="card"
                             onTap={() => {
-                                if (
-                                    !isPanning.current &&
-                                    card.name !== 'hidden'
-                                    && isYourTurn()
-                                ) {
-                                    openCard(card);
+                                if (!isPanning.current && card.name !== 'hidden') {
+                                    if (isYourTurn()) {
+                                        openCard(card);
+                                    } else {
+                                        if (!grayscale) reactToBang(card)
+                                    }
                                 }
                             }}
                             initial={{transform: `translate(${prevTransform.translateX}px, ${prevTransform.translateY}px) rotate(${prevTransform.rotationRad}rad)`}}
@@ -141,10 +151,14 @@ export function CardCarousel({cards, divHeight, divWidth}: CarouselProps) {
                             style={{
                                 width: `${CardWidth}px`,
                                 height: `${CardHeight}px`,
+                                filter: grayscale ? 'grayscale(100%)' : 'none'
                             }}
-                            whileHover={{transform: `translate(${nowTransform.translateX}px, ${nowTransform.translateY}px) rotate(${nowTransform.rotationRad}rad) scale(1.05)`, zIndex:100}}
+                            whileHover={{
+                                transform: `translate(${nowTransform.translateX}px, ${nowTransform.translateY}px) rotate(${nowTransform.rotationRad}rad) scale(1.05)`,
+                                zIndex: 100
+                            }}
                         >
-                            <CardComponent key={card.id} card={card}/>
+                            <CardComponent key={card.id} cardName={card.name}/>
                         </motion.div>
                     );
                 })}

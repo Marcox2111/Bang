@@ -36,6 +36,7 @@ export function EnemyContainer({player}: PlayerContainerProps) {
                             divHeight={carHeight}
                             divWidth={containerWidth}
                             cards={player.cards}
+                            reaction={null}
                         />
                     )}
                 </div>

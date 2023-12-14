@@ -1,24 +1,23 @@
 import React from "react";
-import {CardType} from "../../../shared/types";
 
 type CardProps={
-    card:CardType
+    cardName:string
 }
 
-export function CardComponent({card}: CardProps) {
+export function CardComponent({cardName}: CardProps) {
     let image;
     try {
-        image = require(`../cards/bang_cards/${card.name}.png`);
+        image = require(`../cards/bang_cards/${cardName}.png`);
     } catch (err) {
         console.error(err);
         image = require('../cards/bang_cards/barile.png'); // Fallback to a default image
     }
 
     return (
-        <div
-            className="flex justify-center items-center pointer-events-none">
-            {image && <img src={image} alt="Character" className={""}/>}
+        <div className="flex justify-center items-center h-full">
+            {image && <img src={image} alt="Character" className="max-h-full w-auto object-contain" />}
         </div>
     );
+
 }
 

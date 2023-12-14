@@ -34,6 +34,7 @@ export function TargetMap({card, onCloseCard}: TargetMapProps) {
     const rotInc = 2 * Math.PI / players.length;
     const isUseButtonDisabled = ['single', 'any', 'one'].includes(card.target) && !selectedTarget;
 
+    //THIS IS THE FUNCTION USED JUST FOR STYLING
     function getPlayerClass(player: PlayerType, adjustedIndex: number): string {
         switch (card.target) {
             case 'all':
@@ -73,8 +74,8 @@ export function TargetMap({card, onCloseCard}: TargetMapProps) {
                 target = [...players]; // Copy of the players array
                 break;
             case 'single':
-            case 'any':
             case 'one':
+            case 'any':
                 if (selectedTarget) {
                     target = [selectedTarget];
                 }

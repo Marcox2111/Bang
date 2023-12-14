@@ -63,7 +63,7 @@
     /*perspective: 40000cm;*/
     position: absolute;
     perspective-origin: top;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     transform: rotateX(-45deg);
     transition: transform 1s;
     left: 15%;
@@ -82,4 +82,9 @@
     transition: transform 0.32s;
 }
 
+.card-component-img {
+    max-height: 100%; /* Limit the height to the container's height */
+    width: auto; /* Adjust width automatically to maintain aspect ratio */
+    object-fit: contain; /* Ensures the image is scaled correctly within the element */
+}
 

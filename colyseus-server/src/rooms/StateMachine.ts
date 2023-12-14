@@ -54,7 +54,7 @@ export const machine = createMachine(
                             Action: {
                                 on: {
                                     BANG_PLAYED: {
-                                        target: 'WaitForReaction',
+                                        target: 'WaitForMissReaction',
                                     },
                                     BEER_PLAYED:{
                                         target: 'Action',
@@ -63,11 +63,21 @@ export const machine = createMachine(
                                         cond: 'canPassTurn',
                                         target: "#game.PlayingTurn.EndPhase",
                                     },
+                                    INDIANI_PLAYED: {
+                                        target: 'WaitForBangReaction',
+                                    }
                                 },
                             },
-                            WaitForReaction: {
+                            WaitForMissReaction: {
                                 on: {
                                     MISSED_REACTED: {
+                                        target: 'Action',
+                                    },
+                                },
+                            },
+                            WaitForBangReaction: {
+                                on: {
+                                    BANG_REACTED: {
                                         target: 'Action',
                                     },
                                 },
@@ -93,8 +103,10 @@ export const machine = createMachine(
                 | { type: "CARDS_DISTRIBUTED" }
                 | { type: "PASS_TURN" }
                 | { type: "BANG_PLAYED" }
+                | { type: "INDIANI_PLAYED" }
                 | { type: "BEER_PLAYED" }
                 | { type: "MISSED_REACTED" }
+                | { type: "BANG_REACTED" }
                 | { type: "RESOLVE_ENDPHASE" },
 
         },

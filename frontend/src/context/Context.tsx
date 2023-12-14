@@ -7,6 +7,7 @@ type GameContextType = {
     players: PlayerType[];
     clientPlayer: PlayerType | null;
     isYourTurn: () => boolean;
+    waitingForReaction: boolean;
     rotationPlayer: number;
     room: Room | null;
     reactToCard: ReactionsType;
@@ -17,12 +18,14 @@ type GameContextType = {
     discardCard: (card: CardType) => void;
     passTurn: () => void;
     playCard: (card: CardType, target: PlayerType[]) => void;
+    reactToBang: (card: CardType) => void;
 };
 
 const defaultContext: GameContextType = {
     players: [],
     clientPlayer: null,
     isYourTurn: () => false,
+    waitingForReaction: false,
     rotationPlayer: 0,
     room: null,
     reactToCard: {type: null, actor: null},
@@ -39,6 +42,8 @@ const defaultContext: GameContextType = {
     passTurn: () => {
     },
     playCard: () => {
+    },
+    reactToBang: () => {
     }
 }
 
@@ -55,24 +60,27 @@ export function GameProvider({children}) {
     const [clientPlayer, setClientPlayer] = useState<PlayerType | null>(null);
     const [rotationPlayer, setRotationPlayer] = useState(0);
     const [reactToCard, setReactToCard] = useState({type: null, actor: null});
-
+    const [waitingForReaction, setWaitingForReaction] = useState(false);
 
     const currentTurnIndexRef = useRef(null); // Using useRef to store the current turn index
     const playersRef = useRef(players);
     const clientPlayerRef = useRef(clientPlayer);
 
+    //THIS IS THE CONNECTION TO THE SERVER
     useEffect(() => {
         const newClient = new Client('ws://localhost:2567');
         setClient(newClient);
     }, []);
 
+
+    //THIS CREATES THE REFERENCE TO THE PLAYERS AND THE CLIENT PLAYER
     useEffect(() => {
         playersRef.current = players;
         clientPlayerRef.current = clientPlayer;
         updateRotationPlayer();
     }, [players, clientPlayer]);
 
-
+    //THIS IS THE LISTENER FOR THE ROOM
     useEffect(() => {
         if (!room) return;
 
@@ -82,7 +90,8 @@ export function GameProvider({children}) {
         };
 
         room.onMessage("reactToCard", handleReactToCard);
-        room.onMessage("cardReacted", handleCardReacted)
+        room.onMessage("cardReacted", handleCardReacted);
+        room.onMessage("EveryoneReacted", () => {setWaitingForReaction(false)});
         // Set up message listeners
         room.onStateChange(handleStateChange);
         // Cleanup function
@@ -103,10 +112,8 @@ export function GameProvider({children}) {
     // Function to update rotation player
     const updateRotationPlayer = (follow: boolean = false) => {
         const turnPlayerIndex = playersRef.current.findIndex(p => p.turn === true);
-        console.log("Turn player index: ", turnPlayerIndex)
         // Check if the turn index has changed
         if (currentTurnIndexRef.current !== turnPlayerIndex || follow) {
-            console.log("Updating rotation player")
             setRotationPlayer(-360 * turnPlayerIndex / playersRef.current.length);
             currentTurnIndexRef.current = turnPlayerIndex;
         }
@@ -128,11 +135,6 @@ export function GameProvider({children}) {
         setReactToCard({type: null, actor: null})
         updateRotationPlayer(true);
     };
-
-    const reactedCard = () => {
-
-    };
-
 
 
     const createPlayerObject = (playerData): PlayerType => {
@@ -179,7 +181,7 @@ export function GameProvider({children}) {
         return clientPlayer?.turn || false;
     };
 
-    const rotateCarouselLeft = () => {
+    const rotateCarouselLeft = () => {/**/
         const rotateLeft = rotationPlayer + 360 / players.length
         setRotationPlayer(rotateLeft)
     }
@@ -198,7 +200,13 @@ export function GameProvider({children}) {
     }
 
     const playCard = (card: CardType, targets: PlayerType[]) => {
+        setWaitingForReaction(true);
         room.send("playCard", {card, targets})
+    }
+
+    const reactToBang = (card: CardType) => {
+        console.log(card)
+        room.send("missedReaction", card)
     }
 
     return (
@@ -207,6 +215,7 @@ export function GameProvider({children}) {
                 players,
                 clientPlayer,
                 isYourTurn,
+                waitingForReaction,
                 rotationPlayer,
                 createRoom,
                 joinRoom,
@@ -217,6 +226,7 @@ export function GameProvider({children}) {
                 discardCard,
                 passTurn,
                 playCard,
+                reactToBang,
             }}
         >
             {children}

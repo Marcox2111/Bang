@@ -66,7 +66,7 @@ export function ShowCardProvider({children}: ShowCardProviderProps) {
                             }}
                             className="flex flex-col rounded-xl justify-center align-middle items-center"
                         >
-                            <CardComponent card={selectedCard}/>
+                            <CardComponent cardName={selectedCard.name}/>
                             {isYourTurn() ?
                                 <div
                                     className="flex align-middle justify-center items-center bg-white bg-opacity-80 m-4 h-14 w-14 rounded-full p-4 cursor-pointer"
