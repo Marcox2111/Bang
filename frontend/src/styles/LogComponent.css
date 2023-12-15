@@ -1,0 +1,21 @@
+.log-container {
+    max-height: 150px; /* Adjust based on your UI requirements */
+    overflow-y: auto; /* Enables vertical scrolling */
+}
+
+.logs {
+    display: flex;
+    flex-direction: column-reverse; /* Reverses the order so latest logs are at the bottom */
+}
+
+.log-entry {
+    /* Add your styling for individual log entries here */
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Styles for when the log is expanded */
+.expanded {
+    max-height: 250px; /* Adjust based on your UI requirements */
+    /*max-width: 250px;*/
+}

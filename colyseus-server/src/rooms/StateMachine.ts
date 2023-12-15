@@ -62,6 +62,9 @@ export const machine = createMachine(
                                     INDIANI_PLAYED: {
                                         target: 'WaitForBangReaction',
                                     },
+                                    DUELLO_PLAYED: {
+                                        target: 'WaitForDuelReaction',
+                                    },
                                     PASS_TURN: {
                                         cond: 'canPassTurn',
                                         target: "#game.PlayingTurn.EndPhase",
@@ -80,6 +83,16 @@ export const machine = createMachine(
                                     BANG_REACTED: {
                                         target: 'Action',
                                     },
+                                },
+                            },
+                            WaitForDuelReaction: {
+                                on: {
+                                    DUELLO_REACTED: {
+                                        target: 'WaitForDuelReaction',
+                                    },
+                                    NO_DUELLO_REACTED: {
+                                        target: 'Action',
+                                    }
                                 },
                             },
                         },
@@ -104,9 +117,12 @@ export const machine = createMachine(
                 | { type: "PASS_TURN" }
                 | { type: "BANG_PLAYED" }
                 | { type: "INDIANI_PLAYED" }
+                | { type: "DUELLO_PLAYED" }
                 | { type: "BEER_PLAYED" }
                 | { type: "MISSED_REACTED" }
                 | { type: "BANG_REACTED" }
+                | { type: "DUELLO_REACTED" }
+                | { type: "NO_DUELLO_REACTED" }
                 | { type: "RESOLVE_ENDPHASE" },
 
         },

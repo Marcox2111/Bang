@@ -20,6 +20,7 @@ type GameContextType = {
     playCard: (card: CardType, target: PlayerType[]) => void;
     reactToBang: (card: CardType) => void;
     reactToIndians: (card: CardType) => void;
+    reactToDuel: (card: CardType) => void;
     gameLogs: string[];
 };
 
@@ -48,6 +49,8 @@ const defaultContext: GameContextType = {
     reactToBang: () => {
     },
     reactToIndians: () => {
+    },
+    reactToDuel: () => {
     },
     gameLogs: [],
 }
@@ -209,7 +212,8 @@ export function GameProvider({children}) {
     }
 
     const passTurn = () => {
-        room.send("passTurn")
+        if (isYourTurn())
+            room.send("passTurn")
     }
 
     const playCard = (card: CardType, targets: PlayerType[]) => {
@@ -225,6 +229,11 @@ export function GameProvider({children}) {
     const reactToIndians = (card: CardType) => {
         console.log(card)
         room.send("bangReaction", card)
+    }
+
+    const reactToDuel = (card: CardType) => {
+        console.log(card)
+        room.send("duelReaction", card)
     }
 
     return (
@@ -246,6 +255,7 @@ export function GameProvider({children}) {
                 playCard,
                 reactToBang,
                 reactToIndians,
+                reactToDuel,
                 gameLogs,
             }}
         >

@@ -43,7 +43,7 @@ const useCarouselCalculations = (totalCards, divHeight, divWidth, maxCards) => {
 
 export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselProps) {
     const {openCard} = useShowCard();
-    const {isYourTurn, reactToBang, reactToIndians} = useGame();
+    const {isYourTurn, reactToBang, reactToIndians, reactToDuel} = useGame();
     const isPanning = useRef(false);
     const rotation = useSpring(0, {stiffness: 100, damping: 12});
     const rotationRef = useRef(0);
@@ -89,7 +89,7 @@ export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselPro
 
     const possibleReaction = (card: CardType, reaction: string | null): boolean => {
         if (!reaction) return false; // No reaction, no grayscale
-        if (reaction === 'indiani' && card.name === 'bang') return false;
+        if ((reaction === 'indiani' || reaction === 'duello') && card.name === 'bang') return false;
         if ((reaction === 'bang' || reaction === 'gatling') && card.name === 'mancato') return false;
         return true; // Apply grayscale in all other cases
     };
@@ -97,27 +97,32 @@ export function CardCarousel({cards, divHeight, divWidth, reaction}: CarouselPro
     // New function to handle card actions
     const handleCardAction = useCallback((card: CardType) => {
         if (!isPanning.current && card.name !== 'hidden') {
-            if (isYourTurn()) {
-                openCard(card);
-            } else {
-                switch (reaction) {
-                    case 'bang':
-                    case 'gatling':
-                        // Action for 'bang' or 'gatling' reaction
-                        if (card.name === 'mancato') {
-                            reactToBang(card);
-                        }
-                        break;
-                    case 'indiani':
-                        // Action for 'indiani' reaction
-                        if (card.name === 'bang') {
-                            reactToIndians(card);
-                        }
-                        break;
-                    // Add more cases for different reactions
-                    default:
-                    // Default action if reaction is not matched
-                }
+
+            switch (reaction) {
+                case 'bang':
+                case 'gatling':
+                    // Action for 'bang' or 'gatling' reaction
+                    if (card.name === 'mancato') {
+                        reactToBang(card);
+                    }
+                    break;
+                case 'indiani':
+                    // Action for 'indiani' reaction
+                    if (card.name === 'bang') {
+                        reactToIndians(card);
+                    }
+                    break;
+                case 'duello':
+                    // Action for 'duello' reaction
+                    if (card.name === 'bang') {
+                        reactToDuel(card);
+                    }
+                    break;
+                // Add more cases for different reactions
+                default:
+                    if (isYourTurn()) {
+                        openCard(card);
+                    }
             }
         }
     }, [isYourTurn, openCard, reaction]);

@@ -44,6 +44,7 @@ export class Card extends Schema {
                 this.target = 'single'; // Target is one and has to be in range
                 break;
             case 'catbalou':
+            case 'duello':
                 this.target = 'any'; // Target is any single player at any range
                 break;
             case 'saloon':

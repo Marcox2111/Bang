@@ -18,12 +18,13 @@ export class Deck extends Schema {
         // This can be as sophisticated as needed.
         // It could involve random card generation, predefined card sequences, etc.
         this.createCards("bang", 15);
-        this.createCards("birra", 5);
-        this.createCards("saloon", 2);
-        this.createCards("gatling", 3);
-        this.createCards("panico", 4);
-        this.createCards("mancato",12);
-        this.createCards("indiani",10)
+        this.createCards("birra", 1);
+        this.createCards("saloon", 1);
+        this.createCards("gatling", 1);
+        this.createCards("panico", 1);
+        this.createCards("mancato",1);
+        this.createCards("indiani",1);
+        this.createCards("duello", 15);
 
         // Shuffle the deck
         this.shuffle();

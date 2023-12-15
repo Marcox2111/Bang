@@ -11,7 +11,7 @@ type PlayerContainerProps = {
 };
 
 export function PlayerContainer({player}: PlayerContainerProps) {
-    const {passTurn, reactToCard, isYourTurn, reactToBang, reactToIndians, waitingForReaction} = useGame()
+    const {passTurn, reactToCard, isYourTurn, reactToBang, reactToIndians, reactToDuel, waitingForReaction} = useGame()
 
     //TODO: Implement logic for when is waiting for reaction (it has also to be adjusted because the flag it goes true also for cards like beer)
 
@@ -24,14 +24,13 @@ export function PlayerContainer({player}: PlayerContainerProps) {
             case 'indiani':
                 reactToIndians(null);
                 break;
+            case 'duello':
+                reactToDuel(null);
+                break;
         }
         // Implement logic for when the player has no reaction cards
     };
 
-
-    useEffect(() => {
-        console.log(reactToCard)
-    }, [reactToCard])
 
     const {height: carHeight, ref: carRef} = useResizeDetector();
     const {width: containerWidth, ref: containerDiv} = useResizeDetector();
@@ -49,35 +48,30 @@ export function PlayerContainer({player}: PlayerContainerProps) {
                     <div className="flex w-1/3 justify-center ">{player.name}</div>
                     <div className="flex w-1/3 justify-center ">{player.hp}</div>
                 </div>
-                {isYourTurn() ?
-                    <div className="flex flex-grow ">
-                        {/* Display something here when it's the player's turn */}
-                    </div>
-                    :
-                    <div className="flex flex-grow flex-col ">
-                        {reactToCard.type != null ?
-                            <>
-                                <div className="flex h-[40%] justify-center items-center">
-                                    {reactToCard.actor}
-                                </div>
-                                <div className="flex h-[60%] justify-center items-center">
-                                    <CardComponent key={reactToCard.type} cardName={reactToCard.type}/>
-                                </div>
-                            </>
-                            :
-                            <div>
-                                {/* Display nothing here when it's not the player's turn and there's no reaction */}
+
+                <div className="flex flex-grow flex-col ">
+                    {reactToCard.type != null ?
+                        <>
+                            <div className="flex h-[40%] justify-center items-center">
+                                {reactToCard.actor}
                             </div>
-                        }
-                    </div>
-                }
+                            <div className="flex h-[60%] justify-center items-center">
+                                <CardComponent key={reactToCard.type} cardName={reactToCard.type}/>
+                            </div>
+                        </>
+                        :
+                        <div>
+                            {/* Display nothing here when it's not the player's turn and there's no reaction */}
+                        </div>
+                    }
+                </div>
 
                 <div className="flex h-[7%] items-center">
                     <button className={"w-full h-full bg-amber-50 hover:bg-amber-100"}
                             onClick={() => {
-                                isYourTurn() ? passTurn() : handleNoReaction();
+                                reactToCard.type === null ? passTurn() : handleNoReaction();
                             }}>
-                        {isYourTurn() ? "Pass" : "No Reaction"}
+                        {reactToCard.type === null ? "Pass" : "No Reaction"}
                     </button>
                 </div>
                 <div ref={carRef} className="flex h-1/4 w-full justify-center">

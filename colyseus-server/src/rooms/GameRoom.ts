@@ -16,7 +16,7 @@ export class GameRoom extends Room<RoomState> {
     gameService: any;
     currentPlayerIndex: number;
     playersAwaitingReaction: Set<string> = new Set();
-
+    duelInfo: { initiator: string; responder: string } | null = null;
 
     onCreate(options: any) {
         // Initialization code
@@ -96,6 +96,10 @@ export class GameRoom extends Room<RoomState> {
             case "bangReaction":
                 const bangCard: CardType = value;
                 this.handleBangReaction(player, bangCard);
+                break;
+            case "duelReaction":
+                const duelCard: CardType = value;
+                this.handleDuelReaction(player, duelCard)
                 break;
             case "hello":
                 console.log("test", type)
@@ -214,18 +218,20 @@ export class GameRoom extends Room<RoomState> {
             case 'bang':
             case 'gatling':
                 // Pass the player and the card to handleBangEffect
-                this.handleBangEffect(player, card, targets);
+                this.handleBangEffect(player, targets, card);
                 break;
             case 'birra':
             case 'saloon':
                 // Assuming similar changes for other effect handlers if needed
-                this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
                 this.handleBeerEffect(targets);
                 break;
             case 'indiani':
                 // Assuming similar changes for other effect handlers if needed
-                this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
                 this.handleIndianiEffect(player, targets, card);
+                break;
+            case 'duello':
+                // Assuming similar changes for other effect handlers if needed
+                this.handleDuelloEffect(player, targets, card);
                 break;
             //... other card types
             default:
@@ -236,6 +242,12 @@ export class GameRoom extends Room<RoomState> {
             case 'bang':
                 this.BroadCastToAll("Log", `${player.name} played ${card.name} on ${targets.map(t => t.name).join(", ")}`);
                 break;
+            case 'duello':
+                this.BroadCastToAll("Log", `${player.name} played ${card.name} on ${targets.map(t => t.name).join(", ")}`);
+                break;
+            case 'birra':
+            case 'indiani':
+            case 'saloon':
             case 'gatling':
                 this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
                 break;
@@ -284,7 +296,19 @@ export class GameRoom extends Room<RoomState> {
         });
     }
 
-    handleBangEffect(actorPlayer: Player, card: CardType, targets: PlayerType[]) {
+    handleDuelloEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
+        this.duelInfo = { initiator: actorPlayer.id, responder: targets[0].id };
+
+
+        this.reactionMessageSenders(actorPlayer, card, targets)
+
+        // Start WaitForReaction state if there are players who need to react
+        if (this.playersAwaitingReaction.size > 0) {
+            this.gameService.send('DUELLO_PLAYED');
+        }
+    }
+
+    handleBangEffect(actorPlayer: Player, targets: PlayerType[], card: CardType,) {
 
         this.reactionMessageSenders(actorPlayer, card, targets)
 
@@ -347,6 +371,47 @@ export class GameRoom extends Room<RoomState> {
         }
     }
 
+    handleDuelReaction(player: Player, duelCard: CardType | null) {
+
+        if (duelCard && duelCard.name === "bang") {
+            this.discardCard(player, duelCard);
+
+            // Swap the roles in the duel
+            const newInitiatorId = this.duelInfo.responder;
+            const newResponderId = this.duelInfo.initiator;
+            this.duelInfo = { initiator: newInitiatorId, responder: newResponderId };
+
+            // Find the new initiator (previous responder) player object
+            const newInitiatorPlayer = this.state.players.find(p => p.id === newInitiatorId);
+
+            if (newInitiatorPlayer) {
+                // Prepare the new responder data (dummy player object, only id is needed)
+                const newResponderPlayer: PlayerType = { id: newResponderId, name: "responder", hp: 0, cards: [], role: "", turn: false, range: 0, isHost: false };
+                const dummyCard: CardType = { id: "dummy", name: "duello", target: null };
+                // Send a message to the new initiator to respond to the duel
+                this.reactionMessageSenders(newInitiatorPlayer, dummyCard, [newResponderPlayer]);
+            }
+
+            this.gameService.send('DUELLO_REACTED');
+        } else {
+            // Duel ends, handle the consequence
+            player.hp--;
+            this.BroadCastToAll("Log", `${player.name} lost 1 HP in a duel`);
+            this.duelInfo = null; // Reset duelInfo after the duel ends
+            this.gameService.send('NO_DUELLO_REACTED');
+        }
+
+        this.sendToPlayer(player.id, "cardReacted");
+        // Remove player from awaiting reaction set
+        this.playersAwaitingReaction.delete(player.id);
+
+        // Check if all reactions are received
+        if (this.playersAwaitingReaction.size === 0) {
+            // All players have reacted, move to the next state
+            const turnPlayer = this.findPlayerByTurn();
+            this.sendToPlayer(turnPlayer.id, "EveryoneReacted");
+        }
+    }
 
     handleBeerEffect(targets: PlayerType[]) {
         targets.forEach((target) => {
