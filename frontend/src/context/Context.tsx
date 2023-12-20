@@ -238,17 +238,14 @@ export function GameProvider({children}) {
     }
 
     const reactToBang = (card: CardType) => {
-        console.log(card)
         room.send("missedReaction", card)
     }
 
     const reactToIndians = (card: CardType) => {
-        console.log(card)
         room.send("bangReaction", card)
     }
 
     const reactToDuel = (card: CardType) => {
-        console.log(card)
         room.send("duelReaction", card)
     }
 
