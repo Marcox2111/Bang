@@ -13,7 +13,7 @@ export class Card extends Schema {
         value: Card['name'],
         root: Schema
     ) {
-        return this.discarded || this.owner === client.sessionId;
+    return this.discarded || this.owner === client.sessionId || this.owner === "Emporio";
     })
     @type("string") name: string;
 
@@ -25,7 +25,7 @@ export class Card extends Schema {
     ) {
         // Implement your filtering logic for the target here.
         // For example, you may only want to reveal the target to the owner of the card.
-        return this.discarded || this.owner === client.sessionId;
+        return this.discarded || this.owner === client.sessionId || this.owner === "Emporio";
     })
     @type("string") target: string;
 
@@ -48,6 +48,7 @@ export class Card extends Schema {
                 this.target = 'any'; // Target is any single player at any range
                 break;
             case 'saloon':
+            case 'emporio':
                 this.target = 'all'; // Target is all players
                 break;
             case 'gatling':

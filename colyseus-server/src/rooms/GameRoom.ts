@@ -17,6 +17,7 @@ export class GameRoom extends Room<RoomState> {
     currentPlayerIndex: number;
     playersAwaitingReaction: Set<string> = new Set();
     duelInfo: { initiator: string; responder: string } | null = null;
+    playersInEmporio: string[] = [];
 
     onCreate(options: any) {
         // Initialization code
@@ -100,6 +101,10 @@ export class GameRoom extends Room<RoomState> {
             case "duelReaction":
                 const duelCard: CardType = value;
                 this.handleDuelReaction(player, duelCard)
+                break;
+            case "emporioReaction":
+                const empCard: CardType = value;
+                this.handleEmporioReaction(player, empCard)
                 break;
             case "hello":
                 console.log("test", type)
@@ -213,6 +218,11 @@ export class GameRoom extends Room<RoomState> {
         return this.state.players[this.currentPlayerIndex].cards.length <= this.state.players[this.currentPlayerIndex].hp
     }
 
+    areThereMorePlayers(): boolean {
+        return this.playersInEmporio.length > 0;
+    }
+
+
     playCard(player: Player, card: CardType, targets: PlayerType[]) {
         switch (card.name) {
             case 'bang':
@@ -233,6 +243,9 @@ export class GameRoom extends Room<RoomState> {
                 // Assuming similar changes for other effect handlers if needed
                 this.handleDuelloEffect(player, targets, card);
                 break;
+            case 'emporio':
+                this.handleEmporioEffect(player, targets, card);
+                break;
             //... other card types
             default:
                 console.warn("Unknown card type:", card.name);
@@ -248,6 +261,7 @@ export class GameRoom extends Room<RoomState> {
             case 'birra':
             case 'indiani':
             case 'saloon':
+            case 'emporio':
             case 'gatling':
                 this.BroadCastToAll("Log", `${player.name} played ${card.name}`);
                 break;
@@ -297,7 +311,7 @@ export class GameRoom extends Room<RoomState> {
     }
 
     handleDuelloEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
-        this.duelInfo = { initiator: actorPlayer.id, responder: targets[0].id };
+        this.duelInfo = {initiator: actorPlayer.id, responder: targets[0].id};
 
 
         this.reactionMessageSenders(actorPlayer, card, targets)
@@ -307,6 +321,33 @@ export class GameRoom extends Room<RoomState> {
             this.gameService.send('DUELLO_PLAYED');
         }
     }
+
+    handleEmporioEffect(actorPlayer: Player, targets: PlayerType[], card: CardType) {
+        const actorIndex = this.state.players.findIndex(p => p.id === actorPlayer.id);
+
+        for (let i = 0; i < targets.length; i++) {
+            const circleIndex = (actorIndex + i) % this.state.players.length;
+            this.playersInEmporio.push(this.state.players[circleIndex].id);
+        }
+
+        console.log(this.playersInEmporio);
+
+        this.gameService.send('EMPORIO_PLAYED');
+
+    }
+
+    revealEmporioCards() {
+        const numPlayers = this.state.players.length;
+        const revealedCards = this.state.deck.deal(numPlayers); // Assuming 'deal' method draws specified number of cards
+        revealedCards.forEach((card) => card.owner = "Emporio")
+
+        // Assuming you have a place in your state to store these cards
+        this.state.emporio.addCards(revealedCards);
+
+        // Optionally, notify all players about the revealed cards
+        this.BroadCastToAll("EmporioCardsRevealed");
+    }
+
 
     handleBangEffect(actorPlayer: Player, targets: PlayerType[], card: CardType,) {
 
@@ -379,15 +420,24 @@ export class GameRoom extends Room<RoomState> {
             // Swap the roles in the duel
             const newInitiatorId = this.duelInfo.responder;
             const newResponderId = this.duelInfo.initiator;
-            this.duelInfo = { initiator: newInitiatorId, responder: newResponderId };
+            this.duelInfo = {initiator: newInitiatorId, responder: newResponderId};
 
             // Find the new initiator (previous responder) player object
             const newInitiatorPlayer = this.state.players.find(p => p.id === newInitiatorId);
 
             if (newInitiatorPlayer) {
                 // Prepare the new responder data (dummy player object, only id is needed)
-                const newResponderPlayer: PlayerType = { id: newResponderId, name: "responder", hp: 0, cards: [], role: "", turn: false, range: 0, isHost: false };
-                const dummyCard: CardType = { id: "dummy", name: "duello", target: null };
+                const newResponderPlayer: PlayerType = {
+                    id: newResponderId,
+                    name: "responder",
+                    hp: 0,
+                    cards: [],
+                    role: "",
+                    turn: false,
+                    range: 0,
+                    isHost: false
+                };
+                const dummyCard: CardType = {id: "dummy", name: "duello", target: null};
                 // Send a message to the new initiator to respond to the duel
                 this.reactionMessageSenders(newInitiatorPlayer, dummyCard, [newResponderPlayer]);
             }
@@ -411,6 +461,15 @@ export class GameRoom extends Room<RoomState> {
             const turnPlayer = this.findPlayerByTurn();
             this.sendToPlayer(turnPlayer.id, "EveryoneReacted");
         }
+    }
+
+    handleEmporioReaction(player: Player, empCard: CardType) {
+        this.playersInEmporio.shift();
+
+        const chosenCard = this.state.emporio.removeCard(empCard.id);
+        this.state.players.find(p => p.id === player.id)?.addCards([chosenCard]);
+
+        this.gameService.send('CARD_CHOSEN');
     }
 
     handleBeerEffect(targets: PlayerType[]) {

@@ -6,6 +6,7 @@ import {Client, Room} from 'colyseus.js';
 type GameContextType = {
     players: PlayerType[];
     clientPlayer: PlayerType | null;
+    emporioCards: CardType[];
     isYourTurn: () => boolean;
     waitingForReaction: boolean;
     rotationPlayer: number;
@@ -21,12 +22,14 @@ type GameContextType = {
     reactToBang: (card: CardType) => void;
     reactToIndians: (card: CardType) => void;
     reactToDuel: (card: CardType) => void;
+    reactToEmporio: (card: CardType) => void;
     gameLogs: string[];
 };
 
 const defaultContext: GameContextType = {
     players: [],
     clientPlayer: null,
+    emporioCards: [],
     isYourTurn: () => false,
     waitingForReaction: false,
     rotationPlayer: 0,
@@ -52,6 +55,8 @@ const defaultContext: GameContextType = {
     },
     reactToDuel: () => {
     },
+    reactToEmporio: () => {
+    },
     gameLogs: [],
 }
 
@@ -70,7 +75,7 @@ export function GameProvider({children}) {
     const [reactToCard, setReactToCard] = useState({type: null, actor: null});
     const [waitingForReaction, setWaitingForReaction] = useState(false);
     const [gameLogs, setGameLogs] = useState<string[]>([]);
-
+    const [emporioCards, setEmporioCards] = useState<CardType[]>([]);
 
     const currentTurnIndexRef = useRef(null); // Using useRef to store the current turn index
     const playersRef = useRef(players);
@@ -107,6 +112,7 @@ export function GameProvider({children}) {
         room.onMessage("Log", (log) => {
             setGameLogs(prevLogs => [...prevLogs, log]);
         });
+        room.onMessage("EmporioCardsRevealed", handleEmporioStart)
 
         // Set up message listeners
         room.onStateChange(handleStateChange);
@@ -121,6 +127,13 @@ export function GameProvider({children}) {
     const updatePlayersState = (state) => {
         const allPlayers = state.players.map(createPlayerObject);
         const myPlayer = allPlayers.find(p => p.id === room.sessionId);
+        const EmporioCards = state.emporio.cards.map(card => ({
+            id: card.id,
+            name: card.name,
+            target: card.target,
+        }))
+        console.log(EmporioCards)
+        setEmporioCards(EmporioCards)
         setPlayers(allPlayers);
         setClientPlayer(myPlayer);
     };
@@ -152,6 +165,9 @@ export function GameProvider({children}) {
         updateRotationPlayer(true);
     };
 
+    const handleEmporioStart = () => {
+        setReactToCard({type: 'emporio', actor: 'emporio'});
+    }
 
     const createPlayerObject = (playerData): PlayerType => {
         return {
@@ -236,11 +252,17 @@ export function GameProvider({children}) {
         room.send("duelReaction", card)
     }
 
+    const reactToEmporio = (card: CardType) => {
+        console.log(card)
+        room.send("emporioReaction", card)
+    }
+
     return (
         <GameContext.Provider
             value={{
                 players,
                 clientPlayer,
+                emporioCards,
                 isYourTurn,
                 waitingForReaction,
                 rotationPlayer,
@@ -256,6 +278,7 @@ export function GameProvider({children}) {
                 reactToBang,
                 reactToIndians,
                 reactToDuel,
+                reactToEmporio,
                 gameLogs,
             }}
         >

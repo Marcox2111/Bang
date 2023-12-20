@@ -17,14 +17,15 @@ export class Deck extends Schema {
     initializeDeck() {
         // This can be as sophisticated as needed.
         // It could involve random card generation, predefined card sequences, etc.
-        this.createCards("bang", 15);
+        this.createCards("bang", 1);
         this.createCards("birra", 1);
         this.createCards("saloon", 1);
         this.createCards("gatling", 1);
         this.createCards("panico", 1);
         this.createCards("mancato",1);
         this.createCards("indiani",1);
-        this.createCards("duello", 15);
+        this.createCards("duello", 1);
+        this.createCards("emporio", 30);
 
         // Shuffle the deck
         this.shuffle();

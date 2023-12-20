@@ -62,12 +62,13 @@ export function ShowCardProvider({children}: ShowCardProviderProps) {
                         setShowTargetMap(true);
                     }
                     break;
+                case 'mancato':
+                    break;
                 default:
                     // Default action for other cards
                     setShowTargetMap(true);
             }
-        }
-        else {
+        } else {
             animate(scope.current, {rotateZ: [0, 10, -10, 10, 0], transition: {duration: 0.5}})
         }
     };

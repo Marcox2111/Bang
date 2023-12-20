@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import CardCarousel from "./CardCarousel";
 import {useResizeDetector} from "react-resize-detector";
-import {PlayerType} from "../../../shared/types";
+import {CardType, PlayerType} from "../../../shared/types";
 import {useGame} from "../context/Context";
 import {CardComponent} from "./CardComponent";
 import LogComponent from "./LogComponent";
@@ -11,7 +11,7 @@ type PlayerContainerProps = {
 };
 
 export function PlayerContainer({player}: PlayerContainerProps) {
-    const {passTurn, reactToCard, isYourTurn, reactToBang, reactToIndians, reactToDuel, waitingForReaction} = useGame()
+    const {passTurn, reactToCard, reactToBang, reactToIndians, reactToDuel, reactToEmporio, emporioCards} = useGame()
 
     //TODO: Implement logic for when is waiting for reaction (it has also to be adjusted because the flag it goes true also for cards like beer)
 
@@ -31,6 +31,10 @@ export function PlayerContainer({player}: PlayerContainerProps) {
         // Implement logic for when the player has no reaction cards
     };
 
+    const handleEmporioCard = (card: CardType) => {
+        console.log(card);
+        reactToEmporio(card);
+    }
 
     const {height: carHeight, ref: carRef} = useResizeDetector();
     const {width: containerWidth, ref: containerDiv} = useResizeDetector();
@@ -51,19 +55,35 @@ export function PlayerContainer({player}: PlayerContainerProps) {
 
                 <div className="flex flex-grow flex-col ">
                     {reactToCard.type != null ?
-                        <>
-                            <div className="flex h-[40%] justify-center items-center">
-                                {reactToCard.actor}
-                            </div>
-                            <div className="flex h-[60%] justify-center items-center">
-                                <CardComponent key={reactToCard.type} cardName={reactToCard.type}/>
-                            </div>
-                        </>
+                        (reactToCard.type === 'emporio' ?
+                                // Handling the 'emporio' reaction type
+                                <div className="flex justify-center items-center">
+                                    {emporioCards.map((card, index) => (
+                                        <div
+                                            onClick={() => handleEmporioCard(card)}
+                                        >
+                                            <CardComponent key={index} cardName={card.name}/>
+                                        </div>
+                                    ))}
+                                </div>
+                                :
+                                // Handling other reaction types
+                                <>
+                                    <div className="flex h-[40%] justify-center items-center">
+                                        {reactToCard.actor}
+                                    </div>
+                                    <div className="flex h-[60%] justify-center items-center">
+                                        <CardComponent key={reactToCard.type} cardName={reactToCard.type}/>
+                                    </div>
+                                </>
+                        )
                         :
+                        // Display nothing when it's not the player's turn and there's no reaction
                         <div>
-                            {/* Display nothing here when it's not the player's turn and there's no reaction */}
+                            {/* Empty container */}
                         </div>
                     }
+
                 </div>
 
                 <div className="flex h-[7%] items-center">

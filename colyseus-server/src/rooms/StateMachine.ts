@@ -65,6 +65,10 @@ export const machine = createMachine(
                                     DUELLO_PLAYED: {
                                         target: 'WaitForDuelReaction',
                                     },
+                                    EMPORIO_PLAYED: {
+                                        target: 'Emporio',
+                                        actions: 'revealEmporioCards',
+                                    },
                                     PASS_TURN: {
                                         cond: 'canPassTurn',
                                         target: "#game.PlayingTurn.EndPhase",
@@ -95,6 +99,17 @@ export const machine = createMachine(
                                     }
                                 },
                             },
+                            Emporio: {
+                                on: {
+                                    CARD_CHOSEN: {
+                                        target: 'Emporio',
+                                        cond: 'areThereMorePlayers',
+                                    },
+                                    ALL_CARDS_CHOSEN: {
+                                        target: 'Action',
+                                    },
+                                },
+                            },
                         },
                     },
                     EndPhase: {
@@ -118,6 +133,10 @@ export const machine = createMachine(
                 | { type: "BANG_PLAYED" }
                 | { type: "INDIANI_PLAYED" }
                 | { type: "DUELLO_PLAYED" }
+                | { type: "EMPORIO_PLAYED" }
+                | { type: "CARD_CHOSEN" }
+                | { type: "NEXT_PLAYER_CHOOSE" }
+                | { type: "ALL_CARDS_CHOSEN" }
                 | { type: "BEER_PLAYED" }
                 | { type: "MISSED_REACTED" }
                 | { type: "BANG_REACTED" }
@@ -143,11 +162,17 @@ export const machine = createMachine(
             nextPlayer: (context, event) => {
                 context.room.nextPlayer();
             },
+            revealEmporioCards: (context, event) => {
+                context.room.revealEmporioCards();
+            }
         },
         services: {},
         guards: {
             canPassTurn: (context, event) => {
                 return context.room.canPlayerPassTurn();
+            },
+            areThereMorePlayers: (context, event) => {
+                return context.room.areThereMorePlayers();
             }
         },
         delays: {},
