@@ -49,6 +49,19 @@ export class Player extends Schema {
         }
     }
 
+    takeDamage(damage: number) {
+        this.hp -= damage;
+        if (this.hp <= 0) {
+            this.alive = false;
+        }
+    }
+
+    takeHeal(heal: number) {
+        this.hp += heal;
+        if (this.hp > 5) {
+            this.hp = 5;
+        }
+    }
     private arrangeCards() {
         this.cards.sort((a, b) => a.name.localeCompare(b.name));
     }

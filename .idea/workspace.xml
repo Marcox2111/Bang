@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="Vai, ho implementato le carte">
-      <change afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Emporio.ts" afterDir="false" />
+    <list default="true" id="6c59ca12-1350-40e7-96b0-6035c2bf44a4" name="Changes" comment="Merge into master">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/GameRoom.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/GameRoom.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/StateMachine.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/StateMachine.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Card.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Card.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Deck.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Deck.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/RoomState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/RoomState.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/context/Context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/Context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/context/ShowCardContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/ShowCardContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Player.ts" beforeDir="false" afterPath="$PROJECT_DIR$/colyseus-server/src/rooms/schema/Player.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/globalStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/globalStyles.css" afterDir="false" />
     </list>
     <list id="6337df53-1fc9-40d6-adb4-962acf868626" name="mi ero dimenticato il package.json" comment="mi ero dimenticato il package.json" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,28 +69,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ee2e7eea&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Marco/Documents/JavaScript/basic-with-select-item/colyseus-server/src/rooms&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\Marco\\AppData\\Roaming\\npm\\node_modules\\prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Marco\\Documents\\JavaScript\\basic-with-select-item\\colyseus-server\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Marco/Documents/JavaScript/basic-with-select-item/colyseus-server/src/rooms",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\Marco\\AppData\\Roaming\\npm\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "ts.external.directory.path": "C:\\Users\\marco.pellegrino\\WebstormProjects\\Bang\\colyseus-server\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -142,6 +137,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.test" />
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.test" />
       </list>
@@ -186,6 +183,9 @@
       <workItem from="1700231597857" duration="11725000" />
       <workItem from="1700499328877" duration="11974000" />
       <workItem from="1702805485196" duration="11052000" />
+      <workItem from="1703675903725" duration="4057000" />
+      <workItem from="1703772493569" duration="7591000" />
+      <workItem from="1703859598377" duration="582000" />
     </task>
     <task id="LOCAL-00001" summary="Inizio a fare il backend">
       <option name="closed" value="true" />
@@ -283,7 +283,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700542567405</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Merge into master">
+      <option name="closed" value="true" />
+      <created>1703056048494</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1703056048494</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,6 +324,7 @@
     <MESSAGE value="mi ero dimenticato il package.json" />
     <MESSAGE value="Sono andato avanti con colyseus io ho paura per questo commit, spero di non fare danni" />
     <MESSAGE value="Vai, ho implementato le carte" />
-    <option name="LAST_COMMIT_MESSAGE" value="Vai, ho implementato le carte" />
+    <MESSAGE value="Merge into master" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge into master" />
   </component>
 </project>

@@ -59,12 +59,12 @@
 .carousel-container {
     width: 70%;
     height: 70%;
-    transform-style: preserve-3d;
+    /*transform-style: preserve-3d;*/
     /*perspective: 40000cm;*/
     position: absolute;
     perspective-origin: top;
     /*border: 1px solid black;*/
-    transform: rotateX(-45deg);
+    /*transform: rotateX(-45deg);*/
     transition: transform 1s;
     left: 15%;
     top: 15%;

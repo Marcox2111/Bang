@@ -6,6 +6,7 @@ import {interpret} from "xstate";
 import {Player} from "./schema/Player";
 import {CardType, PlayerType} from "../../../shared/types";
 import {Card} from "./schema/Card";
+import {ArraySchema} from "@colyseus/schema";
 
 interface JoinOptions {
     name: string;
@@ -15,6 +16,10 @@ export class GameRoom extends Room<RoomState> {
     maxClients = 7;
     gameService: any;
     currentPlayerIndex: number;
+
+    targets: PlayerType[] = [];
+
+
     playersAwaitingReaction: Set<string> = new Set();
     duelInfo: { initiator: string; responder: string } | null = null;
     playersInEmporio: string[] = [];
@@ -155,15 +160,7 @@ export class GameRoom extends Room<RoomState> {
                 roles = ["sceriffo", "rinnegato", "fuorilegge", "fuorilegge", "fuorilegge", "vice"];
                 break;
             case 7:
-                roles = [
-                    "sceriffo",
-                    "rinnegato",
-                    "fuorilegge",
-                    "fuorilegge",
-                    "fuorilegge",
-                    "vice",
-                    "vice",
-                ];
+                roles = ["sceriffo", "rinnegato", "fuorilegge", "fuorilegge", "fuorilegge", "vice", "vice",];
                 break;
             default:
                 throw new Error("Invalid number of players for role assignment");
@@ -184,6 +181,17 @@ export class GameRoom extends Room<RoomState> {
                 this.currentPlayerIndex = index;
             }
         });
+// Create a new array with the sheriff at the first position
+        const newPlayerOrder = [...this.state.players];
+        const sheriffPlayer = newPlayerOrder.splice(this.currentPlayerIndex, 1)[0];
+        newPlayerOrder.unshift(sheriffPlayer);
+
+// Update the state.players array with the new order
+        this.state.players = new ArraySchema(...newPlayerOrder);
+
+// Reset the currentPlayerIndex
+        this.currentPlayerIndex = 0;
+
         this.gameService.send('ROLES_ASSIGNED');
     }
 
@@ -218,7 +226,7 @@ export class GameRoom extends Room<RoomState> {
         return this.state.players[this.currentPlayerIndex].cards.length <= this.state.players[this.currentPlayerIndex].hp
     }
 
-    areThereMorePlayers(): boolean {
+    areThereMorePlayersEmporio(): boolean {
         return this.playersInEmporio.length > 0;
     }
 
@@ -271,6 +279,20 @@ export class GameRoom extends Room<RoomState> {
         this.discardCard(player, card);
     }
 
+    prepareSubRoundTargets() {
+        const numPlayers = this.state.players.length;
+
+        for (let i = 0; i < numPlayers; i++) {
+            // Calculate the index of the next player in order
+            const targetIndex = (this.currentPlayerIndex + i) % numPlayers;
+            const targetPlayer = this.state.players[targetIndex];
+
+            // Check if the target player is alive and eligible
+            if (targetPlayer.alive) {
+                this.targets.push(targetPlayer);
+            }
+        }
+    }
 
 // Modify sendToPlayer to include the additional data in the message
     sendToPlayer(playerId: string, messageType: string, data: any = null) {
@@ -373,7 +395,7 @@ export class GameRoom extends Room<RoomState> {
     handleMissedReaction(player: Player, missedCard: CardType | null) {
         // player is the player who reacted
         if (!missedCard || missedCard.name != "mancato") {
-            player.hp--;
+            player.takeDamage(1);
             this.BroadCastToAll("Log", `${player.name} lost 1 HP`);
         } else {
             this.discardCard(player, missedCard);
@@ -394,7 +416,9 @@ export class GameRoom extends Room<RoomState> {
     handleBangReaction(player: Player, bangCard: CardType | null) {
         //player is the player who reacted
         if (!bangCard || bangCard.name != "bang") {
-            player.hp--;
+            player.takeDamage(1)
+        )
+            ;
             this.BroadCastToAll("Log", `${player.name} lost 1 HP`);
         } else {
             this.discardCard(player, bangCard);
@@ -445,7 +469,7 @@ export class GameRoom extends Room<RoomState> {
             this.gameService.send('DUELLO_REACTED');
         } else {
             // Duel ends, handle the consequence
-            player.hp--;
+            player.takeDamage(1);
             this.BroadCastToAll("Log", `${player.name} lost 1 HP in a duel`);
             this.duelInfo = null; // Reset duelInfo after the duel ends
             this.gameService.send('NO_DUELLO_REACTED');
@@ -476,7 +500,7 @@ export class GameRoom extends Room<RoomState> {
         targets.forEach((target) => {
             const targetPlayer = this.state.players.find((p) => p.id === target.id);
             if (targetPlayer) {
-                targetPlayer.hp++;
+                targetPlayer.takeDamage(1);
             }
         });
         const turnPlayer = this.findPlayerByTurn();
@@ -488,7 +512,19 @@ export class GameRoom extends Room<RoomState> {
         this.state.players[this.currentPlayerIndex].turn = false;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.state.players.length;
         this.state.players[this.currentPlayerIndex].turn = true;
-        this.gameService.send('RESOLVE_ENDPHASE')
+    }
+
+    checkEndRound() {
+        if (this.currentPlayerIndex === 0) {
+            this.gameService.send('START_NEW_ROUND')
+        } else {
+            this.gameService.send('CONTINUE_ROUND')
+        }
+    }
+
+    drawWorldCard() {
+        console.log("drawWorldCard")
+        this.gameService.send('RESOLVE_WORLD_CARD')
     }
 
 

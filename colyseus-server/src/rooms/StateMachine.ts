@@ -31,6 +31,14 @@ export const machine = createMachine(
                     },
                 },
             },
+            WorldCard: {
+                entry: 'drawWorldCard',
+                on: {
+                    RESOLVE_WORLD_CARD: {
+                        target: "PlayingTurn",
+                    },
+                },
+            },
             PlayingTurn: {
                 initial: "DrawingPhase",
                 states: {
@@ -56,7 +64,7 @@ export const machine = createMachine(
                                     BANG_PLAYED: {
                                         target: 'WaitForMissReaction',
                                     },
-                                    BEER_PLAYED:{
+                                    BEER_PLAYED: {
                                         target: 'Action',
                                     },
                                     INDIANI_PLAYED: {
@@ -113,10 +121,13 @@ export const machine = createMachine(
                         },
                     },
                     EndPhase: {
-                        entry: 'nextPlayer',
+                        entry: ['nextPlayer', 'checkEndRound'], // Call 'nextPlayer' and then 'checkEndRound'
                         on: {
-                            RESOLVE_ENDPHASE: {
+                            CONTINUE_ROUND: {
                                 target: "#game.PlayingTurn",
+                            },
+                            START_NEW_ROUND: {
+                                target: "#game.WorldCard",
                             },
                         },
                     },
@@ -129,6 +140,7 @@ export const machine = createMachine(
                 | { type: "RESOLVE_FIRST_DRAW" }
                 | { type: "ROLES_ASSIGNED" }
                 | { type: "CARDS_DISTRIBUTED" }
+                | { type: "RESOLVE_WORLD_CARD" }
                 | { type: "PASS_TURN" }
                 | { type: "BANG_PLAYED" }
                 | { type: "INDIANI_PLAYED" }
@@ -142,6 +154,8 @@ export const machine = createMachine(
                 | { type: "BANG_REACTED" }
                 | { type: "DUELLO_REACTED" }
                 | { type: "NO_DUELLO_REACTED" }
+                | { type: "CONTINUE_ROUND" }
+                | { type: "START_NEW_ROUND" }
                 | { type: "RESOLVE_ENDPHASE" },
 
         },
@@ -164,6 +178,12 @@ export const machine = createMachine(
             },
             revealEmporioCards: (context, event) => {
                 context.room.revealEmporioCards();
+            },
+            checkEndRound: (context, event) => {
+                context.room.checkEndRound();
+            },
+            drawWorldCard: (context, event) => {
+                context.room.drawWorldCard();
             }
         },
         services: {},
@@ -172,7 +192,7 @@ export const machine = createMachine(
                 return context.room.canPlayerPassTurn();
             },
             areThereMorePlayers: (context, event) => {
-                return context.room.areThereMorePlayers();
+                return context.room.areThereMorePlayersEmporio();
             }
         },
         delays: {},
